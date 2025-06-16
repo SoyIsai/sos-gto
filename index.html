@@ -3,208 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS | Portal de Emergencias</title>
-    
-    <!-- Fuentes de Google -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome (íconos) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Animaciones básicas -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
-    <!-- Tus estilos EN ORDEN CORRECTO -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="animations.css">
-    <link rel="stylesheet" href="emergency.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/206/206853.png">
+    <title>SOS | Asistencia de Emergencia</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/transitions.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🆘</text></svg>">
 </head>
-<body class="preload">
-    <!-- Pantalla de carga -->
-    <div class="loader">
-        <div class="pulse-loader">
-            <div class="pulse-circle pulse-1"></div>
-            <div class="pulse-circle pulse-2"></div>
-            <div class="pulse-circle pulse-3"></div>
+<body>
+    <div class="app-container">
+        <!-- Overlay de carga -->
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
         </div>
-        <p>Cargando sistema de emergencia...</p>
-    </div>
 
-    <!-- Fondo interactivo -->
-    <div class="particles-background" id="particles-js"></div>
-    
-    <!-- Contenido principal -->
-    <main class="main-content">
-        <div class="hero-container animate__animated animate__fadeIn">
-            <div class="logo-container">
-                <img src="assets/logo-sos-animated.svg" alt="SOS Emergency" class="logo-pulse">
-                <h1 class="glitch-text" data-text="SOS">SOS</h1>
+        <!-- Header minimalista -->
+        <header class="main-header">
+            <div class="header-content">
+                <h1 class="logo">SOS</h1>
+                <p class="tagline">Asistencia inteligente para emergencias</p>
             </div>
-            
-            <div class="hero-text">
-                <h2 class="typing-animation">Sistema de Respuesta a Emergencias</h2>
-                <p>Plataforma interactiva para situaciones críticas</p>
-            </div>
-            
-            <div class="access-buttons">
-                <a href="lobby.html" class="btn-holographic btn-main-access">
-                    <span class="btn-inner">
-                        <i class="fas fa-door-open"></i> Acceder al Portal
-                    </span>
-                    <span class="btn-hover-effect"></span>
-                </a>
-                
-                <button class="btn-emergency btn-flashing" id="emergencyTrigger">
-                    <span class="emergency-icon">
-                        <i class="fas fa-bell"></i>
-                    </span>
-                    EMERGENCIA
-                </button>
-            </div>
-            
-            <div class="scrolldown-indicator">
-                <div class="mouse">
-                    <div class="scroller"></div>
-                </div>
-                <p>Desplázate para más información</p>
-            </div>
-        </div>
-        
-        <!-- Sección de información -->
-        <section class="info-section">
-            <div class="info-card-container">
-                <div class="info-card" data-category="medical">
-                    <div class="card-icon">
-                        <i class="fas fa-heartbeat"></i>
-                    </div>
-                    <h3>Emergencias Médicas</h3>
-                    <p>Protocolos para ataques cardíacos, derrames cerebrales, alergias severas y más</p>
-                    <div class="card-wave"></div>
-                </div>
-                
-                <div class="info-card" data-category="natural">
-                    <div class="card-icon">
-                        <i class="fas fa-volcano"></i>
-                    </div>
-                    <h3>Desastres Naturales</h3>
-                    <p>Guías para terremotos, inundaciones, incendios forestales y otros fenómenos</p>
-                    <div class="card-wave"></div>
-                </div>
-                
-                <div class="info-card" data-category="accidents">
-                    <div class="card-icon">
-                        <i class="fas fa-car-crash"></i>
-                    </div>
-                    <h3>Accidentes Comunes</h3>
-                    <p>Procedimientos para accidentes de tráfico, caídas, quemaduras y electrocuciones</p>
-                    <div class="card-wave"></div>
-                </div>
-            </div>
-        </section>
-    </main>
+        </header>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <img src="assets/logo-sos-white.svg" alt="SOS">
-                <p>Sistema de Respuesta a Emergencias</p>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h2>Ayuda cuando más la necesitas</h2>
+                    <p>Acceso rápido a protocolos de emergencia verificados por expertos</p>
+                </div>
+                
+                <div class="cta-buttons">
+                    <a href="emergencias.html" class="btn primary-btn">
+                        <span>Ver emergencias</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    
+                    <button class="btn emergency-btn" id="emergencyBtn">
+                        <span>Emergencia</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
-            
-            <div class="footer-links">
-                <h4>Recursos</h4>
-                <ul>
-                    <li><a href="#">Descargar manuales</a></li>
-                    <li><a href="#">Cursos de formación</a></li>
-                    <li><a href="#">Directorio de hospitales</a></li>
-                    <li><a href="#">Mapa de riesgos</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-contact">
-                <h4>Contacto de emergencia</h4>
-                <p><i class="fas fa-phone-alt"></i> 911 (Emergencias)</p>
-                <p><i class="fas fa-ambulance"></i> 112 (Internacional)</p>
-                <p><i class="fas fa-envelope"></i> soporte@sosemergencia.com</p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2023 SOS Emergency System. Todos los derechos reservados.</p>
-            <div class="legal-links">
+        </main>
+
+        <!-- Footer minimalista -->
+        <footer class="main-footer">
+            <p>Sistema de respuesta a emergencias</p>
+            <nav class="footer-links">
                 <a href="#">Privacidad</a>
                 <a href="#">Términos</a>
-                <a href="#">Cookies</a>
-            </div>
-        </div>
-    </footer>
+                <a href="#">Contacto</a>
+            </nav>
+        </footer>
+    </div>
 
     <!-- Modal de emergencia -->
     <div class="emergency-modal" id="emergencyModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-exclamation-triangle"></i> EMERGENCIA</h3>
+                <h3>🚨 Emergencia</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Seleccione el tipo de emergencia:</p>
                 <div class="emergency-options">
-                    <button class="emergency-option medical">
-                        <i class="fas fa-user-md"></i> Médica
-                    </button>
-                    <button class="emergency-option police">
-                        <i class="fas fa-shield-alt"></i> Seguridad
-                    </button>
-                    <button class="emergency-option fire">
-                        <i class="fas fa-fire-extinguisher"></i> Incendio
-                    </button>
+                    <a href="salud.html" class="emergency-option">
+                        <div class="option-icon">❤️</div>
+                        <span>Salud</span>
+                    </a>
+                    <a href="naturales.html" class="emergency-option">
+                        <div class="option-icon">🌪️</div>
+                        <span>Natural</span>
+                    </a>
+                    <a href="accidentes.html" class="emergency-option">
+                        <div class="option-icon">🚑</div>
+                        <span>Accidente</span>
+                    </a>
                 </div>
                 <div class="emergency-contacts">
-                    <p>Llame al número de emergencia local:</p>
-                    <div class="contact-numbers">
-                        <button class="contact-btn">911</button>
-                        <button class="contact-btn">112</button>
-                        <button class="contact-btn">Local</button>
+                    <h4>Contactos de emergencia</h4>
+                    <div class="contact-buttons">
+                        <button class="contact-btn">Llamar al 911</button>
+                        <button class="contact-btn">Contactar vecino</button>
+                        <button class="contact-btn">Ubicar hospital</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts ESENCIALES -->
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-
-<!-- Tus scripts EN ORDEN CORRECTO -->
-<script src="main.js"></script>
-<script src="animations.js"></script>
-<script src="emergency.js"></script>
-
-<!-- Inicialización de partículas -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    if (typeof particlesJS !== 'undefined') {
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: 60, density: { enable: true, value_area: 800 } },
-          color: { value: "#e74c3c" },
-          shape: { type: "circle" },
-          opacity: { value: 0.5, random: true },
-          size: { value: 3, random: true },
-          line_linked: { enable: true, distance: 150, color: "#e74c3c", opacity: 0.4, width: 1 },
-          move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-        }
-      });
-    }
-  });
-</script>
+    <script src="js/main.js"></script>
 </body>
 </html>
