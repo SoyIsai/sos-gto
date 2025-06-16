@@ -95,7 +95,14 @@
             </div>
         </div>
     </div>
-
+    <script>
+    window.addEventListener('load', () => {
+        const overlay = document.querySelector('.loading-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+    });
+    </script>
     
 </body>
 </html>
