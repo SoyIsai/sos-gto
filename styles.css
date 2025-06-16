@@ -1,196 +1,84 @@
-/* --- Estilos generales --- */
-:root {
-    --primary: #e74c3c;
-    --secondary: #3498db;
-    --dark: #2c3e50;
-    --light: #ecf0f1;
-    --success: #2ecc71;
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // Menú emergencias
+    const emergenciasBtn = document.getElementById('emergencias-btn');
+    const btnEmergenciaMain = document.getElementById('btn-emergencia-main');
+    const emergencyMenu = document.querySelector('.emergency-menu');
+    const menuOverlay = document.querySelector('.menu-overlay');
+    const closeMenuBtn = document.querySelector('.close-menu');
 
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    background-color: #f9f9f9;
-}
+    // Abrir menú desde cualquier botón
+    [emergenciasBtn, btnEmergenciaMain].forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            emergencyMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+        });
+    });
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+    // Cerrar menú
+    closeMenuBtn.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', closeMenu);
 
-/* --- Barra de navegación SUPERIOR --- */
-.navbar {
-    background-color: var(--dark);
-    color: white;
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.brand {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: white;
-    text-decoration: none;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.9rem;
-}
-
-.btn-login {
-    background-color: var(--primary);
-    padding: 8px 15px;
-    border-radius: 5px;
-}
-
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-}
-
-/* --- Hero Section --- */
-.hero {
-    text-align: center;
-    padding: 80px 0;
-    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-}
-
-.logo {
-    width: 120px;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 2.5rem;
-    color: var(--dark);
-    margin-bottom: 10px;
-}
-
-.slogan {
-    font-size: 1.2rem;
-    color: #7f8c8d;
-    margin-bottom: 30px;
-}
-
-/* --- Botón de emergencia --- */
-.btn-emergencia {
-    display: inline-block;
-    background-color: var(--primary);
-    color: white;
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    text-decoration: none;
-    margin: 20px 0;
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-    transition: all 0.3s ease;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
-}
-
-/* --- Tarjetas informativas --- */
-.info-cards {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin: 40px 0;
-}
-
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    width: 220px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-}
-
-.card i {
-    font-size: 2rem;
-    color: var(--secondary);
-    margin-bottom: 15px;
-}
-
-/* --- Menú LATERAL (nuevo) --- */
-.emergency-menu {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 85%;
-    max-width: 400px;
-    height: 100vh;
-    background: white;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-    z-index: 1000;
-    transition: left 0.3s ease;
-}
-
-.emergency-menu.active {
-    left: 0;
-}
-
-.menu-header {
-    padding: 20px;
-    background: var(--primary);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.menu-categories {
-    padding: 15px;
-}
-
-/* ... (resto de estilos del menú lateral) ... */
-
-/* --- Footer --- */
-.footer {
-    background-color: var(--dark);
-    color: white;
-    padding: 50px 0 20px;
-}
-
-/* --- Responsive --- */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
+    function closeMenu() {
+        emergencyMenu.classList.remove('active');
+        menuOverlay.classList.remove('active');
     }
-    .mobile-menu-btn {
-        display: block;
-    }
-}
+
+    // Generar contenido dinámico del menú
+    const menuCategories = document.querySelector('.menu-categories');
+    const categorias = [
+        {
+            nombre: "Médicas",
+            icono: "fa-kit-medical",
+            color: "#FFEBEE",
+            items: [
+                { nombre: "Ataque Cardiaco", icono: "fa-heart-pulse", enlace: "#" },
+                { nombre: "Hemorragias", icono: "fa-droplet", enlace: "#" },
+                { nombre: "Quemaduras", icono: "fa-fire", enlace: "#" }
+            ]
+        },
+        {
+            nombre: "Naturales",
+            icono: "fa-cloud-bolt",
+            color: "#E3F2FD",
+            items: [
+                { nombre: "Terremoto", icono: "fa-house-tsunami", enlace: "#" },
+                { nombre: "Inundación", icono: "fa-water", enlace: "#" },
+                { nombre: "Incendio", icono: "fa-fire", enlace: "#" }
+            ]
+        },
+        {
+            nombre: "Accidentes",
+            icono: "fa-car-burst",
+            color: "#FFF8E1",
+            items: [
+                { nombre: "Tráfico", icono: "fa-car-crash", enlace: "#" },
+                { nombre: "Domésticos", icono: "fa-house-chimney-medical", enlace: "#" },
+                { nombre: "Laborales", icono: "fa-helmet-safety", enlace: "#" }
+            ]
+        }
+    ];
+
+    let menuHTML = '';
+    categorias.forEach(categoria => {
+        menuHTML += `
+        <div class="category">
+            <h4 style="background: ${categoria.color}">
+                <i class="fas ${categoria.icono}"></i> ${categoria.nombre}
+            </h4>
+            <ul>`;
+        
+        categoria.items.forEach(item => {
+            menuHTML += `
+                <li>
+                    <a href="${item.enlace}">
+                        <i class="fas ${item.icono}"></i> ${item.nombre}
+                    </a>
+                </li>`;
+        });
+
+        menuHTML += `</ul></div>`;
+    });
+
+    menuCategories.innerHTML = menuHTML;
+});
