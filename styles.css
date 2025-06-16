@@ -1,98 +1,282 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SOS - Tu Seguridad Primero</title>
-  <link rel="stylesheet" href="styles/styles.css"/>
-  <link rel="icon" type="image/png" href="assets/favicon.png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet"/>
-  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
-</head>
-<body>
-  <!-- Barra de navegación principal -->
-  <header class="main-header">
-    <div class="logo">
-      <img src="assets/logo-sos.png" alt="Logo SOS"/>
-      <h1>SOS</h1>
-    </div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="#como-funciona">¿Cómo funciona?</a></li>
-        <li><a href="main.html">Entrar al Lobby</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
+/* Reset básico y tipografía general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-  <!-- Sección Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Actúa rápido. Informa mejor. Reacciona seguro.</h2>
-      <p>Con SOS puedes saber qué hacer en cualquier emergencia en cuestión de segundos.</p>
-      <div class="hero-buttons">
-        <a href="main.html" class="btn-primary">Ir al Lobby</a>
-        <a href="#como-funciona" class="btn-secondary">¿Cómo funciona?</a>
-      </div>
-    </div>
-    <div class="hero-img">
-      <img src="assets/qr-demo.png" alt="Código QR SOS">
-    </div>
-  </section>
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+}
 
-  <!-- Cómo funciona -->
-  <section id="como-funciona" class="info-section">
-    <h2>¿Cómo funciona SOS?</h2>
-    <div class="cards">
-      <div class="card">
-        <i class="fas fa-map-marked-alt"></i>
-        <h3>Identifica el riesgo</h3>
-        <p>Detecta si estás frente a una emergencia médica, desastre o accidente.</p>
-      </div>
-      <div class="card">
-        <i class="fas fa-qrcode"></i>
-        <h3>Escanea el QR</h3>
-        <p>Apunta tu celular al código QR de la zona o entra al sitio.</p>
-      </div>
-      <div class="card">
-        <i class="fas fa-first-aid"></i>
-        <h3>Actúa correctamente</h3>
-        <p>Sigue protocolos precisos y rápidos según tu situación.</p>
-      </div>
-    </div>
-  </section>
+/* Navbar */
+.navbar {
+    background-color: #ff4e42;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
 
-  <!-- Contacto -->
-  <section id="contacto" class="contact-section">
-    <h2>Contacto</h2>
-    <p>¿Dudas o sugerencias? Escríbenos:</p>
-    <div class="contact-info">
-      <p><i class="fas fa-envelope"></i> contacto@sosapp.com</p>
-      <p><i class="fas fa-phone"></i> +52 55 1234 5678</p>
-      <p><i class="fas fa-map-marker-alt"></i> Av. Protección Civil 911, CDMX, México</p>
-    </div>
-  </section>
+.logo-container {
+    display: flex;
+    align-items: center;
+}
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-logo">
-        <img src="assets/logo-sos.png" alt="SOS Logo">
-        <h3>SOS - Tu Seguridad Primero</h3>
-      </div>
-      <div class="footer-links">
-        <a href="#">Aviso Legal</a>
-        <a href="#">Términos de Uso</a>
-        <a href="#">Política de Privacidad</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 SOS. Todos los derechos reservados.</p>
-    </div>
-  </footer>
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.5rem;
+}
 
-  <script src="scripts/main.js"></script>
-</body>
-</html>
+.app-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #ffe5e2;
+}
+
+.btn-download {
+    background-color: white;
+    color: #ff4e42;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn-download:hover {
+    background-color: #ffe5e2;
+    color: #ff4e42;
+}
+
+.burger-menu {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #ff4e42, #ff7671);
+    color: white;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.slogan {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.emergency-btn {
+    background-color: #fff;
+    color: #ff4e42;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.emergency-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: #fff;
+    color: #ff4e42;
+}
+
+.btn-primary:hover {
+    background-color: #ffe5e2;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: white;
+    color: #ff4e42;
+}
+
+.hero-image img {
+    width: 300px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Cómo funciona */
+.how-it-works {
+    padding: 4rem 2rem;
+    background-color: #fff;
+    text-align: center;
+}
+
+.how-it-works h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.steps-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.step {
+    background-color: #ffe5e2;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 280px;
+    transition: transform 0.3s;
+}
+
+.step:hover {
+    transform: translateY(-10px);
+}
+
+.step-number {
+    background-color: #ff4e42;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 40px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.step-icon {
+    font-size: 2rem;
+    color: #ff4e42;
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 3rem 2rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.footer-section {
+    max-width: 300px;
+}
+
+.footer-section h4 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.footer-section p, .footer-section li, .footer-section a {
+    font-size: 0.95rem;
+    color: #ccc;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.social-icons a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    .burger-menu {
+        display: block;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+}
