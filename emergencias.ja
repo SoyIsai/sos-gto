@@ -1,22 +1,69 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Abrir menú emergencias
+    // Elementos del menú
     const emergenciasBtn = document.getElementById('emergencias-btn');
+    const btnEmergenciaMain = document.getElementById('btn-emergencia-main');
     const emergencyMenu = document.querySelector('.emergency-menu');
     const menuOverlay = document.querySelector('.menu-overlay');
     const closeMenuBtn = document.querySelector('.close-menu');
-    
-    emergenciasBtn.addEventListener('click', function(e) {
-        e.preventDefault();
+
+    // Función para abrir el menú
+    function openMenu() {
         emergencyMenu.classList.add('active');
         menuOverlay.classList.add('active');
-    });
-    
-    // Cerrar menú
-    closeMenuBtn.addEventListener('click', closeMenu);
-    menuOverlay.addEventListener('click', closeMenu);
-    
+        document.body.style.overflow = 'hidden'; // Bloquea el scroll
+    }
+
+    // Función para cerrar el menú
     function closeMenu() {
         emergencyMenu.classList.remove('active');
         menuOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Restaura el scroll
+    }
+
+    // Eventos para abrir (desde ambos botones)
+    [emergenciasBtn, btnEmergenciaMain].forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openMenu();
+        });
+    });
+
+    // Eventos para cerrar
+    closeMenuBtn.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', closeMenu);
+
+    // Cerrar al presionar ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+    });
+
+    // Generar contenido del menú (opcional)
+    const menuCategories = document.querySelector('.menu-categories');
+    if (menuCategories) {
+        menuCategories.innerHTML = `
+        <div class="category">
+            <h4 class="medical"><i class="fas fa-kit-medical"></i> Emergencias Médicas</h4>
+            <ul>
+                <li><a href="#"><i class="fas fa-heart-pulse"></i> Ataque Cardiaco</a></li>
+                <li><a href="#"><i class="fas fa-droplet"></i> Hemorragias</a></li>
+                <li><a href="#"><i class="fas fa-fire"></i> Quemaduras</a></li>
+            </ul>
+        </div>
+        <div class="category">
+            <h4 class="natural"><i class="fas fa-cloud-bolt"></i> Desastres Naturales</h4>
+            <ul>
+                <li><a href="#"><i class="fas fa-house-tsunami"></i> Terremoto</a></li>
+                <li><a href="#"><i class="fas fa-water"></i> Inundación</a></li>
+                <li><a href="#"><i class="fas fa-fire"></i> Incendio</a></li>
+            </ul>
+        </div>
+        <div class="category">
+            <h4 class="accident"><i class="fas fa-car-burst"></i> Accidentes</h4>
+            <ul>
+                <li><a href="#"><i class="fas fa-car-crash"></i> Tráfico</a></li>
+                <li><a href="#"><i class="fas fa-house-chimney-medical"></i> Domésticos</a></li>
+                <li><a href="#"><i class="fas fa-helmet-safety"></i> Laborales</a></li>
+            </ul>
+        </div>`;
     }
 });
