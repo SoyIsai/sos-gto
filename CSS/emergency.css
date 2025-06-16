@@ -1,128 +1,126 @@
-/* Estilos para el mapa */
+/* Estilos mejorados para el mapa */
+.emergency-map-container {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
 #riskMap {
-    height: 300px;
+    height: 400px;
     width: 100%;
-    background-color: #f5f7fa;
     border-radius: var(--border-radius-sm);
-    margin-bottom: 1rem;
-    position: relative;
+    margin: 1rem 0;
+    z-index: 10;
 }
 
-/* Marcadores del mapa */
-.map-marker {
+.map-controls {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.map-marker svg {
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-.map-marker.emergency svg {
-    animation: pulse 1.5s infinite;
-}
-
-/* Animación para marcadores de emergencia */
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Controles del mapa */
-.map-loading {
-    background-color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    box-shadow: var(--shadow-sm);
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
     gap: 0.5rem;
+    justify-content: flex-end;
 }
 
-.map-loading .spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(0,0,0,0.1);
-    border-top-color: var(--primary-color);
+.control-btn {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.map-error {
-    background-color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    box-shadow: var(--shadow-sm);
-    font-size: 0.8rem;
-    color: var(--primary-color);
-}
-
-/* Leyenda del mapa */
-.map-legend {
-    background-color: white;
-    padding: 0.75rem;
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    font-size: 0.8rem;
-    line-height: 1.6;
-}
-
-.map-legend h4 {
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--dark-color);
-}
-
-.legend-icon {
-    display: inline-flex;
-    width: 18px;
-    height: 18px;
-    margin-right: 0.5rem;
+    display: flex;
     align-items: center;
     justify-content: center;
+    background: #f5f7fa;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
 }
 
-.legend-icon.emergency {
-    background-color: #e63946;
-    border-radius: 50%;
+.control-btn:hover {
+    background: #e9ecef;
 }
 
-.legend-icon.user {
-    background-color: #1d3557;
-    border-radius: 50%;
-}
-
-/* Popups del mapa */
-.leaflet-popup-content {
-    font-family: var(--font-main);
-    font-size: 0.85rem;
-}
-
-.leaflet-popup-content strong {
-    color: var(--primary-color);
-}
-
-/* Marcadores de instalaciones */
-.facility-marker .facility-icon {
-    font-size: 1.5rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    margin-top: -10px;
-}
-
-/* Botón de ubicación */
-.location-btn.active {
-    background-color: var(--primary-color);
+.control-btn.primary {
+    background: var(--primary-color);
     color: white;
 }
 
-.location-btn .spinner-small {
+.control-btn.primary:hover {
+    background: var(--primary-dark);
+}
+
+.map-legend {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.legend-color {
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: white;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.high-risk .legend-color {
+    background-color: var(--primary-color);
+}
+
+.medium-risk .legend-color {
+    background-color: var(--warning-color);
+}
+
+.safe-zone .legend-color {
+    background-color: var(--success-color);
+}
+
+.map-footer {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--gray-color);
+    text-align: center;
+}
+
+.map-footer strong {
+    color: var(--dark-color);
+}
+
+/* Estilos para el mapa de Leaflet */
+.leaflet-popup-content {
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    min-width: 200px;
+}
+
+.leaflet-popup-content h3 {
+    color: var(--primary-color);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.leaflet-control-attribution {
+    font-size: 0.7rem !important;
+    background-color: rgba(255,255,255,0.8) !important;
+}
+
+/* Spinner para carga */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0,0,0,0.1);
+    border-top-color: var(--primary-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     display: inline-block;
