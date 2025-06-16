@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOS | Tu seguridad primero</title>
-    <!-- Fuente Google (moderna) -->
+    <!-- Fuentes e iconos -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Iconos FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="styles.css">
@@ -14,19 +13,21 @@
     <link rel="icon" href="img/favicon.png">
 </head>
 <body>
-    <!-- Barra de navegación superior -->
+    <!-- Barra de navegación SUPERIOR (nueva versión) -->
     <nav class="navbar">
         <div class="container">
-            <a href="#" class="brand">SOS</a>
+            <a href="index.html" class="brand">SOS</a>
             <div class="nav-links">
                 <a href="#"><i class="fas fa-info-circle"></i> Acerca de</a>
                 <a href="#"><i class="fas fa-phone-alt"></i> Contacto</a>
+                <a href="#" id="emergencias-btn"><i class="fas fa-bell"></i> Emergencias</a>
                 <a href="#" class="btn-login"><i class="fas fa-user"></i> Acceso autoridades</a>
             </div>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
-    <!-- Hero Section (Contenido principal) -->
+    <!-- Hero Section (original que te gustó) -->
     <header class="hero">
         <div class="container">
             <img src="img/logo-sos.png" alt="Logo SOS" class="logo">
@@ -34,7 +35,7 @@
             <p class="slogan">"Tu guía instantánea para actuar en momentos críticos"</p>
             
             <!-- Botón de emergencia con efecto -->
-            <a href="emergencias.html" class="btn-emergencia">
+            <a href="#" id="btn-emergencia-main" class="btn-emergencia">
                 <i class="fas fa-bell"></i> BOTÓN DE EMERGENCIA
             </a>
             
@@ -59,7 +60,19 @@
         </div>
     </header>
 
-    <!-- Sección de alerta importante -->
+    <!-- Menú LATERAL (nueva versión) -->
+    <div class="emergency-menu">
+        <div class="menu-header">
+            <h3><i class="fas fa-triangle-exclamation"></i> Tipos de Emergencia</h3>
+            <button class="close-menu">&times;</button>
+        </div>
+        <div class="menu-categories">
+            <!-- Contenido dinámico desde emergencias.js -->
+        </div>
+    </div>
+    <div class="menu-overlay"></div>
+
+    <!-- Alerta (original) -->
     <section class="alerta">
         <div class="container">
             <i class="fas fa-exclamation-triangle"></i>
@@ -67,22 +80,20 @@
         </div>
     </section>
 
-    <!-- Footer profesional -->
+    <!-- Footer (original con tus datos) -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>SOS Emergencias</h4>
-                    <p>2025 Avenida de los Sustos Repentinos No. 911, C.P. 0666 - Cd. de México
-</p>
-                    <p>Tel. (01-800) AUXILIO-PLZ.</p>
+                    <p>2025 Avenida de los Sustos Repentinos No. 911, Cd. de México</p>
+                    <p>Tel.: (01-800) AUXILIO-PLZ</p>
                 </div>
                 <div class="footer-col">
                     <h4>Enlaces rápidos</h4>
                     <a href="#">Aviso legal</a>
                     <a href="#">Accesibilidad</a>
                     <a href="#">Política privacidad</a>
-                    <a href="#">Cookies</a>
                 </div>
                 <div class="footer-col">
                     <h4>Redes sociales</h4>
@@ -99,9 +110,12 @@
         </div>
     </footer>
 
-    <!-- Botón flotante de WhatsApp -->
-    <a href="https://wa.me/34963395017" class="whatsapp-float">
+    <!-- Botón de WhatsApp (original) -->
+    <a href="https://wa.me/520123456789" class="whatsapp-float">
         <i class="fab fa-whatsapp"></i>
     </a>
+
+    <!-- JavaScript -->
+    <script src="emergencias.js"></script>
 </body>
 </html>
