@@ -3,15 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS - Inicio</title>
+    <title>SOS | Tu seguridad primero</title>
+    <!-- Fuente Google (moderna) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS personalizado -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.png">
 </head>
 <body>
-    <div class="container">
-        <img src="index.php/2019/03/31/emergencias/" alt="Logo SOS" class="logo">
-        <h1>SOS EMERGENCIAS</h1>
-        <p>Escanea el código QR para acceder a protocolos de seguridad</p>
-        <a href="emergencias.html" class="btn">ENTRAR</a>
-    <div></div>
+    <!-- Barra de navegación superior -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="brand">SOS</a>
+            <div class="nav-links">
+                <a href="#"><i class="fas fa-info-circle"></i> Acerca de</a>
+                <a href="#"><i class="fas fa-phone-alt"></i> Contacto</a>
+                <a href="#" class="btn-login"><i class="fas fa-user"></i> Acceso autoridades</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Contenido principal) -->
+    <header class="hero">
+        <div class="container">
+            <img src="img/logo-sos.png" alt="Logo SOS" class="logo">
+            <h1>SOS EMERGENCIAS</h1>
+            <p class="slogan">"Tu guía instantánea para actuar en momentos críticos"</p>
+            
+            <!-- Botón de emergencia con efecto -->
+            <a href="emergencias.html" class="btn-emergencia">
+                <i class="fas fa-bell"></i> BOTÓN DE EMERGENCIA
+            </a>
+            
+            <!-- Tarjetas informativas -->
+            <div class="info-cards">
+                <div class="card">
+                    <i class="fas fa-qrcode"></i>
+                    <h3>Escanea QR</h3>
+                    <p>Encuentra códigos en zonas de riesgo</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-first-aid"></i>
+                    <h3>Primeros Auxilios</h3>
+                    <p>Instrucciones paso a paso</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Rutas Seguras</h3>
+                    <p>Mapas de evacuación</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de alerta importante -->
+    <section class="alerta">
+        <div class="container">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>En caso de emergencia real, llama inmediatamente al <strong>911</strong></p>
+        </div>
+    </section>
+
+    <!-- Footer profesional -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>SOS Emergencias</h4>
+                    <p>2025 UV. - C. Amadeo de Saboya, 4 - 3 piso, 46010 Valencia.</p>
+                    <p>Tel.: (+34) 963395017</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Enlaces rápidos</h4>
+                    <a href="#">Aviso legal</a>
+                    <a href="#">Accesibilidad</a>
+                    <a href="#">Política privacidad</a>
+                    <a href="#">Cookies</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Redes sociales</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 SOS Emergencias. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/34963395017" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 </body>
 </html>
