@@ -1,0 +1,22 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Abrir menú emergencias
+    const emergenciasBtn = document.getElementById('emergencias-btn');
+    const emergencyMenu = document.querySelector('.emergency-menu');
+    const menuOverlay = document.querySelector('.menu-overlay');
+    const closeMenuBtn = document.querySelector('.close-menu');
+    
+    emergenciasBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        emergencyMenu.classList.add('active');
+        menuOverlay.classList.add('active');
+    });
+    
+    // Cerrar menú
+    closeMenuBtn.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', closeMenu);
+    
+    function closeMenu() {
+        emergencyMenu.classList.remove('active');
+        menuOverlay.classList.remove('active');
+    }
+});
