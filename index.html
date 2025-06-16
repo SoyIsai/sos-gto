@@ -180,8 +180,31 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/animations.js"></script>
+    <!-- Scripts ESENCIALES -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<!-- Tus scripts EN ORDEN CORRECTO -->
+<script src="main.js"></script>
+<script src="animations.js"></script>
+<script src="emergency.js"></script>
+
+<!-- Inicialización de partículas -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof particlesJS !== 'undefined') {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 60, density: { enable: true, value_area: 800 } },
+          color: { value: "#e74c3c" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: { enable: true, distance: 150, color: "#e74c3c", opacity: 0.4, width: 1 },
+          move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
