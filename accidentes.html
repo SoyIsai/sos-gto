@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accidentes Comunes | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/transitions.css">
+    <link rel="stylesheet" href="css/emergency.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="category-header">
+            <a href="emergencias.html" class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <h1>Accidentes Comunes</h1>
+            <button class="filter-btn" id="filterBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </header>
+
+        <main class="emergency-list">
+            <div class="emergency-tabs">
+                <button class="tab-btn active" data-category="all">Todos</button>
+                <button class="tab-btn" data-category="home">Hogar</button>
+                <button class="tab-btn" data-category="traffic">Tráfico</button>
+                <button class="tab-btn" data-category="work">Trabajo</button>
+            </div>
+
+            <div class="emergency-items" id="accidentItems">
+                <!-- Los items se cargan dinámicamente desde JS -->
+            </div>
+
+            <div class="prevention-section">
+                <h3>Medidas Preventivas</h3>
+                <div class="prevention-tips">
+                    <div class="tip-card">
+                        <div class="tip-icon">🏠</div>
+                        <h4>En el Hogar</h4>
+                        <ul>
+                            <li>Mantener pisos libres de obstáculos</li>
+                            <li>Usar antideslizantes en bañeras</li>
+                            <li>Almacenar productos peligrosos con seguridad</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🚗</div>
+                        <h4>En la Vía</h4>
+                        <ul>
+                            <li>Siempre usar cinturón de seguridad</li>
+                            <li>Respetar límites de velocidad</li>
+                            <li>Evitar distracciones al conducir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/emergency-data.js"></script>
+    <script>
+        // Cargar accidentes desde el archivo de datos
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('accidentItems');
+            
+            accidentData.forEach(accident => {
+                const item = document.createElement('a');
+                item.className = `emergency-item ${accident.category}`;
+                item.href = `protocolo.html?type=accident&id=${accident.id}`;
+                
+                item.innerHTML = `
+                    <div class="item-icon">${accident.icon}</div>
+                    <div class="item-info">
+                        <h3>${accident.title}</h3>
+                        <p>${accident.description}</p>
+                        <div class="item-meta">
+                            <span class="risk-level ${accident.risk}">${accident.riskText}</span>
+                            <span class="time">${accident.time}</span>
+                        </div>
+                    </div>
+                    <div class="item-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
+
+            // Filtrar por categoría
+            const filterButtons = document.querySelectorAll('.tab-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Actualizar botón activo
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar/ocultar items
+                    const items = document.querySelectorAll('.emergency-item');
+                    items.forEach(item => {
+                        if (category === 'all' || item.classList.contains(category)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
