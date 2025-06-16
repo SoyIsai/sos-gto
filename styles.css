@@ -1,4 +1,4 @@
-/* Estilos base */
+/* --- Estilos generales --- */
 :root {
     --primary: #e74c3c;
     --secondary: #3498db;
@@ -7,16 +7,9 @@
     --success: #2ecc71;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    color: #333;
+    margin: 0;
     background-color: #f9f9f9;
 }
 
@@ -27,12 +20,20 @@ body {
     padding: 0 20px;
 }
 
-/* Barra de navegación */
+/* --- Barra de navegación SUPERIOR --- */
 .navbar {
     background-color: var(--dark);
     color: white;
     padding: 15px 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .brand {
@@ -44,13 +45,15 @@ body {
 
 .nav-links {
     display: flex;
-    align-items: center;
     gap: 20px;
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-size: 0.9rem;
 }
 
@@ -58,17 +61,20 @@ body {
     background-color: var(--primary);
     padding: 8px 15px;
     border-radius: 5px;
-    transition: all 0.3s ease;
 }
 
-.btn-login:hover {
-    background-color: #c0392b;
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
 }
 
-/* Hero Section */
+/* --- Hero Section --- */
 .hero {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
     background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
 }
 
@@ -88,10 +94,9 @@ h1 {
     font-size: 1.2rem;
     color: #7f8c8d;
     margin-bottom: 30px;
-    font-weight: 400;
 }
 
-/* Botón de emergencia */
+/* --- Botón de emergencia --- */
 .btn-emergencia {
     display: inline-block;
     background-color: var(--primary);
@@ -106,19 +111,13 @@ h1 {
     animation: pulse 2s infinite;
 }
 
-.btn-emergencia:hover {
-    background-color: #c0392b;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
-}
-
 @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
     70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
     100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
 }
 
-/* Tarjetas informativas */
+/* --- Tarjetas informativas --- */
 .info-cards {
     display: flex;
     justify-content: center;
@@ -146,147 +145,52 @@ h1 {
     margin-bottom: 15px;
 }
 
-.card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: var(--dark);
+/* --- Menú LATERAL (nuevo) --- */
+.emergency-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transition: left 0.3s ease;
 }
 
-.card p {
-    font-size: 0.9rem;
-    color: #7f8c8d;
+.emergency-menu.active {
+    left: 0;
 }
 
-/* Alerta */
-.alerta {
-    background-color: #fff3cd;
-    padding: 15px 0;
-    text-align: center;
-    color: #856404;
+.menu-header {
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.alerta i {
-    margin-right: 10px;
+.menu-categories {
+    padding: 15px;
 }
 
-/* Footer */
+/* ... (resto de estilos del menú lateral) ... */
+
+/* --- Footer --- */
 .footer {
     background-color: var(--dark);
     color: white;
     padding: 50px 0 20px;
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.footer-col h4 {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    position: relative;
-    padding-bottom: 10px;
-}
-
-.footer-col h4::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 50px;
-    height: 2px;
-    background-color: var(--primary);
-}
-
-.footer-col a {
-    display: block;
-    color: #bdc3c7;
-    margin-bottom: 10px;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-col a:hover {
-    color: white;
-}
-
-.social-links {
-    display: flex;
-    gap: 15px;
-}
-
-.social-links a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px;
-    height: 35px;
-    background-color: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    background-color: var(--primary);
-    transform: translateY(-3px);
-}
-
-.copyright {
-    text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    font-size: 0.8rem;
-    color: #bdc3c7;
-}
-
-/* Botón de WhatsApp */
-.whatsapp-float {
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    bottom: 40px;
-    right: 40px;
-    background-color: #25d366;
-    color: white;
-    border-radius: 50px;
-    text-align: center;
-    font-size: 30px;
-    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.whatsapp-float:hover {
-    background-color: #128c7e;
-    transform: scale(1.1);
-}
-
-/* Responsive */
+/* --- Responsive --- */
 @media (max-width: 768px) {
     .nav-links {
         display: none;
     }
-    
-    .hero {
-        padding: 40px 0;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    .info-cards {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .card {
-        width: 100%;
-        max-width: 300px;
+    .mobile-menu-btn {
+        display: block;
     }
 }
