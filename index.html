@@ -1,98 +1,177 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SOS - Tu Seguridad Primero</title>
-  <link rel="stylesheet" href="styles/styles.css"/>
-  <link rel="icon" type="image/png" href="assets/favicon.png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet"/>
-  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS | Portal de Emergencias</title>
+    <meta name="description" content="Sistema integral de respuesta a emergencias médicas, desastres naturales y accidentes">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
-<body>
-  <!-- Barra de navegación principal -->
-  <header class="main-header">
-    <div class="logo">
-      <img src="assets/logo-sos.png" alt="Logo SOS"/>
-      <h1>SOS</h1>
+<body class="preload">
+    <!-- Pantalla de carga -->
+    <div class="loader">
+        <div class="pulse-loader">
+            <div class="pulse-circle pulse-1"></div>
+            <div class="pulse-circle pulse-2"></div>
+            <div class="pulse-circle pulse-3"></div>
+        </div>
+        <p>Cargando sistema de emergencia...</p>
     </div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="#como-funciona">¿Cómo funciona?</a></li>
-        <li><a href="main.html">Entrar al Lobby</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <!-- Sección Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Actúa rápido. Informa mejor. Reacciona seguro.</h2>
-      <p>Con SOS puedes saber qué hacer en cualquier emergencia en cuestión de segundos.</p>
-      <div class="hero-buttons">
-        <a href="main.html" class="btn-primary">Ir al Lobby</a>
-        <a href="#como-funciona" class="btn-secondary">¿Cómo funciona?</a>
-      </div>
-    </div>
-    <div class="hero-img">
-      <img src="assets/qr-demo.png" alt="Código QR SOS">
-    </div>
-  </section>
+    <!-- Fondo interactivo -->
+    <div class="particles-background" id="particles-js"></div>
+    
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <div class="hero-container animate__animated animate__fadeIn">
+            <div class="logo-container">
+                <img src="assets/logo-sos-animated.svg" alt="SOS Emergency" class="logo-pulse">
+                <h1 class="glitch-text" data-text="SOS">SOS</h1>
+            </div>
+            
+            <div class="hero-text">
+                <h2 class="typing-animation">Sistema de Respuesta a Emergencias</h2>
+                <p>Plataforma interactiva para situaciones críticas</p>
+            </div>
+            
+            <div class="access-buttons">
+                <a href="lobby.html" class="btn-holographic btn-main-access">
+                    <span class="btn-inner">
+                        <i class="fas fa-door-open"></i> Acceder al Portal
+                    </span>
+                    <span class="btn-hover-effect"></span>
+                </a>
+                
+                <button class="btn-emergency btn-flashing" id="emergencyTrigger">
+                    <span class="emergency-icon">
+                        <i class="fas fa-bell"></i>
+                    </span>
+                    EMERGENCIA
+                </button>
+            </div>
+            
+            <div class="scrolldown-indicator">
+                <div class="mouse">
+                    <div class="scroller"></div>
+                </div>
+                <p>Desplázate para más información</p>
+            </div>
+        </div>
+        
+        <!-- Sección de información -->
+        <section class="info-section">
+            <div class="info-card-container">
+                <div class="info-card" data-category="medical">
+                    <div class="card-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Emergencias Médicas</h3>
+                    <p>Protocolos para ataques cardíacos, derrames cerebrales, alergias severas y más</p>
+                    <div class="card-wave"></div>
+                </div>
+                
+                <div class="info-card" data-category="natural">
+                    <div class="card-icon">
+                        <i class="fas fa-volcano"></i>
+                    </div>
+                    <h3>Desastres Naturales</h3>
+                    <p>Guías para terremotos, inundaciones, incendios forestales y otros fenómenos</p>
+                    <div class="card-wave"></div>
+                </div>
+                
+                <div class="info-card" data-category="accidents">
+                    <div class="card-icon">
+                        <i class="fas fa-car-crash"></i>
+                    </div>
+                    <h3>Accidentes Comunes</h3>
+                    <p>Procedimientos para accidentes de tráfico, caídas, quemaduras y electrocuciones</p>
+                    <div class="card-wave"></div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-  <!-- Cómo funciona -->
-  <section id="como-funciona" class="info-section">
-    <h2>¿Cómo funciona SOS?</h2>
-    <div class="cards">
-      <div class="card">
-        <i class="fas fa-map-marked-alt"></i>
-        <h3>Identifica el riesgo</h3>
-        <p>Detecta si estás frente a una emergencia médica, desastre o accidente.</p>
-      </div>
-      <div class="card">
-        <i class="fas fa-qrcode"></i>
-        <h3>Escanea el QR</h3>
-        <p>Apunta tu celular al código QR de la zona o entra al sitio.</p>
-      </div>
-      <div class="card">
-        <i class="fas fa-first-aid"></i>
-        <h3>Actúa correctamente</h3>
-        <p>Sigue protocolos precisos y rápidos según tu situación.</p>
-      </div>
-    </div>
-  </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/logo-sos-white.svg" alt="SOS">
+                <p>Sistema de Respuesta a Emergencias</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Recursos</h4>
+                <ul>
+                    <li><a href="#">Descargar manuales</a></li>
+                    <li><a href="#">Cursos de formación</a></li>
+                    <li><a href="#">Directorio de hospitales</a></li>
+                    <li><a href="#">Mapa de riesgos</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h4>Contacto de emergencia</h4>
+                <p><i class="fas fa-phone-alt"></i> 911 (Emergencias)</p>
+                <p><i class="fas fa-ambulance"></i> 112 (Internacional)</p>
+                <p><i class="fas fa-envelope"></i> soporte@sosemergencia.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 SOS Emergency System. Todos los derechos reservados.</p>
+            <div class="legal-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
 
-  <!-- Contacto -->
-  <section id="contacto" class="contact-section">
-    <h2>Contacto</h2>
-    <p>¿Dudas o sugerencias? Escríbenos:</p>
-    <div class="contact-info">
-      <p><i class="fas fa-envelope"></i> contacto@sosapp.com</p>
-      <p><i class="fas fa-phone"></i> +52 55 1234 5678</p>
-      <p><i class="fas fa-map-marker-alt"></i> Av. Protección Civil 911, CDMX, México</p>
+    <!-- Modal de emergencia -->
+    <div class="emergency-modal" id="emergencyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> EMERGENCIA</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Seleccione el tipo de emergencia:</p>
+                <div class="emergency-options">
+                    <button class="emergency-option medical">
+                        <i class="fas fa-user-md"></i> Médica
+                    </button>
+                    <button class="emergency-option police">
+                        <i class="fas fa-shield-alt"></i> Seguridad
+                    </button>
+                    <button class="emergency-option fire">
+                        <i class="fas fa-fire-extinguisher"></i> Incendio
+                    </button>
+                </div>
+                <div class="emergency-contacts">
+                    <p>Llame al número de emergencia local:</p>
+                    <div class="contact-numbers">
+                        <button class="contact-btn">911</button>
+                        <button class="contact-btn">112</button>
+                        <button class="contact-btn">Local</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-logo">
-        <img src="assets/logo-sos.png" alt="SOS Logo">
-        <h3>SOS - Tu Seguridad Primero</h3>
-      </div>
-      <div class="footer-links">
-        <a href="#">Aviso Legal</a>
-        <a href="#">Términos de Uso</a>
-        <a href="#">Política de Privacidad</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 SOS. Todos los derechos reservados.</p>
-    </div>
-  </footer>
-
-  <script src="scripts/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
 </body>
 </html>
