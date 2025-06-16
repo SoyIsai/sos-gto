@@ -3,37 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolos de Emergencia</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>SOS - Menú de Emergencias</title>
+    <!-- Mismos recursos que index.html -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" href="../img/favicon.png">
 </head>
 <body>
-    <header>
-        <h1>¿Qué emergencia necesitas?</h1>
-    </header>
-    
-    <nav class="menu-emergencias">
-        <a href="#terremoto">Terremoto</a>
-        <a href="#incendio">Incendio</a>
-        <a href="#herida">Heridas</a>
-        <a href="contactos.html">Contactos</a>
+    <!-- Barra de navegación IDÉNTICA a index.html -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="brand">SOS</a>
+            <div class="nav-links">
+                <a href="#"><i class="fas fa-info-circle"></i> Acerca de</a>
+                <a href="#"><i class="fas fa-phone-alt"></i> Contacto</a>
+                <a href="#" id="emergencias-btn" class="active"><i class="fas fa-bell"></i> Emergencias</a>
+                <a href="#" class="btn-login"><i class="fas fa-user"></i> Acceso autoridades</a>
+            </div>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+        </div>
     </nav>
-    
-    <section id="terremoto" class="protocolo">
-        <h2>Terremoto</h2>
-        <ol>
-            <li>Conserva la calma</li>
-            <li>Aléjate de ventanas y objetos pesados</li>
-            <li>Busca el "triángulo de vida" (mesas resistentes)</li>
-        </ol>
-    </section>
-    
-    <section id="incendio" class="protocolo">
-        <h2>Incendio</h2>
-        <ol>
-            <li>Gatea para evitar inhalar humo</li>
-            <li>Usa extintor solo si el fuego es pequeño</li>
-            <li>Nunca uses ascensores</li>
-        </ol>
-    </section>
+
+    <!-- Contenido específico de emergencias -->
+    <main class="emergency-main">
+        <div class="container">
+            <!-- Encabezado con breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="../index.html">Inicio</a> > <span>Emergencias</span>
+            </div>
+
+            <!-- Título y buscador -->
+            <div class="emergency-header">
+                <h1><i class="fas fa-triangle-exclamation"></i> Protocolos de Emergencia</h1>
+                <div class="search-bar">
+                    <input type="text" placeholder="Buscar emergencia...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <!-- Grid de categorías -->
+            <div class="emergency-grid">
+                <!-- Tarjeta Médicas -->
+                <div class="emergency-category medical">
+                    <div class="category-header">
+                        <i class="fas fa-kit-medical"></i>
+                        <h2>Emergencias Médicas</h2>
+                    </div>
+                    <ul class="protocol-list">
+                        <li><a href="ataque-cardiaco.html"><i class="fas fa-heart-pulse"></i> Ataque Cardiaco</a></li>
+                        <li><a href="hemorragias.html"><i class="fas fa-droplet"></i> Hemorragias</a></li>
+                        <li><a href="quemaduras.html"><i class="fas fa-fire"></i> Quemaduras</a></li>
+                        <li><a href="atragantamiento.html"><i class="fas fa-lungs"></i> Atragantamiento</a></li>
+                    </ul>
+                </div>
+
+                <!-- Tarjeta Naturales -->
+                <div class="emergency-category natural">
+                    <div class="category-header">
+                        <i class="fas fa-cloud-bolt"></i>
+                        <h2>Desastres Naturales</h2>
+                    </div>
+                    <ul class="protocol-list">
+                        <li><a href="terremoto.html"><i class="fas fa-house-tsunami"></i> Terremoto</a></li>
+                        <li><a href="inundacion.html"><i class="fas fa-water"></i> Inundación</a></li>
+                        <li><a href="incendio.html"><i class="fas fa-fire"></i> Incendio Forestal</a></li>
+                        <li><a href="huracan.html"><i class="fas fa-wind"></i> Huracán</a></li>
+                    </ul>
+                </div>
+
+                <!-- Tarjeta Accidentes -->
+                <div class="emergency-category accident">
+                    <div class="category-header">
+                        <i class="fas fa-car-burst"></i>
+                        <h2>Accidentes</h2>
+                    </div>
+                    <ul class="protocol-list">
+                        <li><a href="transito.html"><i class="fas fa-car-crash"></i> Tráfico</a></li>
+                        <li><a href="domesticos.html"><i class="fas fa-house-chimney-medical"></i> Domésticos</a></li>
+                        <li><a href="laborales.html"><i class="fas fa-helmet-safety"></i> Laborales</a></li>
+                        <li><a href="electricos.html"><i class="fas fa-bolt"></i> Eléctricos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sección de emergencia activa (ejemplo) -->
+            <div class="current-emergency">
+                <div class="emergency-alert">
+                    <i class="fas fa-siren-on"></i>
+                    <h3>Alerta activa en tu zona: <span>Incendio forestal</span></h3>
+                    <a href="incendio.html" class="btn-emergencia">Ver protocolo</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mismo footer que index.html -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- ... (copiar footer de index.html) ... -->
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón WhatsApp -->
+    <a href="https://wa.me/520123456789" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Mismos scripts -->
+    <script src="../emergencias.js"></script>
 </body>
 </html>
