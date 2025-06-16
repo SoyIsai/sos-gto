@@ -1,371 +1,130 @@
-/* emergency.css - Estilos específicos para páginas de emergencia */
-
-/* Alertas de emergencia */
-.emergency-alert {
-    background-color: #fff8e6;
-    border-left: 4px solid var(--warning-color);
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-    margin-bottom: 1.5rem;
-    display: flex;
-    gap: 1rem;
-    animation: fadeIn 0.5s ease;
-}
-
-.alert-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.alert-content h3 {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-    color: var(--dark-color);
-}
-
-.alert-content p {
-    font-size: 0.85rem;
-    color: var(--gray-color);
-}
-
-/* Meta información de items */
-.item-meta {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-}
-
-.risk-level {
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-.risk-level.high {
-    background-color: rgba(230, 57, 70, 0.1);
-    color: var(--primary-color);
-}
-
-.risk-level.medium {
-    background-color: rgba(233, 196, 106, 0.1);
-    color: var(--warning-color);
-}
-
-.time {
-    color: var(--gray-color);
-    display: flex;
-    align-items: center;
-}
-
-/* Mapa de riesgos */
-.emergency-map-container {
-    margin-top: 2rem;
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-}
-
-.emergency-map-container h3 {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.map-placeholder {
-    height: 200px;
+/* Estilos para el mapa */
+#riskMap {
+    height: 300px;
+    width: 100%;
     background-color: #f5f7fa;
     border-radius: var(--border-radius-sm);
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+/* Marcadores del mapa */
+.map-marker {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gray-color);
-    margin-bottom: 1rem;
 }
 
-.map-legend {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
+.map-marker svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--gray-color);
+.map-marker.emergency svg {
+    animation: pulse 1.5s infinite;
 }
 
-.color {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    display: inline-block;
+/* Animación para marcadores de emergencia */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.high-risk {
-    background-color: var(--primary-color);
-}
-
-.medium-risk {
-    background-color: var(--warning-color);
-}
-
-.safe-zone {
-    background-color: var(--success-color);
-}
-
-/* Pestañas de filtrado */
-.emergency-tabs {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-    scrollbar-width: none; /* Firefox */
-}
-
-.emergency-tabs::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-}
-
-.tab-btn {
-    background-color: #f8f9fa;
-    border: none;
+/* Controles del mapa */
+.map-loading {
+    background-color: white;
     padding: 0.5rem 1rem;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.tab-btn.active {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-/* Sección de prevención */
-.prevention-section {
-    margin-top: 2rem;
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
+    border-radius: 4px;
     box-shadow: var(--shadow-sm);
-}
-
-.prevention-section h3 {
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-}
-
-.prevention-tips {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-}
-
-.tip-card {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-}
-
-.tip-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.tip-card h4 {
-    font-size: 0.9rem;
-    margin-bottom: 0.75rem;
-    color: var(--dark-color);
-}
-
-.tip-card ul {
-    padding-left: 1.25rem;
     font-size: 0.8rem;
-    color: var(--gray-color);
-}
-
-.tip-card li {
-    margin-bottom: 0.25rem;
-}
-
-/* Estilos para página de protocolo */
-.protocol-header {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 100;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-}
-
-.protocol-header h1 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    text-align: center;
-    flex: 1;
-}
-
-.protocol-container {
-    padding: 1.5rem;
-    padding-bottom: 80px; /* Espacio para botones flotantes */
-}
-
-.protocol-hero {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.hero-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.hero-meta {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-}
-
-.protocol-section {
-    margin-bottom: 2rem;
-}
-
-.protocol-section h2 {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.section-number {
-    color: var(--primary-color);
-    font-weight: 700;
-    font-size: 1rem;
-    min-width: 30px;
+.map-loading .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-.section-content {
+.map-error {
     background-color: white;
-    padding: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    box-shadow: var(--shadow-sm);
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+/* Leyenda del mapa */
+.map-legend {
+    background-color: white;
+    padding: 0.75rem;
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow-sm);
-}
-
-.section-content p {
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.6;
 }
 
-.section-content ul,
-.section-content ol {
-    padding-left: 1.25rem;
+.map-legend h4 {
+    margin-bottom: 0.5rem;
     font-size: 0.9rem;
-    color: var(--gray-color);
-    margin-bottom: 1rem;
-}
-
-.section-content li {
-    margin-bottom: 0.5rem;
-}
-
-.resources-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-}
-
-.resource-card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    text-decoration: none;
     color: var(--dark-color);
-    transition: var(--transition);
 }
 
-.resource-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-}
-
-.resource-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.resource-card h3 {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-}
-
-.resource-card p {
-    font-size: 0.8rem;
-    color: var(--gray-color);
-}
-
-.emergency-actions {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    background-color: white;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-    z-index: 90;
-}
-
-.action-btn {
-    width: 100%;
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    border: none;
-    font-weight: 500;
-    display: flex;
+.legend-icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5rem;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    transition: var(--transition);
 }
 
-.action-btn.primary {
+.legend-icon.emergency {
+    background-color: #e63946;
+    border-radius: 50%;
+}
+
+.legend-icon.user {
+    background-color: #1d3557;
+    border-radius: 50%;
+}
+
+/* Popups del mapa */
+.leaflet-popup-content {
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+}
+
+.leaflet-popup-content strong {
+    color: var(--primary-color);
+}
+
+/* Marcadores de instalaciones */
+.facility-marker .facility-icon {
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-top: -10px;
+}
+
+/* Botón de ubicación */
+.location-btn.active {
     background-color: var(--primary-color);
     color: white;
 }
 
-.action-btn.primary:hover {
-    background-color: #d62839;
+.location-btn .spinner-small {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
 }
-
-/* Responsive */
-@media (min-width: 768px) {
-    .prevention-tips {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .resources-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .emergency-map-container {
-        margin-top: 3rem;
-    }
-    
-    .map-placeholder {
-        height: 300px;
-    }
-  }
