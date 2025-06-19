@@ -3,83 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS | Asistencia de Emergencia</title>
-    <link rel="stylesheet" href="CSS/styles.css">
-    <link rel="stylesheet" href="CSS/transitions.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🆘</text></svg>">
+    <title>SOS | Inicio</title>
+    <link rel="stylesheet" href="CSS/landing.css">
+    <link rel="icon" href="ASSETS/logo-sos.png">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="main-header">
-            <div class="header-content">
-                <h1 class="logo">SOS</h1>
-                <p class="tagline">Asistencia inteligente para emergencias</p>
-            </div>
+    <div class="landing-container">
+        <!-- Logo y título -->
+        <header class="landing-header">
+            <img src="ASSETS/logo-sos.png" alt="Logo SOS" class="logo">
+            <h1>SOS</h1>
+            <p>Asistencia inteligente para emergencias</p>
         </header>
 
-        <!-- Contenido principal -->
-        <main class="main-content">
-            <!-- Sección Hero -->
-            <div class="hero-section">
-                <div class="hero-text">
-                    <h2>Ayuda cuando más la necesitas</h2>
-                    <p>Acceso rápido a protocolos de emergencia verificados</p>
-                </div>
-            </div>
+        <!-- Botón de acceso al lobby -->
+        <div class="access-buttons">
+            <a href="lobby.html" class="btn-access">Entrar al sistema</a>
+        </div>
 
-            <!-- Sección de Protocolos -->
-            <section class="protocols-section">
-                <h2>Protocolos Disponibles</h2>
-                <div class="protocols-grid">
-                    <!-- Tarjeta Terremoto -->
-                    <div class="protocols-grid">
-    <!-- Asegúrate que cada href sea único -->
-    <a href="terremoto.html" class="protocol-card" id="terremoto-link">
-        <img src="ASSETS/terremoto-icon.jpg" alt="Terremoto">
-        <h3>Terremoto</h3>
-    </a>
-
-    </a>
-    <a href="inundacion.html" class="protocol-card" id="inundacion-link">
-        <img src="ASSETS/inundacion-icon.jpg" alt="Inundación">
-        <h3>Inundación</h3>
-    </a>
-                    
-                    <!-- Tarjeta Incendio -->
-                    <a href="incendio.html" class="protocol-card">
-                        <img src="ASSETS/incendio-icon.jpg" alt="Incendio">
-                        <h3>Incendio</h3>
-                        <p>Qué hacer en caso de fuego</p>
-                    </a>
-                    
-                    <!-- Tarjeta Primeros Auxilios -->
-                    <a href="primeros-auxilios.html" class="protocol-card">
-                        <img src="ASSETS/primeros-auxilios-icon.jpg" alt="Primeros Auxilios">
-                        <h3>Primeros Auxilios</h3>
-                        <p>Asistencia médica básica</p>
-                    </a>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer class="main-footer">
-            <p>© 2023 SOS Emergencias</p>
-            <div class="footer-links">
-                <a href="privacidad.html">Privacidad</a>
-                <a href="terminos.html">Términos</a>
-            </div>
+        <!-- Footer minimalista -->
+        <footer class="landing-footer">
+            <p>© 2025 SOS - Todos los derechos reservados</p>
         </footer>
     </div>
-
-    <!-- Scripts -->
-    <script>
-        // Carga de página
-        window.addEventListener('load', () => {
-            const overlay = document.querySelector('.loading-overlay');
-            if (overlay) overlay.style.display = 'none';
-        });
-    </script>
 </body>
 </html>
