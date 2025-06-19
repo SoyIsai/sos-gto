@@ -142,5 +142,31 @@
 </script>
         });
     </script>
+    <script>
+    // Seleccionar elementos
+    const burgerMenu = document.getElementById('burgerMenu');
+    const navLinks = document.getElementById('navLinks');
+
+    // Alternar menú al hacer clic
+    burgerMenu.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        
+        // Cambiar ícono a "X" cuando está abierto
+        const icon = burgerMenu.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+            icon.classList.replace('fa-bars', 'fa-times');
+        } else {
+            icon.classList.replace('fa-times', 'fa-bars');
+        }
+    });
+
+    // Cerrar menú al hacer clic en un enlace (móvil)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            burgerMenu.querySelector('i').classList.replace('fa-times', 'fa-bars');
+        });
+    });
+    </script>
 </body>
 </html>
