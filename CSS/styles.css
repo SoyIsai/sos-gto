@@ -497,3 +497,150 @@ body {
 @keyframes spin {
     to { transform: rotate(360deg); }
   }
+/* Estilos para protocolos.html */
+.protocol-header {
+    padding: 6rem 5% 2rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #FF6B6B 100%);
+    color: white;
+}
+
+.protocol-breadcrumb {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.protocol-breadcrumb a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+.protocol-breadcrumb span {
+    font-weight: 600;
+}
+
+.protocol-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.protocol-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.9;
+}
+
+.protocol-content {
+    display: flex;
+    padding: 3rem 5%;
+    gap: 2rem;
+}
+
+.protocol-steps {
+    flex: 2;
+}
+
+.step {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    align-items: flex-start;
+}
+
+.step-number {
+    background-color: var(--primary-color);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-top: 0.3rem;
+}
+
+.step-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.step-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.protocol-map {
+    margin-top: 1rem;
+    position: relative;
+}
+
+.protocol-map img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.btn-map {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.emergency-panel {
+    flex: 1;
+    background-color: #FFF8F8;
+    border: 1px solid #FFD6D6;
+    border-radius: 10px;
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 1rem;
+}
+
+.emergency-panel h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.emergency-contacts {
+    margin-top: 1.5rem;
+}
+
+.emergency-contacts ul {
+    list-style: none;
+    margin-top: 0.5rem;
+}
+
+.emergency-contacts li {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .protocol-content {
+        flex-direction: column;
+    }
+
+    .emergency-panel {
+        position: static;
+    }
+}
