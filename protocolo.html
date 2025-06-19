@@ -122,6 +122,19 @@
             if (confirm('¿Llamar al servicio de emergencias 911?')) {
                 window.location.href = 'tel:911';
             }
+            <script>
+    // Menú hamburguesa
+    document.querySelector('.burger-menu').addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+
+    // Cierra el menú al hacer clic en un enlace (móvil)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.remove('active');
+        });
+    });
+</script>
         });
     </script>
 </body>
