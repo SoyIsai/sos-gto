@@ -3,54 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS | Respuesta Inteligente a Emergencias</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="CSS/landing.css">
-    <link rel="icon" href="ASSETS/logo-sos.svg">
+    <title>SOS | Asistencia de Emergencia</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="CSS/transitions.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🆘</text></svg>">
 </head>
 <body>
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="pulse-logo">🆘</div>
+    <div class="app-container">
+        <!-- Overlay de carga -->
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <!-- Header minimalista -->
+        <header class="main-header">
+            <div class="header-content">
+                <h1 class="logo">SOS</h1>
+                <p class="tagline">Asistencia inteligente para emergencias</p>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="hero-section">
+
+                <!-- Hero Section (ya existe) -->
+
+<!-- Nueva Sección: Protocolos -->
+<section class="protocols-section">
+    <h2>Protocolos de Emergencia</h2>
+    <p>Elige un protocolo para ver instrucciones detalladas:</p>
+    
+    <div class="protocols-grid">
+        <a href="protocolos/terremoto.html" class="protocol-card">
+            <img src="ASSETS/terremoto-icon.jpg" alt="Terremoto">
+            <h3>Terremoto</h3>
+        </a>
+        <a href="protocolos/inundacion.html" class="protocol-card">
+            <img src="ASSETS/inundacion-icon.jpg" alt="Inundación">
+            <h3>Inundación</h3>
+        </a>
+        <!-- Añade más tarjetas si necesitas -->
+    </div>
+</section>
+                <div class="hero-text">
+                    <h2>Ayuda cuando más la necesitas</h2>
+                    <p>Acceso rápido a protocolos de emergencia verificados por expertos</p>
+                </div>
+                
+                <div class="cta-buttons">
+                    <a href="emergencias.html" class="btn primary-btn">
+                        <span>Ver emergencias</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    
+                    <button class="btn emergency-btn" id="emergencyBtn">
+                        <span>Emergencia</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer minimalista -->
+        <footer class="main-footer">
+            <p>Sistema de respuesta a emergencias</p>
+            <nav class="footer-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Contacto</a>
+            </nav>
+        </footer>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="logo-container animate__animated animate__pulse">
-                <span class="logo-emoji" id="dynamicEmoji">🚨</span>
-                <h1 class="logo-text">SOS<span class="blink">_</span></h1>
+    <!-- Modal de emergencia -->
+    <div class="emergency-modal" id="emergencyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🚨 Emergencia</h3>
+                <button class="close-modal">&times;</button>
             </div>
-            <p class="hero-tagline">Tecnología que salva vidas en tiempo real</p>
-            
-            <!-- CTA Principal -->
-            <a href="lobby.html" class="cta-button" id="mainCTA">
-                <span>Acceder al Sistema</span>
-                <div class="cta-arrow">→</div>
-            </a>
-
-            <!-- Countdown Simulado -->
-            <div class="countdown">
-                <p>Última actualización de emergencias: <span id="emergencyCounter">5</span> min</p>
-                <div class="countdown-bar"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer Animado -->
-    <footer class="wave-footer">
-        <div class="wave"></div>
-        <div class="footer-content">
-            <p>© 2023 SOS Emergency Tech</p>
-            <div class="qr-container">
-                <img src="ASSETS/qr-code.svg" alt="Descarga la App" class="qr-code">
-                <p>Escanea para descargar</p>
+            <div class="modal-body">
+                <div class="emergency-options">
+                    <a href="salud.html" class="emergency-option">
+                        <div class="option-icon">❤️</div>
+                        <span>Salud</span>
+                    </a>
+                    <a href="naturales.html" class="emergency-option">
+                        <div class="option-icon">🌪️</div>
+                        <span>Natural</span>
+                    </a>
+                    <a href="accidentes.html" class="emergency-option">
+                        <div class="option-icon">🚑</div>
+                        <span>Accidente</span>
+                    </a>
+                </div>
+                <div class="emergency-contacts">
+                    <h4>Contactos de emergencia</h4>
+                    <div class="contact-buttons">
+                        <button class="contact-btn">Llamar al 911</button>
+                        <button class="contact-btn">Contactar vecino</button>
+                        <button class="contact-btn">Ubicar hospital</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
-
-    <!-- Scripts Mágicos -->
-    <script src="JS/landing-effects.js"></script>
+    </div>
+    <script>
+    window.addEventListener('load', () => {
+        const overlay = document.querySelector('.loading-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+    });
+    </script>
+    
 </body>
 </html>
