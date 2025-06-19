@@ -3,173 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo de Emergencia | SOS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
-    <link rel="stylesheet" href="CSS/styles.css">
-    <link rel="stylesheet" href="CSS/transitions.css">
-    <link rel="stylesheet" href="CSS/emergency.css">
+    <title>Protocolos de Emergencia | SOS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
-    <div class="app-container">
-        <header class="protocol-header">
-            <a href="javascript:history.back()" class="back-button">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
-            <h1 id="protocolTitle">Protocolo</h1>
-            <button class="action-btn" id="speakBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 1C11.2044 1 10.4413 1.31607 9.87868 1.87868C9.31607 2.44129 9 3.20435 9 4V12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12V4C15 3.20435 14.6839 2.44129 14.1213 1.87868C13.5587 1.31607 12.7956 1 12 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M19 10V12C19 13.8565 18.2625 15.637 16.9497 16.9497C15.637 18.2625 13.8565 19 12 19C10.1435 19 8.36301 18.2625 7.05025 16.9497C5.7375 15.637 5 13.8565 5 12V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 19V23M8 23H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </header>
+    <!-- Barra de navegación (igual que en index.html) -->
+    <nav class="navbar">
+        <!-- Copiar el mismo navbar del index.html -->
+    </nav>
 
-        <main class="protocol-container">
-            <div class="protocol-hero" id="protocolHero">
-                <div class="hero-icon" id="protocolIcon">⚠️</div>
-                <div class="hero-meta">
-                    <span class="risk-level" id="protocolRisk">Alto riesgo</span>
-                    <span class="time" id="protocolTime">3 min lectura</span>
-                </div>
-            </div>
-
-            <div class="protocol-content">
-                <div class="protocol-section">
-                    <h2><span class="section-number">01</span> Reconocimiento</h2>
-                    <div class="section-content" id="recognitionSection">
-                        <!-- Cargado dinámicamente -->
-                    </div>
-                </div>
-
-                <div class="protocol-section">
-                    <h2><span class="section-number">02</span> Acción Inmediata</h2>
-                    <div class="section-content" id="actionSection">
-                        <!-- Cargado dinámicamente -->
-                    </div>
-                </div>
-
-                <div class="protocol-section">
-                    <h2><span class="section-number">03</span> Contactos de Emergencia</h2>
-                    <div class="emergency-contacts">
-                        <button class="contact-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22 16.92V19.92C22 20.47 21.55 20.92 21 20.92H19C18.45 20.92 18 20.47 18 19.92V16.92C18 16.37 18.45 15.92 19 15.92H21C21.55 15.92 22 16.37 22 16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M16 3H8C4 3 2 5 2 9V15C2 19 4 21 8 21H16C20 21 22 19 22 15V9C22 5 20 3 16 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M13 7H14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M11 7H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M11 11H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Llamar al 911
-                        </button>
-                        <button class="contact-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Contactar vecino
-                        </button>
-                        <button class="contact-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Ubicar hospital
-                        </button>
-                    </div>
-                </div>
-
-                <div class="protocol-section">
-                    <h2><span class="section-number">04</span> Recursos Adicionales</h2>
-                    <div class="resources-grid">
-                        <a href="#" class="resource-card">
-                            <div class="resource-icon">📄</div>
-                            <h3>Guía PDF</h3>
-                            <p>Descargar protocolo completo</p>
-                        </a>
-                        <a href="#" class="resource-card">
-                            <div class="resource-icon">🎥</div>
-                            <h3>Video Tutorial</h3>
-                            <p>Ver demostración práctica</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <div class="emergency-actions">
-            <button class="action-btn primary" id="emergencyActionBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Acción de Emergencia
-            </button>
+    <!-- Encabezado de la página -->
+    <header class="protocol-header">
+        <div class="protocol-breadcrumb">
+            <a href="index.html">Inicio</a> > <span>Terremoto</span>
         </div>
-    </div>
+        <h1>Protocolo: Terremoto</h1>
+        <p class="protocol-location"><i class="fas fa-map-marker-alt"></i> Estás en: <strong>Edificio A, Piso 3</strong></p>
+    </header>
 
-    <script src="JS/main.js"></script>
-    <script src="JS/emergency-data.js"></script>
+    <!-- Contenido del protocolo -->
+    <section class="protocol-content">
+        <div class="protocol-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-info">
+                    <h3>Mantén la calma</h3>
+                    <p>No corras ni grites. Busca un lugar seguro bajo una mesa o junto a un muro de carga.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                    <h3>Protege tu cabeza</h3>
+                    <p>Usa tus brazos o un objeto resistente para cubrirte la cabeza y el cuello.</p>
+                    <img src="assets/protect-head.jpg" alt="Protección cabeza" class="step-image">
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                    <h3>Evacúa si es seguro</h3>
+                    <p>Cuando el temblor cese, dirígete a la zona de seguridad marcada en el mapa.</p>
+                    <div class="protocol-map">
+                        <img src="assets/evacuation-map.jpg" alt="Mapa de evacuación">
+                        <a href="#" class="btn-map"><i class="fas fa-download"></i> Descargar mapa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de emergencia -->
+        <div class="emergency-panel">
+            <h3><i class="fas fa-exclamation-triangle"></i> ¿Necesitas ayuda inmediata?</h3>
+            <button class="emergency-btn">
+                <i class="fas fa-phone-alt"></i> LLAMAR AL 911
+            </button>
+            <div class="emergency-contacts">
+                <p>Contactos locales:</p>
+                <ul>
+                    <li><i class="fas fa-hospital"></i> Hospital más cercano: <strong>1.2 km</strong></li>
+                    <li><i class="fas fa-fire-extinguisher"></i> Bomberos: <strong>555-1234</strong></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (igual que en index.html) -->
+    <footer class="footer">
+        <!-- Copiar el mismo footer del index.html -->
+    </footer>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Obtener parámetros de la URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const type = urlParams.get('type');
-            const id = urlParams.get('id');
-            
-            // Buscar el protocolo correspondiente
-            let protocol;
-            if (type === 'health') {
-                protocol = healthData.find(item => item.id === id);
-            } else if (type === 'natural') {
-                protocol = naturalData.find(item => item.id === id);
-            } else if (type === 'accident') {
-                protocol = accidentData.find(item => item.id === id);
-            }
-            
-            if (protocol) {
-                // Actualizar la página con los datos del protocolo
-                document.getElementById('protocolTitle').textContent = protocol.title;
-                document.getElementById('protocolIcon').textContent = protocol.icon;
-                document.getElementById('protocolRisk').textContent = protocol.riskText;
-                document.getElementById('protocolRisk').className = `risk-level ${protocol.risk}`;
-                document.getElementById('protocolTime').textContent = protocol.time;
-                
-                // Actualizar secciones de contenido
-                document.getElementById('recognitionSection').innerHTML = `
-                    <p>${protocol.recognition}</p>
-                    ${protocol.recognitionList ? `<ul>${protocol.recognitionList.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
-                `;
-                
-                document.getElementById('actionSection').innerHTML = `
-                    <p>${protocol.action}</p>
-                    ${protocol.actionSteps ? `<ol>${protocol.actionSteps.map(step => `<li>${step}</li>`).join('')}</ol>` : ''}
-                `;
-                
-                // Configurar botón de acción de emergencia
-                const emergencyBtn = document.getElementById('emergencyActionBtn');
-                emergencyBtn.addEventListener('click', function() {
-                    if (protocol.emergencyNumber) {
-                        window.location.href = `tel:${protocol.emergencyNumber}`;
-                    } else {
-                        window.location.href = 'tel:911';
-                    }
-                });
-                
-                // Configurar botón de texto a voz
-                const speakBtn = document.getElementById('speakBtn');
-                speakBtn.addEventListener('click', function() {
-                    const speech = new SpeechSynthesisUtterance();
-                    speech.text = `${protocol.title}. ${protocol.recognition}. ${protocol.action}`;
-                    speech.lang = 'es-ES';
-                    speech.rate = 0.9;
-                    window.speechSynthesis.speak(speech);
-                });
-            } else {
-                // Redirigir si no se encuentra el protocolo
-                window.location.href = 'emergencias.html';
+        // Botón de emergencia
+        document.querySelector('.emergency-btn').addEventListener('click', function() {
+            if (confirm('¿Llamar al servicio de emergencias 911?')) {
+                window.location.href = 'tel:911';
             }
         });
     </script>
