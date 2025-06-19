@@ -799,8 +799,11 @@ body {
     transition: color 0.3s;
 }
 
-.nav-links a:hover, .nav-links a.active {
-    color: #FFD166; /* Amarillo */
+.nav-links a:hover, 
+.nav-links a.active,
+.footer-section a:hover {
+    color: #FF3A44 !important;  /* Rojo SOS en hover */
+    transform: translateX(3px);  /* Pequeño movimiento */
 }
 
 .btn-download {
@@ -833,9 +836,10 @@ body {
 }
 
 .footer-section h4 {
-    color: #FFD166;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    color: white;  /* Cambiamos amarillo (#FFD166) a blanco */
+    border-bottom: 2px solid #FF3A44;  /* Subrayado rojo SOS */
+    padding-bottom: 0.5rem;
+    display: inline-block;
 }
 
 .footer-section p, .footer-section li {
@@ -857,10 +861,9 @@ body {
 }
 
 .social-icons a:hover {
-    transform: translateY(-3px);
-    color: #FFD166;
+    color: #FF3A44 !important;  /* Rojo SOS al tocar */
+    transform: scale(1.2);  /* Crecen ligeramente */
 }
-
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 1rem;
