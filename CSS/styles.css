@@ -984,3 +984,48 @@ body {
     font-size: 1.2rem;
     margin: 0;
 }
+/* Estilos para la sección de protocolos */
+.protocols-section {
+    padding: 2rem 5%;
+    background: #f9f9f9;
+}
+
+.protocols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.protocol-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    color: #333;
+}
+
+.protocol-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.protocol-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.protocol-card h3 {
+    padding: 1rem 1rem 0.5rem;
+    font-size: 1.2rem;
+    color: #2F4858; /* Azul oscuro */
+}
+
+.protocol-card p {
+    padding: 0 1rem 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
