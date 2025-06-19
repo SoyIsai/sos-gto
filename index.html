@@ -27,34 +27,39 @@
         <!-- Contenido principal -->
         <main class="main-content">
             <div class="hero-section">
-
-                <!-- Hero Section (ya existe) -->
-
-<!-- Nueva Sección: Protocolos -->
-<section class="protocols-section">
-    <h2>Protocolos de Emergencia</h2>
-    <p>Elige un protocolo para ver instrucciones detalladas:</p>
-    
-    <div class="protocols-grid">
-        <a href="terremoto.html" class="protocol-card">
-            <img src="ASSETS/terremoto-icon.jpg" alt="Terremoto">
-            <h3>Terremoto</h3>
-        </a>
-        <a href="inundacion.html" class="protocol-card">
-            <img src="ASSETS/inundacion-icon.jpg" alt="Inundación">
-            <h3>Inundación</h3>
-        </a>
-        <!-- Añade más tarjetas si necesitas -->
-    </div>
-</section>
                 <div class="hero-text">
                     <h2>Ayuda cuando más la necesitas</h2>
                     <p>Acceso rápido a protocolos de emergencia verificados por expertos</p>
                 </div>
                 
+                <!-- Sección de Protocolos -->
+                <section class="protocols-section">
+                    <h2>Protocolos de Emergencia</h2>
+                    <p>Elige un protocolo para ver instrucciones detalladas:</p>
+                    
+                    <div class="protocols-grid">
+                        <a href="protocolos/terremoto.html" class="protocol-card">
+                            <img src="ASSETS/terremoto-icon.jpg" alt="Terremoto">
+                            <h3>Terremoto</h3>
+                        </a>
+                        <a href="protocolos/inundacion.html" class="protocol-card">
+                            <img src="ASSETS/inundacion-icon.jpg" alt="Inundación">
+                            <h3>Inundación</h3>
+                        </a>
+                        <a href="protocolos/salud.html" class="protocol-card">
+                            <img src="ASSETS/salud-icon.jpg" alt="Salud">
+                            <h3>Salud</h3>
+                        </a>
+                        <a href="protocolos/naturales.html" class="protocol-card">
+                            <img src="ASSETS/naturales-icon.jpg" alt="Desastres Naturales">
+                            <h3>Desastres Naturales</h3>
+                        </a>
+                    </div>
+                </section>
+
                 <div class="cta-buttons">
-                    <a href="emergencias.html" class="btn primary-btn">
-                        <span>Ver emergencias</span>
+                    <a href="protocolos/" class="btn primary-btn">
+                        <span>Ver todos los protocolos</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -75,9 +80,9 @@
         <footer class="main-footer">
             <p>Sistema de respuesta a emergencias</p>
             <nav class="footer-links">
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
-                <a href="#">Contacto</a>
+                <a href="legal/privacidad.html">Privacidad</a>
+                <a href="legal/terminos.html">Términos</a>
+                <a href="contacto.html">Contacto</a>
             </nav>
         </footer>
     </div>
@@ -91,17 +96,17 @@
             </div>
             <div class="modal-body">
                 <div class="emergency-options">
-                    <a href="salud.html" class="emergency-option">
+                    <a href="protocolos/salud.html" class="emergency-option">
                         <div class="option-icon">❤️</div>
                         <span>Salud</span>
                     </a>
-                    <a href="naturales.html" class="emergency-option">
+                    <a href="protocolos/naturales.html" class="emergency-option">
                         <div class="option-icon">🌪️</div>
-                        <span>Natural</span>
+                        <span>Desastres Naturales</span>
                     </a>
-                    <a href="accidentes.html" class="emergency-option">
+                    <a href="protocolos/accidentes.html" class="emergency-option">
                         <div class="option-icon">🚑</div>
-                        <span>Accidente</span>
+                        <span>Accidentes</span>
                     </a>
                 </div>
                 <div class="emergency-contacts">
@@ -121,8 +126,21 @@
         if (overlay) {
             overlay.style.display = 'none';
         }
+        
+        // Configuración del botón de emergencia
+        const emergencyBtn = document.getElementById('emergencyBtn');
+        const emergencyModal = document.getElementById('emergencyModal');
+        
+        if (emergencyBtn && emergencyModal) {
+            emergencyBtn.addEventListener('click', () => {
+                emergencyModal.style.display = 'block';
+            });
+            
+            document.querySelector('.close-modal').addEventListener('click', () => {
+                emergencyModal.style.display = 'none';
+            });
+        }
     });
     </script>
-    
 </body>
 </html>
