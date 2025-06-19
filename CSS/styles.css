@@ -895,3 +895,41 @@ body {
         text-align: left;
     }
 }
+/* === Menú Hamburguesa === */
+.burger-menu {
+    display: block; /* Visible en móvil */
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: white;
+    z-index: 1001;
+}
+
+/* Ocultar nav-links en móvil */
+.nav-links {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #2F4858;
+    padding: 1rem 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links.active {
+    display: block; /* Mostrar al activar */
+}
+
+/* Desktop: ocultar hamburguesa, mostrar enlaces */
+@media (min-width: 768px) {
+    .burger-menu {
+        display: none;
+    }
+    .nav-links {
+        display: flex;
+        position: static;
+        width: auto;
+        background: transparent;
+        padding: 0;
+    }
+}
