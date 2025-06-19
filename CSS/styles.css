@@ -933,3 +933,54 @@ body {
         padding: 0;
     }
 }
+/* === Sección de Protocolos === */
+.protocols-section {
+    padding: 4rem 5%;
+    text-align: center;
+    background-color: #F7F9FC;  /* Fondo claro para destacar */
+}
+
+.protocols-section h2 {
+    font-size: 2rem;
+    color: #2F4858;  /* Azul oscuro de la marca */
+    margin-bottom: 1rem;
+}
+
+.protocols-section p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.protocols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.protocol-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #2F4858;
+}
+
+.protocol-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.protocol-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.protocol-card h3 {
+    padding: 1.2rem;
+    font-size: 1.2rem;
+    margin: 0;
+}
