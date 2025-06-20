@@ -4,113 +4,300 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desastres Naturales | SOS</title>
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
-    <link rel="stylesheet" href="CSS/styles.css">
-    <link rel="stylesheet" href="CSS/transitions.css">
-    <link rel="stylesheet" href="CSS/emergency.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --primary-light: #FF6B6B;
+            --natural: #4ECDC4;
+            --natural-dark: #3AA99E;
+            --light: #FFFFFF;
+            --gray: #F5F5F5;
+            --text-dark: #333333;
+        }
+
+        .natural-protocol {
+            padding: 2rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .protocol-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .protocol-title {
+            font-size: 2rem;
+            color: var(--natural-dark);
+            margin-bottom: 1rem;
+        }
+
+        .emergency-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .emergency-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border-top: 5px solid var(--natural);
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--natural-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-btn {
+            background: var(--natural);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .card-btn:hover {
+            background: var(--natural-dark);
+        }
+
+        .risk-map {
+            margin: 3rem 0;
+        }
+
+        .map-container {
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .map-layers {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .layer-btn {
+            background: var(--gray);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .layer-btn.active {
+            background: var(--natural);
+            color: white;
+        }
+
+        .emergency-kit {
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .kit-items {
+            columns: 2;
+            margin-top: 1rem;
+        }
+
+        .kit-item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-system {
+            background: linear-gradient(135deg, var(--natural), var(--natural-dark));
+            padding: 1.5rem;
+            border-radius: 15px;
+            color: white;
+            margin: 2rem 0;
+        }
+
+        .alert-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .alert-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .alert-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .emergency-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .kit-items {
+                columns: 1;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="category-header">
-            <a href="emergencias.html" class="back-button">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
-            <h1>Desastres Naturales</h1>
-            <button class="location-btn" id="locationBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
+    <section class="natural-protocol">
+        <header class="protocol-header">
+            <h1 class="protocol-title">Desastres Naturales</h1>
+            <p>Protocolos para fenómenos naturales y emergencias ambientales</p>
         </header>
 
-        <main class="emergency-list">
-            <div class="emergency-alert">
-                <div class="alert-icon">⚠️</div>
-                <div class="alert-content">
-                    <h3>Alerta Meteorológica</h3>
-                    <p>Tormenta severa pronosticada para esta zona</p>
-                </div>
+        <!-- Tarjetas de emergencias -->
+        <div class="emergency-cards">
+            <div class="emergency-card">
+                <h2 class="card-title">🌍 Terremoto</h2>
+                <p>Protocolo de actuación antes, durante y después de un sismo.</p>
+                <button class="card-btn" onclick="location.href='protocolos/terremoto.html'">
+                    Ver protocolo <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-
-            <div class="emergency-items">
-                <a href="protocolo.html?type=natural&id=terremoto" class="emergency-item">
-                    <div class="item-icon">🌍</div>
-                    <div class="item-info">
-                        <h3>Terremoto</h3>
-                        <p>Protocolo antisísmico</p>
-                        <div class="item-meta">
-                            <span class="risk-level high">Alto riesgo</span>
-                            <span class="time">3 min lectura</span>
-                        </div>
-                    </div>
-                    <div class="item-arrow">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </a>
-
-                <a href="protocolo.html?type=natural&id=inundacion" class="emergency-item">
-                    <div class="item-icon">🌊</div>
-                    <div class="item-info">
-                        <h3>Inundación</h3>
-                        <p>Medidas ante crecidas de agua</p>
-                        <div class="item-meta">
-                            <span class="risk-level medium">Riesgo medio</span>
-                            <span class="time">2 min lectura</span>
-                        </div>
-                    </div>
-                    <div class="item-arrow">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </a>
-
-                <a href="protocolo.html?type=natural&id=incendio" class="emergency-item">
-                    <div class="item-icon">🔥</div>
-                    <div class="item-info">
-                        <h3>Incendio Forestal</h3>
-                        <p>Evacuación y protección</p>
-                        <div class="item-meta">
-                            <span class="risk-level high">Alto riesgo</span>
-                            <span class="time">4 min lectura</span>
-                        </div>
-                    </div>
-                    <div class="item-arrow">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </a>
+            
+            <div class="emergency-card">
+                <h2 class="card-title">🌊 Inundación</h2>
+                <p>Qué hacer en caso de crecidas de agua o tsunamis.</p>
+                <button class="card-btn" onclick="location.href='protocolos/inundacion.html'">
+                    Ver protocolo <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-
-            <div class="emergency-map-container">
-                <h3>Mapa de Riesgos</h3>
-                <div class="map-placeholder" id="riskMap">
-                    <p>Cargando mapa de riesgos...</p>
-                </div>
-                <div class="map-legend">
-                    <div class="legend-item"><span class="color high-risk"></span> Alto riesgo</div>
-                    <div class="legend-item"><span class="color medium-risk"></span> Riesgo medio</div>
-                    <div class="legend-item"><span class="color safe-zone"></span> Zonas seguras</div>
-                </div>
+            
+            <div class="emergency-card">
+                <h2 class="card-title">🔥 Incendio Forestal</h2>
+                <p>Actuación ante incendios y evacuación en zonas rurales.</p>
+                <button class="card-btn" onclick="location.href='protocolos/incendio-forestal.html'">
+                    Ver protocolo <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-                <!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""></script>
-        </main>
-    </div>
+        </div>
 
-    <script src="JS/main.js"></script>
-    <script src="JS/map.js"></script>
+        <!-- Mapa de riesgo interactivo -->
+        <div class="risk-map">
+            <h2>Mapa de Riesgo en tu Zona</h2>
+            <div class="map-container" id="riskMap"></div>
+            <div class="map-layers">
+                <button class="layer-btn active" data-layer="all">Todos</button>
+                <button class="layer-btn" data-layer="flood">Inundaciones</button>
+                <button class="layer-btn" data-layer="fire">Incendios</button>
+                <button class="layer-btn" data-layer="earthquake">Sismos</button>
+                <button class="layer-btn" data-layer="shelters">Refugios</button>
+            </div>
+        </div>
+
+        <!-- Kit de emergencia -->
+        <div class="emergency-kit">
+            <h2>🧰 Kit Básico para Desastres Naturales</h2>
+            <div class="kit-items">
+                <div class="kit-item">✔ Agua (4L por persona)</div>
+                <div class="kit-item">✔ Alimentos no perecederos</div>
+                <div class="kit-item">✔ Botiquín de primeros auxilios</div>
+                <div class="kit-item">✔ Linterna + pilas</div>
+                <div class="kit-item">✔ Radio portátil</div>
+                <div class="kit-item">✔ Documentos importantes</div>
+                <div class="kit-item">✔ Medicamentos esenciales</div>
+                <div class="kit-item">✔ Manta térmica</div>
+            </div>
+        </div>
+
+        <!-- Sistema de alertas -->
+        <div class="alert-system">
+            <h2>⚠ Sistema de Alertas Tempranas</h2>
+            <p>Recibe notificaciones sobre emergencias en tu área:</p>
+            <div class="alert-buttons">
+                <button class="alert-btn">
+                    <i class="fas fa-bell"></i> Alertas por SMS
+                </button>
+                <button class="alert-btn">
+                    <i class="fas fa-envelope"></i> Alertas por Email
+                </button>
+                <button class="alert-btn">
+                    <i class="fas fa-mobile-alt"></i> Notificaciones App
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Mapa de riesgo con capas
+        const riskMap = L.map('riskMap').setView([39.4699, -0.3763], 12);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(riskMap);
+
+        // Capas de ejemplo (en un sistema real serían geojson)
+        const floodZone = L.polygon(
+            [[39.47, -0.38], [39.47, -0.37], [39.46, -0.37], [39.46, -0.38]],
+            {color: '#2196F3', fillOpacity: 0.4}
+        ).addTo(riskMap).bindPopup("Zona de riesgo de inundación");
+        
+        const fireZone = L.polygon(
+            [[39.48, -0.39], [39.48, -0.38], [39.47, -0.38], [39.47, -0.39]],
+            {color: '#FF5722', fillOpacity: 0.4}
+        ).addTo(riskMap).bindPopup("Zona de riesgo de incendio");
+        
+        const shelters = L.layerGroup([
+            L.marker([39.468, -0.375]).bindPopup("Refugio Norte"),
+            L.marker([39.466, -0.380]).bindPopup("Refugio Sur")
+        ]).addTo(riskMap);
+
+        // Control de capas
+        document.querySelectorAll('.layer-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('.layer-btn.active').classList.remove('active');
+                this.classList.add('active');
+                
+                const layer = this.dataset.layer;
+                riskMap.eachLayer(l => {
+                    if(l !== riskMap) l.remove();
+                });
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(riskMap);
+                
+                if(layer === 'all' || layer === 'flood') floodZone.addTo(riskMap);
+                if(layer === 'all' || layer === 'fire') fireZone.addTo(riskMap);
+                if(layer === 'all' || layer === 'shelters') shelters.addTo(riskMap);
+            });
+        });
+    </script>
 </body>
 </html>
