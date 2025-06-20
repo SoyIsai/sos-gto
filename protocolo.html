@@ -4,497 +4,351 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protocolos de Emergencia | SOS</title>
-    <link rel="stylesheet" href="CSS/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <style>
-        /* Estilos mejorados para el lobby */
         :root {
-            --health: #FF6B6B;
-            --natural: #4ECDC4;
-            --accidents: #FFD166;
-            --emergency: #FF3A44;
-            --dark: #2F4858;
-            --light: #F7F9FC;
+            --primary: #FF3A44;
+            --primary-light: #FF6B6B;
+            --primary-dark: #CC0000;
+            --bg-light: #FFFFFF;
+            --bg-gray: #F5F5F5;
+            --text-dark: #333333;
+            --text-gray: #666666;
         }
-        
-        .protocols-lobby {
-            padding: 2rem 5%;
-            background-color: var(--light);
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .search-container {
-            margin: 2rem 0;
-            position: relative;
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
         }
-        
-        .search-container input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            border: 2px solid #ddd;
-            font-size: 1rem;
-            padding-left: 3.5rem;
-        }
-        
-        .search-container i {
-            position: absolute;
-            left: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--dark);
-        }
-        
-        .categories-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .category-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-        
-        .category-header {
-            padding: 1.5rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .health { background: var(--health); }
-        .natural { background: var(--natural); }
-        .accidents { background: var(--accidents); }
-        
-        .category-icon {
-            font-size: 1.8rem;
-        }
-        
-        .protocols-list {
-            padding: 1.5rem;
-        }
-        
-        .protocol-item {
-            padding: 1rem 0;
-            border-bottom: 1px solid #eee;
+
+        /* Navbar minimalista */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--bg-light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-        
-        .protocol-item:last-child {
-            border-bottom: none;
-        }
-        
-        .protocol-item a {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            flex-grow: 1;
-        }
-        
-        .protocol-item i {
-            color: #999;
-        }
-        
-        .emergency-section {
-            margin-top: 3rem;
-            background: linear-gradient(135deg, #FF3A44, #FF6B6B);
-            padding: 2rem;
-            border-radius: 15px;
-            color: white;
-            text-align: center;
-        }
-        
-        .emergency-section h2 {
-            margin-bottom: 1rem;
-        }
-        
-        .emergency-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .emergency-btn {
-            background: white;
-            color: var(--emergency);
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
+
+        .logo-container {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s;
         }
-        
-        .emergency-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+        .logo {
+            height: 30px;
         }
-        
-        .location-map {
-            height: 250px;
-            margin-top: 2rem;
+
+        .app-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* Contenido principal */
+        .protocols-container {
+            padding: 2rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        /* Categorías como botones */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-btn {
+            background-color: var(--bg-light);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 58, 68, 0.2);
+        }
+
+        .category-btn:hover .emoji {
+            transform: scale(1.1);
+        }
+
+        .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-desc {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Mapa de zonas */
+        .map-section {
+            margin: 3rem 0;
+        }
+
+        .map-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .map-container {
+            height: 400px;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
         }
-        
-        .quick-access {
+
+        .map-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        /* Footer minimalista */
+        .footer {
+            background-color: var(--bg-gray);
+            padding: 2rem 5%;
+            text-align: center;
             margin-top: 3rem;
         }
-        
-        .quick-access h2 {
-            margin-bottom: 1.5rem;
-            color: var(--dark);
+
+        .footer p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
         }
-        
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .quick-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
-        
-        .quick-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .quick-card i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--emergency);
-        }
-        
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .categories-container {
+            .categories-grid {
                 grid-template-columns: 1fr;
             }
             
-            .emergency-buttons {
-                flex-direction: column;
-            }
-            
-            .emergency-btn {
-                justify-content: center;
+            .map-container {
+                height: 300px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Barra de navegación mejorada -->
+    <!-- Barra de navegación minimalista -->
     <nav class="navbar">
         <div class="logo-container">
-            <img src="ASSETS/logo-sos.png" alt="Logo SOS" class="logo">
+            <img src="assets/logo-sos.png" alt="Logo SOS" class="logo">
             <span class="app-name">SOS</span>
         </div>
-
-        <div class="burger-menu" id="burgerMenu">
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="index.html#como-funciona">¿Cómo funciona?</a></li>
-            <li><a href="protocolo.html" class="active">Protocolos</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-            <li><a href="#descargar" class="btn-download">Descargar App</a></li>
-        </ul>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
     </nav>
 
-    <!-- Lobby de protocolos -->
-    <main class="protocols-lobby">
-        <header class="lobby-header">
-            <h1>Protocolos de Emergencia</h1>
-            <p>Selecciona una categoría o busca un protocolo específico</p>
-        </header>
+    <!-- Contenido principal -->
+    <main class="protocols-container">
+        <h1 class="page-title">Selecciona el tipo de emergencia</h1>
         
-        <!-- Barra de búsqueda -->
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Buscar protocolos (terremoto, incendio, RCP...)">
-        </div>
-        
-        <!-- Mapa de ubicación actual -->
-        <div class="location-map" id="locationMap"></div>
-        <p class="map-info"><i class="fas fa-info-circle"></i> Marcadores: <span class="safe-zone">Zonas seguras</span>, <span class="danger-zone">Zonas de peligro</span>, <span class="hospital">Hospitales</span></p>
-        
-        <!-- Categorías de protocolos -->
-        <div class="categories-container">
-            <!-- Salud -->
-            <div class="category-card">
-                <div class="category-header health">
-                    <i class="fas fa-heartbeat category-icon"></i>
-                    <h2>Salud</h2>
-                </div>
-                <div class="protocols-list">
-                    <div class="protocol-item">
-                        <a href="protocolos/rcp.html">Reanimación Cardiopulmonar (RCP)</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="protocol-item">
-                        <a href="protocolos/ahogamiento.html">Atragantamiento/Ahogamiento</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="protocol-item">
-                        <a href="protocolos/convulsiones.html">Convulsiones/Epilepsia</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
+        <!-- Categorías como botones grandes -->
+        <div class="categories-grid">
+            <div class="category-btn" onclick="location.href='#salud'">
+                <span class="emoji">💊</span>
+                <h3 class="category-name">Salud</h3>
+                <p class="category-desc">Emergencias médicas y primeros auxilios</p>
             </div>
             
-            <!-- Desastres Naturales -->
-            <div class="category-card">
-                <div class="category-header natural">
-                    <i class="fas fa-mountain category-icon"></i>
-                    <h2>Desastres Naturales</h2>
-                </div>
-                <div class="protocols-list">
-                    <div class="protocol-item">
-                        <a href="protocolos/terremoto.html">Terremoto</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="protocol-item">
-                        <a href="protocolos/inundacion.html">Inundación</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="protocol-item">
-                        <a href="protocolos/incendio-forestal.html">Incendio Forestal</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
+            <div class="category-btn" onclick="location.href='#naturales'">
+                <span class="emoji">🌪️</span>
+                <h3 class="category-name">Desastres Naturales</h3>
+                <p class="category-desc">Protocolos para fenómenos naturales</p>
             </div>
             
-            <!-- Accidentes -->
-            <div class="category-card">
-                <div class="category-header accidents">
-                    <i class="fas fa-car-crash category-icon"></i>
-                    <h2>Accidentes</h2>
+            <div class="category-btn" onclick="location.href='#accidentes'">
+                <span class="emoji">🚑</span>
+                <h3 class="category-name">Accidentes</h3>
+                <p class="category-desc">Emergencias cotidianas y accidentes</p>
+            </div>
+        </div>
+
+        <!-- Mapa de zonas -->
+        <div class="map-section">
+            <h2 class="map-title">Zonas de seguridad en tu área</h2>
+            <div class="map-container" id="safetyMap"></div>
+            <div class="map-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4CAF50;"></div>
+                    <span>Zonas seguras</span>
                 </div>
-                <div class="protocols-list">
-                    <div class="protocol-item">
-                        <a href="protocolos/accidente-auto.html">Accidente Automovilístico</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="protocol-item">
-                        <a href="protocolos/quemaduras.html">Quemaduras</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="protocol-item">
-                        <a href="protocolos/caidas.html">Caídas/Traumatismos</a>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FF3A44;"></div>
+                    <span>Zonas de peligro</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #2196F3;"></div>
+                    <span>Hospitales</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFC107;"></div>
+                    <span>Refugios</span>
                 </div>
             </div>
         </div>
+
+        <!-- Secciones de protocolos (se muestran al hacer clic en categoría) -->
+        <section id="salud" class="protocol-section" style="display: none;">
+            <!-- Contenido dinámico se cargará aquí -->
+        </section>
         
-        <!-- Accesos rápidos -->
-        <div class="quick-access">
-            <h2>Accesos Rápidos</h2>
-            <div class="quick-grid">
-                <div class="quick-card">
-                    <i class="fas fa-hospital"></i>
-                    <h3>Hospitales Cercanos</h3>
-                    <p>Ubica los centros médicos más próximos</p>
-                </div>
-                <div class="quick-card">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <h3>Zonas Seguras</h3>
-                    <p>Refugios y puntos de encuentro</p>
-                </div>
-                <div class="quick-card">
-                    <i class="fas fa-phone-alt"></i>
-                    <h3>Números de Emergencia</h3>
-                    <p>Contactos locales de ayuda</p>
-                </div>
-                <div class="quick-card">
-                    <i class="fas fa-first-aid"></i>
-                    <h3>Botiquín Virtual</h3>
-                    <p>Guía de primeros auxilios</p>
-                </div>
-            </div>
-        </div>
+        <section id="naturales" class="protocol-section" style="display: none;">
+            <!-- Contenido dinámico se cargará aquí -->
+        </section>
         
-        <!-- Sección de emergencia -->
-        <div class="emergency-section">
-            <h2><i class="fas fa-exclamation-triangle"></i> ¿Emergencia Inmediata?</h2>
-            <p>Si estás en peligro o presencias una emergencia, actúa ahora</p>
-            <div class="emergency-buttons">
-                <button class="emergency-btn" id="callEmergency">
-                    <i class="fas fa-phone-alt"></i> LLAMAR AL 911
-                </button>
-                <button class="emergency-btn" id="shareLocation">
-                    <i class="fas fa-location-arrow"></i> COMPARTIR UBICACIÓN
-                </button>
-                <button class="emergency-btn" id="emergencyGuide">
-                    <i class="fas fa-compass"></i> GUÍA DE EMERGENCIA
-                </button>
-            </div>
-        </div>
+        <section id="accidentes" class="protocol-section" style="display: none;">
+            <!-- Contenido dinámico se cargará aquí -->
+        </section>
     </main>
 
-    <!-- Footer mejorado -->
+    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>SOS</h4>
-                <p>Tu seguridad es nuestra prioridad</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-            <div class="footer-section">
-                <h4>Enlaces Rápidos</h4>
-                <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="protocolo.html">Todos los protocolos</a></li>
-                    <li><a href="#">Descargar App</a></li>
-                    <li><a href="#">Blog de seguridad</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Términos de uso</a></li>
-                    <li><a href="#">Política de privacidad</a></li>
-                    <li><a href="#">Aviso legal</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Contacto</h4>
-                <p><i class="fas fa-map-marker-alt"></i> C. Amadeo de Saboya, 4 - 3 piso, 46010 Valencia</p>
-                <p><i class="fas fa-phone"></i> (+34) 963 39 50 17</p>
-                <p><i class="fas fa-envelope"></i> contacto@sosapp.com</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 SOS Emergency Protocols. Todos los derechos reservados.</p>
-        </div>
+        <p>Presiona el botón de emergencia si necesitas ayuda inmediata</p>
+        <p>&copy; 2023 SOS Protocolos. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Scripts mejorados -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Mapa interactivo
-        const map = L.map('locationMap').setView([39.4699, -0.3763], 15); // Coordenadas de Valencia
+        // Mapa de zonas coloreadas
+        const map = L.map('safetyMap').setView([39.4699, -0.3763], 14);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
-        // Marcadores de ejemplo (personalizar con datos reales)
-        const safeZoneIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41]
-        });
-        
-        const dangerZoneIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41]
-        });
-        
-        const hospitalIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41]
-        });
-        
-        // Añadir marcadores (coordenadas de ejemplo)
-        L.marker([39.4699, -0.3763], {icon: safeZoneIcon})
-            .addTo(map)
-            .bindPopup("<b>Zona Segura</b><br>Plaza del Ayuntamiento");
-            
-        L.marker([39.4715, -0.3738], {icon: dangerZoneIcon})
-            .addTo(map)
-            .bindPopup("<b>Zona de Peligro</b><br>Río Turia - Posible inundación");
-            
-        L.marker([39.4682, -0.3745], {icon: hospitalIcon})
-            .addTo(map)
-            .bindPopup("<b>Hospital General</b><br>A 1.2 km - 5 min en coche");
-        
-        // Botón de emergencia
-        document.getElementById('callEmergency').addEventListener('click', function() {
-            if(confirm('¿Deseas llamar al servicio de emergencias 911?')) {
-                window.location.href = 'tel:911';
-            }
-        });
-        
-        // Compartir ubicación
-        document.getElementById('shareLocation').addEventListener('click', function() {
-            if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const message = `Necesito ayuda! Mi ubicación: https://www.google.com/maps?q=${lat},${lon}`;
-                    
-                    if(navigator.share) {
-                        navigator.share({
-                            title: 'Emergencia - Necesito ayuda',
-                            text: message,
-                        }).catch(err => {
-                            alert('Error al compartir: ' + err);
-                        });
-                    } else {
-                        // Fallback para navegadores sin API Share
-                        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-                    }
-                });
-            } else {
-                alert('No se pudo acceder a tu ubicación');
-            }
-        });
-        
-        // Menú hamburguesa
-        const burgerMenu = document.getElementById('burgerMenu');
-        const navLinks = document.getElementById('navLinks');
-        
-        burgerMenu.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = burgerMenu.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-        
-        // Cerrar menú al hacer clic en enlace (mobile)
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                burgerMenu.querySelector('i').classList.remove('fa-times');
-                burgerMenu.querySelector('i').classList.add('fa-bars');
+
+        // Zonas coloreadas (ejemplo con polígonos)
+        const safeZone = L.polygon([
+            [39.472, -0.380],
+            [39.472, -0.372],
+            [39.467, -0.372],
+            [39.467, -0.380]
+        ], {
+            color: '#4CAF50',
+            fillColor: '#4CAF50',
+            fillOpacity: 0.3,
+            weight: 2
+        }).addTo(map).bindPopup("Zona segura - Plaza del Ayuntamiento");
+
+        const dangerZone = L.polygon([
+            [39.470, -0.375],
+            [39.470, -0.370],
+            [39.465, -0.370],
+            [39.465, -0.375]
+        ], {
+            color: '#FF3A44',
+            fillColor: '#FF3A44',
+            fillOpacity: 0.3,
+            weight: 2
+        }).addTo(map).bindPopup("Zona de peligro - Río Turia");
+
+        const hospitalZone = L.circle([39.4682, -0.3745], {
+            color: '#2196F3',
+            fillColor: '#2196F3',
+            fillOpacity: 0.3,
+            radius: 300
+        }).addTo(map).bindPopup("Hospital General - 1.2 km");
+
+        // Navegación a protocolos específicos
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('onclick').split("'")[1];
+                // Aquí iría la lógica para cargar los protocolos específicos
+                alert(`Cargando protocolos de ${this.querySelector('.category-name').textContent}`);
+                // window.location.href = `protocolos/${targetId}.html`;
             });
         });
+
+        // Botón de emergencia flotante
+        const emergencyBtn = document.createElement('a');
+        emergencyBtn.href = 'tel:911';
+        emergencyBtn.className = 'floating-emergency-btn';
+        emergencyBtn.innerHTML = '<i class="fas fa-bell"></i>';
+        emergencyBtn.style = `
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.4);
+            z-index: 999;
+            text-decoration: none;
+            transition: all 0.3s;
+        `;
+        emergencyBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1)';
+            this.style.backgroundColor = 'var(--primary-dark)';
+        });
+        emergencyBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+            this.style.backgroundColor = 'var(--primary)';
+        });
+        document.body.appendChild(emergencyBtn);
     </script>
 </body>
 </html>
