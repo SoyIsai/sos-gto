@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kit Digital de Emergencia | SOS</title>
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --secondary: #2F4858;
+            --accent: #FFD166;
+        }
+        
+        .kit-generator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        
+        .config-panel, .kit-result {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .family-member {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .avatar-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .avatar-option.selected {
+            transform: scale(1.1);
+            border: 3px solid var(--accent);
+        }
+        
+        .kit-item-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            background: #F7F9FC;
+        }
+        
+        .qr-generator {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .kit-generator {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="kit-generator">
+        <div class="config-panel">
+            <h2>🛠️ Configura tu Kit</h2>
+            
+            <div class="family-config">
+                <h3>👨‍👩‍👧‍👦 Miembros de la Familia</h3>
+                <div id="familyMembers">
+                    <!-- Dinámico -->
+                </div>
+                <button id="addMember">➕ Añadir Miembro</button>
+                
+                <div class="avatar-selector">
+                    <img src="assets/avatars/adulto.svg" class="avatar-option">
+                    <img src="assets/avatars/niño.svg" class="avatar-option">
+                    <img src="assets/avatars/bebe.svg" class="avatar-option">
+                    <img src="assets/avatars/mascota.svg" class="avatar-option">
+                    <img src="assets/avatars/anciano.svg" class="avatar-option">
+                </div>
+            </div>
+            
+            <div class="conditions-config">
+                <h3>⚠ Condiciones Especiales</h3>
+                <label><input type="checkbox"> Asma/Alergias</label>
+                <label><input type="checkbox"> Diabetes</label>
+                <label><input type="checkbox"> Movilidad Reducida</label>
+                <label><input type="checkbox"> Medicación Diaria</label>
+            </div>
+            
+            <div class="location-config">
+                <h3>📍 Mi Zona de Riesgo</h3>
+                <select>
+                    <option>Terremotos</option>
+                    <option>Inundaciones</option>
+                    <option>Incendios</option>
+                    <option>Huracanes</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="kit-result">
+            <h2>🧰 Tu Kit Personalizado</h2>
+            <div id="kitItems">
+                <!-- Generado automáticamente -->
+                <div class="kit-item-card">
+                    <img src="assets/icons/agua.svg" width="40">
+                    <div style="flex-grow: 1; margin-left: 1rem;">
+                        <h4>Agua potable</h4>
+                        <p>4 litros por persona (72h)</p>
+                    </div>
+                    <input type="checkbox">
+                </div>
+                <!-- Más items generados dinámicamente -->
+            </div>
+            
+            <div class="qr-generator">
+                <h3>📲 QR de Emergencia</h3>
+                <div id="qrCode"></div>
+                <p>Escanea para ver tu kit desde cualquier dispositivo</p>
+                <button>Descargar QR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica para generar kit personalizado
+        // Basado en miembros, condiciones y ubicación
+        // Integración con API de generación QR
+    </script>
+</body>
+</html>
