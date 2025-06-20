@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCP - SOS Protocolos</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --primary-light: #FF6B6B;
+            --dark: #2F4858;
+            --light: #FFFFFF;
+            --gray: #F5F5F5;
+        }
+
+        .rcp-protocol {
+            padding: 2rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .protocol-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 1rem;
+        }
+
+        .protocol-title {
+            font-size: 2rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .emergency-alert {
+            background: #FFF3E0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FFA000;
+        }
+
+        .steps-container {
+            margin: 3rem 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            min-width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .metronome {
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .metronome-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+
+        .metronome-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .metronome-btn:hover {
+            background: var(--primary-light);
+        }
+
+        .age-tabs {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            justify-content: center;
+        }
+
+        .age-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--gray);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .age-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .video-guide {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 400px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .step {
+                flex-direction: column;
+            }
+            
+            .video-placeholder {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="rcp-protocol">
+        <header class="protocol-header">
+            <h1 class="protocol-title"><span>🫀</span> Reanimación Cardiopulmonar (RCP)</h1>
+            <p>Técnica de emergencia para cuando la respiración o los latidos del corazón se han detenido</p>
+        </header>
+
+        <div class="emergency-alert">
+            <h3><i class="fas fa-exclamation-triangle"></i> ANTES DE COMENZAR</h3>
+            <p>Verifica que la persona no responda y no respire normalmente. Pide ayuda y llama al servicio de emergencias antes de comenzar RCP.</p>
+        </div>
+
+        <!-- Selector de edad -->
+        <div class="age-tabs">
+            <div class="age-tab active" data-age="adult">Adultos</div>
+            <div class="age-tab" data-age="child">Niños (1-8 años)</div>
+            <div class="age-tab" data-age="baby">Bebés (<1 año)</div>
+        </div>
+
+        <!-- Pasos RCP -->
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Posiciona a la persona</h3>
+                    <p>Coloca a la persona boca arriba sobre una superficie firme. Arrodíllate a su lado.</p>
+                    <p class="age-specific adult show">Para adultos: No inclines la cabeza demasiado</p>
+                    <p class="age-specific child" style="display:none">Para niños: Inclina ligeramente la cabeza hacia atrás</p>
+                    <p class="age-specific baby" style="display:none">Para bebés: Coloca sobre superficie plana, no inclines</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Compresiones torácicas</h3>
+                    <div class="age-specific adult show">
+                        <p>Coloca el talón de una mano en el centro del pecho (entre los pezones). Coloca la otra mano encima y entrelaza los dedos.</p>
+                        <p>Comprime el pecho al menos 5 cm de profundidad a un ritmo de 100-120 compresiones por minuto.</p>
+                    </div>
+                    <div class="age-specific child" style="display:none">
+                        <p>Usa una o dos manos (según tamaño del niño) en el centro del pecho.</p>
+                        <p>Comprime unos 5 cm de profundidad (1/3 del diámetro torácico).</p>
+                    </div>
+                    <div class="age-specific baby" style="display:none">
+                        <p>Usa dos dedos (índice y medio) justo debajo de la línea de los pezones.</p>
+                        <p>Comprime unos 4 cm de profundidad (1/3 del diámetro torácico).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Ventilaciones (si entrenado)</h3>
+                    <div class="age-specific adult show">
+                        <p>Después de 30 compresiones, abre la vía aérea (inclinación cabeza-elevación mentón) y da 2 respiraciones de 1 segundo cada una.</p>
+                    </div>
+                    <div class="age-specific child" style="display:none">
+                        <p>30 compresiones seguidas de 2 respiraciones (cubriendo completamente boca y nariz del niño).</p>
+                    </div>
+                    <div class="age-specific baby" style="display:none">
+                        <p>30 compresiones seguidas de 2 respiraciones (cubriendo boca y nariz con tu boca).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrónomo -->
+        <div class="metronome">
+            <h3><i class="fas fa-music"></i> Ritmo de Compresiones (100-120/min)</h3>
+            <div class="metronome-display" id="metroDisplay">--</div>
+            <button class="metronome-btn" id="startMetro">Iniciar</button>
+            <button class="metronome-btn" id="stopMetro">Detener</button>
+            <audio id="metroAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-metronome-click-952.mp3" preload="auto"></audio>
+        </div>
+
+        <!-- Video guía -->
+        <div class="video-guide">
+            <h3><i class="fas fa-video"></i> Video Demostrativo</h3>
+            <div class="video-placeholder">
+                <p>[Video demostración RCP - Espacio para integración]</p>
+            </div>
+            <button class="metronome-btn">
+                <i class="fas fa-download"></i> Descargar Guía Completa
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Selector de edad
+        document.querySelectorAll('.age-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelector('.age-tab.active').classList.remove('active');
+                this.classList.add('active');
+                
+                const age = this.dataset.age;
+                document.querySelectorAll('.age-specific').forEach(el => {
+                    el.style.display = 'none';
+                });
+                document.querySelectorAll(`.age-specific.${age}`).forEach(el => {
+                    el.style.display = 'block';
+                });
+            });
+        });
+
+        // Metrónomo
+        const metroDisplay = document.getElementById('metroDisplay');
+        const startBtn = document.getElementById('startMetro');
+        const stopBtn = document.getElementById('stopMetro');
+        const audio = document.getElementById('metroAudio');
+        let metroInterval;
+        let isPlaying = false;
+        let beat = true;
+
+        startBtn.addEventListener('click', function() {
+            if(!isPlaying) {
+                isPlaying = true;
+                metroDisplay.textContent = '▶ 100/min';
+                metroInterval = setInterval(function() {
+                    audio.currentTime = 0;
+                    audio.play();
+                    metroDisplay.textContent = beat ? '▶ COMPRIME' : '▶ LIBERA';
+                    beat = !beat;
+                }, 300); // 100 compresiones/min = 600ms/compresión (300ms para cada parte)
+            }
+        });
+
+        stopBtn.addEventListener('click', function() {
+            clearInterval(metroInterval);
+            isPlaying = false;
+            metroDisplay.textContent = '--';
+        });
+    </script>
+</body>
+</html>
