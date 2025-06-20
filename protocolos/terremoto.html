@@ -300,6 +300,25 @@ function simulateEarthquake(intensity) {
     document.body.style.transform = `rotate(${Math.random() * intensity}deg)`;
     setTimeout(() => { document.body.style.transform = ''; }, 500);
 }
+        <!-- Añade esta sección -->
+<section class="mapa-seccion">
+    <h3>🗺 Mapa de Riesgo Actual</h3>
+    <div id="mapa-protocolo" style="height: 400px; border-radius: 10px;"></div>
+    <a href="../herramientas/mapa-vivo/" class="btn-ver-mapa">
+        Ver mapa completo
+    </a>
+</section>
+
+<script>
+    // Mapa simplificado para el protocolo
+    const miniMap = L.map('mapa-protocolo').setView([19.4326, -99.1332], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+    
+    // Añadir capas relevantes según el protocolo
+    L.marker([19.4350, -99.1400])
+        .addTo(miniMap)
+        .bindPopup("Zona de alto riesgo sísmico");
+</script>
     </script>
 </body>
 </html>
