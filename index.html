@@ -4,394 +4,256 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOS - Tu seguridad primero</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <style>
         :root {
-            --primary: #FF3A44;
-            --primary-dark: #E0353E;
-            --secondary: #2F4858;
-            --accent: #FFD166;
-            --light: #F7F9FC;
-            --dark: #333;
-            --gray: #6c757d;
+            --primary: #FF3A44;       /* Rojo de emergencia */
+            --primary-dark: #E0353E;  /* Rojo oscuro */
+            --secondary: #2F4858;     /* Azul oscuro */
+            --accent: #FFD166;        /* Amarillo de alerta */
+            --light: #F7F9FC;         /* Fondo claro */
+            --dark: #333;             /* Texto oscuro */
+            --gray: #6c757d;          /* Texto gris */
+            --card-bg: #FFFFFF;       /* Fondo de tarjetas */
         }
 
-        /* Estilos generales mejorados */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             color: var(--dark);
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,245,0.95)), 
-                        url('assets/background-pattern.png') repeat;
-            margin: 0;
+            background-color: var(--light);
             overflow-x: hidden;
         }
 
-        /* Barra de navegación premium */
+        /* Barra de navegación */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.2rem 5%;
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            padding: 1rem 5%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             width: 100%;
             z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            padding: 0.8rem 5%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.5rem;
         }
 
         .logo {
-            height: 42px;
-            transition: transform 0.3s;
-        }
-
-        .logo:hover {
-            transform: rotate(15deg);
+            height: 40px;
         }
 
         .app-name {
             font-weight: 700;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--primary);
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
         }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1.8rem;
+            gap: 1.5rem;
         }
 
         .nav-links li a {
             text-decoration: none;
-            color: var(--secondary);
+            color: var(--dark);
             font-weight: 500;
-            font-size: 1.05rem;
-            transition: all 0.3s;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background-color: var(--primary);
-            transition: width 0.3s;
+            transition: color 0.3s;
         }
 
         .nav-links li a:hover {
             color: var(--primary);
         }
 
-        .nav-links li a:hover::after {
-            width: 100%;
-        }
-
         .btn-download {
             background-color: var(--primary);
             color: white !important;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
             font-weight: 600;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(255, 58, 68, 0.3);
         }
 
         .btn-download:hover {
             background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 58, 68, 0.4);
         }
 
         .burger-menu {
             display: none;
-            font-size: 1.6rem;
-            color: var(--secondary);
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: transform 0.3s;
         }
 
-        .burger-menu:hover {
-            transform: scale(1.1);
-        }
-
-        /* Hero section premium */
+        /* Hero Section */
         .hero {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 10rem 5% 6rem;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
             min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('assets/hero-bg-pattern.svg') no-repeat;
-            background-size: cover;
-            opacity: 0.05;
-            z-index: -1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,245,245,0.9));
         }
 
         .hero-content {
-            flex: 1;
-            max-width: 600px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             margin-bottom: 1.5rem;
             color: var(--secondary);
-            line-height: 1.2;
         }
 
         .slogan {
-            font-size: 1.4rem;
-            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
             color: var(--gray);
-            max-width: 90%;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 1.5rem;
+            justify-content: center;
+            gap: 1rem;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .btn-primary, .btn-secondary {
-            padding: 1rem 2rem;
-            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .btn-primary {
-            background-color: var(--primary);
+            background-color: var(--secondary);
             color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: 0.5s;
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
+            background-color: #1e3a4a;
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 58, 68, 0.4);
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
         }
 
         .btn-secondary {
-            border: 2px solid var(--secondary);
-            color: var(--secondary);
-            background-color: transparent;
+            background-color: var(--primary);
+            color: white;
         }
 
         .btn-secondary:hover {
-            background-color: var(--secondary);
-            color: white;
+            background-color: var(--primary-dark);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(47, 72, 88, 0.3);
         }
 
         .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 1s ease-out;
+            margin-top: 3rem;
+            max-width: 100%;
         }
 
         .hero-image img {
-            max-width: 100%;
+            max-width: 300px;
             height: auto;
-            animation: float 4s ease-in-out infinite;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));
-            transition: transform 0.5s;
-        }
-
-        .hero-image img:hover {
-            transform: scale(1.05) rotate(5deg);
+            animation: float 3s ease-in-out infinite;
         }
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
 
         /* Botón flotante de emergencia */
         .floating-emergency-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 70px;
-            height: 70px;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
             background-color: var(--primary);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 6px 20px rgba(255, 58, 68, 0.5);
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.4);
             z-index: 999;
-            transition: all 0.3s;
-            animation: pulse 2s infinite;
             text-decoration: none;
+            transition: all 0.3s;
         }
 
         .floating-emergency-btn:hover {
-            transform: scale(1.1) rotate(10deg);
-            background-color: #ff1a26;
-            box-shadow: 0 8px 25px rgba(255, 26, 38, 0.6);
+            transform: scale(1.1);
+            background-color: var(--primary-dark);
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 58, 68, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 58, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 58, 68, 0); }
-        }
-
-        /* Sección "Cómo funciona" mejorada */
+        /* Sección "Cómo funciona" */
         .how-it-works {
-            padding: 6rem 5%;
+            padding: 4rem 5%;
             background-color: white;
             text-align: center;
-            position: relative;
-        }
-
-        .how-it-works::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('assets/wave-top.svg') no-repeat center top;
-            background-size: cover;
         }
 
         .how-it-works h2 {
-            font-size: 2.8rem;
-            margin-bottom: 5rem;
+            font-size: 2rem;
+            margin-bottom: 3rem;
             color: var(--secondary);
             position: relative;
-            display: inline-block;
         }
 
         .how-it-works h2::after {
             content: '';
             position: absolute;
-            bottom: -15px;
+            bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 5px;
+            width: 80px;
+            height: 3px;
             background-color: var(--primary);
-            border-radius: 3px;
         }
 
         .steps-container {
             display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            max-width: 1200px;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .step {
-            flex: 1;
-            min-width: 280px;
-            max-width: 320px;
-            padding: 2.5rem 2rem;
-            background-color: var(--light);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .step::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background-color: var(--primary);
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
         }
 
         .step:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
         }
 
         .step-number {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background-color: var(--primary);
             color: white;
             border-radius: 50%;
@@ -399,85 +261,52 @@
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 1.5rem;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 5px 15px rgba(255, 58, 68, 0.3);
+            margin: 0 auto 1rem;
         }
 
         .step-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .step:hover .step-icon {
-            transform: scale(1.1);
+            margin-bottom: 1rem;
         }
 
         .step h3 {
             margin-bottom: 1rem;
             color: var(--secondary);
-            font-size: 1.4rem;
-        }
-
-        .step p {
-            color: var(--gray);
-            font-size: 1.05rem;
-            line-height: 1.6;
         }
 
         /* Testimonios */
         .testimonials {
-            padding: 6rem 5%;
+            padding: 4rem 5%;
             background-color: var(--light);
             text-align: center;
         }
 
         .testimonials h2 {
-            font-size: 2.8rem;
-            margin-bottom: 5rem;
+            font-size: 2rem;
+            margin-bottom: 3rem;
             color: var(--secondary);
         }
 
         .testimonials-container {
             display: flex;
-            gap: 2rem;
-            overflow-x: auto;
-            padding: 2rem 0;
-            scroll-snap-type: x mandatory;
-            max-width: 1400px;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .testimonial-card {
-            min-width: 350px;
-            background: white;
-            border-radius: 15px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            scroll-snap-align: start;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             text-align: left;
-            position: relative;
-        }
-
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 5rem;
-            color: rgba(255, 58, 68, 0.1);
-            font-family: serif;
-            line-height: 1;
         }
 
         .testimonial-content {
-            margin-bottom: 1.5rem;
             font-style: italic;
-            color: var(--dark);
-            position: relative;
-            z-index: 1;
+            margin-bottom: 1rem;
         }
 
         .testimonial-author {
@@ -491,201 +320,149 @@
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--primary);
+            border: 2px solid var(--primary);
         }
 
         .author-info h4 {
-            margin: 0;
             color: var(--secondary);
+            margin-bottom: 0.2rem;
         }
 
         .author-info p {
-            margin: 0;
             color: var(--gray);
             font-size: 0.9rem;
         }
 
-        /* Footer mejorado */
+        /* Footer */
         .footer {
             background-color: var(--secondary);
             color: white;
-            padding: 4rem 5% 2rem;
-            position: relative;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('assets/wave-top-dark.svg') no-repeat center top;
-            background-size: cover;
+            padding: 3rem 5% 2rem;
+            text-align: center;
         }
 
         .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .footer-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .footer-section h4 {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            display: inline-block;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: white;
         }
 
-        .footer-section h4::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background-color: var(--primary);
-        }
-
-        .footer-section p {
-            margin-bottom: 1.5rem;
+        .footer-section p, .footer-section li {
+            margin-bottom: 0.5rem;
             opacity: 0.8;
-            line-height: 1.6;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-section a:hover {
+            opacity: 1;
+            text-decoration: underline;
         }
 
         .social-icons {
             display: flex;
-            gap: 1.2rem;
-            margin-top: 1.5rem;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .social-icons a {
             color: white;
-            font-size: 1.3rem;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .social-icons a:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-section ul li a {
-            color: white;
-            text-decoration: none;
-            opacity: 0.8;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .footer-section ul li a:hover {
-            opacity: 1;
-            color: var(--accent);
-            transform: translateX(5px);
+            font-size: 1.2rem;
         }
 
         .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
             margin-top: 2rem;
+            padding-top: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.7;
             font-size: 0.9rem;
         }
 
         /* Responsive */
-        @media (max-width: 992px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding-top: 8rem;
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
             }
-
-            .slogan {
-                max-width: 100%;
-                margin-left: auto;
-                margin-right: auto;
+            
+            .steps-container {
+                flex-direction: row;
+                flex-wrap: wrap;
             }
-
-            .hero-buttons {
-                justify-content: center;
+            
+            .step {
+                flex: 1;
+                min-width: 250px;
             }
-
-            .hero-image {
-                margin-top: 3rem;
+            
+            .testimonials-container {
+                flex-direction: row;
+                flex-wrap: wrap;
             }
+            
+            .testimonial-card {
+                flex: 1;
+                min-width: 300px;
+            }
+            
+            .footer-content {
+                flex-direction: row;
+                flex-wrap: wrap;
+                text-align: left;
+            }
+            
+            .footer-section {
+                flex: 1;
+                min-width: 200px;
+            }
+        }
 
+        @media (max-width: 767px) {
             .nav-links {
-                display: none;
                 position: fixed;
-                top: 80px;
+                top: 70px;
                 left: 0;
                 width: 100%;
                 background-color: white;
                 flex-direction: column;
                 align-items: center;
-                padding: 2rem 0;
-                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-                z-index: 999;
+                padding: 1rem 0;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                display: none;
             }
-
+            
             .nav-links.active {
                 display: flex;
             }
-
+            
             .burger-menu {
                 display: block;
             }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-
-            .slogan {
-                font-size: 1.2rem;
-            }
-
-            .how-it-works h2, 
-            .testimonials h2 {
-                font-size: 2.2rem;
-            }
-
-            .step {
-                min-width: 100%;
-            }
-
-            .testimonial-card {
-                min-width: 300px;
+            
+            .hero {
+                padding-top: 6rem;
             }
         }
     </style>
 </head>
 <body>
     <!-- Barra de navegación -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar">
         <div class="logo-container">
             <img src="assets/logo-sos.png" alt="Logo SOS" class="logo">
             <span class="app-name">SOS</span>
@@ -702,7 +479,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section (Página principal) -->
+    <!-- Hero Section -->
     <section id="inicio" class="hero">
         <div class="hero-content">
             <h1>Tu seguridad es primero</h1>
@@ -726,7 +503,7 @@
         <i class="fas fa-phone-alt"></i>
     </a>
 
-    <!-- Sección de "Cómo funciona" -->
+    <!-- Sección "Cómo funciona" -->
     <section id="como-funciona" class="how-it-works">
         <h2>¿Cómo funciona SOS?</h2>
         <div class="steps-container">
@@ -751,37 +528,27 @@
         </div>
     </section>
 
-    <!-- Sección de testimonios -->
+    <!-- Testimonios -->
     <section class="testimonials">
         <h2>Lo que dicen nuestros usuarios</h2>
         <div class="testimonials-container">
             <div class="testimonial-card">
-                <p class="testimonial-content">Gracias a SOS pude reaccionar rápidamente durante el último terremoto. Las instrucciones fueron claras y me ayudaron a mantener la calma.</p>
+                <p class="testimonial-content">"Durante el último terremoto, el código QR en mi oficina me mostró exactamente qué hacer. Las instrucciones fueron claras y me ayudaron a mantener la calma."</p>
                 <div class="testimonial-author">
                     <img src="assets/testimonial1.jpg" alt="Usuario" class="author-avatar">
                     <div class="author-info">
                         <h4>María González</h4>
-                        <p>Ciudadana, Valencia</p>
+                        <p>Valencia</p>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
-                <p class="testimonial-content">Como director de escuela, hemos instalado los códigos QR en todas las aulas. Ahora tanto alumnos como profesores saben exactamente qué hacer en emergencias.</p>
+                <p class="testimonial-content">"Como director de escuela, hemos instalado los códigos QR en todas las aulas. Ahora tanto alumnos como profesores saben exactamente qué hacer en emergencias."</p>
                 <div class="testimonial-author">
                     <img src="assets/testimonial2.jpg" alt="Usuario" class="author-avatar">
                     <div class="author-info">
                         <h4>Carlos Martínez</h4>
                         <p>Director de Escuela</p>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <p class="testimonial-content">Durante la última inundación, el código QR en mi edificio me mostró las rutas de evacuación más seguras. ¡Esta app salva vidas!</p>
-                <div class="testimonial-author">
-                    <img src="assets/testimonial3.jpg" alt="Usuario" class="author-avatar">
-                    <div class="author-info">
-                        <h4>Ana Rodríguez</h4>
-                        <p>Residente, Zona Costera</p>
                     </div>
                 </div>
             </div>
@@ -793,12 +560,11 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>SOS</h4>
-                <p>Innovando en seguridad desde 2025. Nuestra misión es proteger vidas mediante tecnología accesible.</p>
+                <p>Innovando en seguridad desde 2025.</p>
                 <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
             <div class="footer-section">
@@ -807,17 +573,7 @@
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#como-funciona">¿Cómo funciona?</a></li>
                     <li><a href="protocolos.html">Protocolos</a></li>
-                    <li><a href="#descargar">Descargar App</a></li>
-                    <li><a href="#">Blog de Seguridad</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Política de privacidad</a></li>
-                    <li><a href="#">Términos de uso</a></li>
-                    <li><a href="#">Aviso legal</a></li>
-                    <li><a href="#">Cookies</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -825,7 +581,6 @@
                 <p><i class="fas fa-map-marker-alt"></i> C. Amadeo de Saboya, 4 - 3 piso, 46010 Valencia.</p>
                 <p><i class="fas fa-phone"></i> Tel.: (+34) 963395017</p>
                 <p><i class="fas fa-envelope"></i> contacto@sosapp.com</p>
-                <p><i class="fas fa-clock"></i> 24/7 Soporte de emergencia</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -842,37 +597,27 @@
         burgerMenu.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             const icon = burgerMenu.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.replace('fa-bars', 'fa-times');
-            } else {
-                icon.classList.replace('fa-times', 'fa-bars');
-            }
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
         });
 
-        // Cerrar menú al hacer clic en enlace (mobile)
+        // Cerrar menú al hacer clic en un enlace (mobile)
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
-                burgerMenu.querySelector('i').classList.replace('fa-times', 'fa-bars');
+                burgerMenu.querySelector('i').classList.remove('fa-times');
+                burgerMenu.querySelector('i').classList.add('fa-bars');
             });
         });
 
-        // Efecto scroll navbar
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Animación de carga
-        window.addEventListener('load', () => {
-            // Simular carga de recursos
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-            }, 500);
+        // Smooth scrolling para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>
