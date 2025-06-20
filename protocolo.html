@@ -7,166 +7,494 @@
     <link rel="stylesheet" href="CSS/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="icon" type="image/png" href="assets/favicon.png">
+    <style>
+        /* Estilos mejorados para el lobby */
+        :root {
+            --health: #FF6B6B;
+            --natural: #4ECDC4;
+            --accidents: #FFD166;
+            --emergency: #FF3A44;
+            --dark: #2F4858;
+            --light: #F7F9FC;
+        }
+        
+        .protocols-lobby {
+            padding: 2rem 5%;
+            background-color: var(--light);
+        }
+        
+        .search-container {
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .search-container input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #ddd;
+            font-size: 1rem;
+            padding-left: 3.5rem;
+        }
+        
+        .search-container i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark);
+        }
+        
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .category-header {
+            padding: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .health { background: var(--health); }
+        .natural { background: var(--natural); }
+        .accidents { background: var(--accidents); }
+        
+        .category-icon {
+            font-size: 1.8rem;
+        }
+        
+        .protocols-list {
+            padding: 1.5rem;
+        }
+        
+        .protocol-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .protocol-item:last-child {
+            border-bottom: none;
+        }
+        
+        .protocol-item a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            flex-grow: 1;
+        }
+        
+        .protocol-item i {
+            color: #999;
+        }
+        
+        .emergency-section {
+            margin-top: 3rem;
+            background: linear-gradient(135deg, #FF3A44, #FF6B6B);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .emergency-section h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .emergency-btn {
+            background: white;
+            color: var(--emergency);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .emergency-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .location-map {
+            height: 250px;
+            margin-top: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .quick-access {
+            margin-top: 3rem;
+        }
+        
+        .quick-access h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .quick-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .quick-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .quick-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--emergency);
+        }
+        
+        @media (max-width: 768px) {
+            .categories-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .emergency-buttons {
+                flex-direction: column;
+            }
+            
+            .emergency-btn {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Barra de navegación (COPIADA DEL INDEX.HTML) -->
-<nav class="navbar">
-    <!-- Logo y nombre -->
-    <div class="logo-container">
-        <img src="ASSETS/logo-sos.png" alt="Logo SOS" class="logo">
-        <span class="app-name">SOS</span>
-    </div>
-
-    <!-- Botón Hamburguesa (DEBE estar aquí) -->
-    <div class="burger-menu" id="burgerMenu">
-        <i class="fas fa-bars"></i>
-    </div>
-
-    <!-- Lista de enlaces -->
-    <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="index.html#como-funciona">¿Cómo funciona?</a></li>
-        <li><a href="protocolos.html" class="active">Protocolos</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-        <li><a href="#descargar" class="btn-download">Descargar App</a></li>
-    </ul>
-</nav>
-
-    <!-- Encabezado de la página -->
-    <header class="protocol-header">
-        <div class="protocol-breadcrumb">
-            <a href="index.html">Inicio</a> > <span>Terremoto</span>
+    <!-- Barra de navegación mejorada -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="ASSETS/logo-sos.png" alt="Logo SOS" class="logo">
+            <span class="app-name">SOS</span>
         </div>
-        <h1>Protocolo: Terremoto</h1>
-        <p class="protocol-location"><i class="fas fa-map-marker-alt"></i> Estás en: <strong>Edificio A, Piso 3</strong></p>
-    </header>
 
-    <!-- Contenido del protocolo -->
-    <section class="protocol-content">
-        <div class="protocol-steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-info">
-                    <h3>Mantén la calma</h3>
-                    <p>No corras ni grites. Busca un lugar seguro bajo una mesa o junto a un muro de carga.</p>
+        <div class="burger-menu" id="burgerMenu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#como-funciona">¿Cómo funciona?</a></li>
+            <li><a href="protocolo.html" class="active">Protocolos</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#descargar" class="btn-download">Descargar App</a></li>
+        </ul>
+    </nav>
+
+    <!-- Lobby de protocolos -->
+    <main class="protocols-lobby">
+        <header class="lobby-header">
+            <h1>Protocolos de Emergencia</h1>
+            <p>Selecciona una categoría o busca un protocolo específico</p>
+        </header>
+        
+        <!-- Barra de búsqueda -->
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar protocolos (terremoto, incendio, RCP...)">
+        </div>
+        
+        <!-- Mapa de ubicación actual -->
+        <div class="location-map" id="locationMap"></div>
+        <p class="map-info"><i class="fas fa-info-circle"></i> Marcadores: <span class="safe-zone">Zonas seguras</span>, <span class="danger-zone">Zonas de peligro</span>, <span class="hospital">Hospitales</span></p>
+        
+        <!-- Categorías de protocolos -->
+        <div class="categories-container">
+            <!-- Salud -->
+            <div class="category-card">
+                <div class="category-header health">
+                    <i class="fas fa-heartbeat category-icon"></i>
+                    <h2>Salud</h2>
+                </div>
+                <div class="protocols-list">
+                    <div class="protocol-item">
+                        <a href="protocolos/rcp.html">Reanimación Cardiopulmonar (RCP)</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="protocol-item">
+                        <a href="protocolos/ahogamiento.html">Atragantamiento/Ahogamiento</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="protocol-item">
+                        <a href="protocolos/convulsiones.html">Convulsiones/Epilepsia</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
                 </div>
             </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-info">
-                    <h3>Protege tu cabeza</h3>
-                    <p>Usa tus brazos o un objeto resistente para cubrirte la cabeza y el cuello.</p>
-                    <img src="assets/protect-head.jpg" alt="Protección cabeza" class="step-image">
+            
+            <!-- Desastres Naturales -->
+            <div class="category-card">
+                <div class="category-header natural">
+                    <i class="fas fa-mountain category-icon"></i>
+                    <h2>Desastres Naturales</h2>
+                </div>
+                <div class="protocols-list">
+                    <div class="protocol-item">
+                        <a href="protocolos/terremoto.html">Terremoto</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="protocol-item">
+                        <a href="protocolos/inundacion.html">Inundación</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="protocol-item">
+                        <a href="protocolos/incendio-forestal.html">Incendio Forestal</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
                 </div>
             </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-info">
-                    <h3>Evacúa si es seguro</h3>
-                    <p>Cuando el temblor cese, dirígete a la zona de seguridad marcada en el mapa.</p>
-                    <div class="protocol-map">
-                        <img src="assets/evacuation-map.jpg" alt="Mapa de evacuación">
-                        <a href="#" class="btn-map"><i class="fas fa-download"></i> Descargar mapa</a>
+            
+            <!-- Accidentes -->
+            <div class="category-card">
+                <div class="category-header accidents">
+                    <i class="fas fa-car-crash category-icon"></i>
+                    <h2>Accidentes</h2>
+                </div>
+                <div class="protocols-list">
+                    <div class="protocol-item">
+                        <a href="protocolos/accidente-auto.html">Accidente Automovilístico</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="protocol-item">
+                        <a href="protocolos/quemaduras.html">Quemaduras</a>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="protocol-item">
+                        <a href="protocolos/caidas.html">Caídas/Traumatismos</a>
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Panel de emergencia -->
-        <div class="emergency-panel">
-            <h3><i class="fas fa-exclamation-triangle"></i> ¿Necesitas ayuda inmediata?</h3>
-            <button class="emergency-btn">
-                <i class="fas fa-phone-alt"></i> LLAMAR AL 911
-            </button>
-            <div class="emergency-contacts">
-                <p>Contactos locales:</p>
-                <ul>
-                    <li><i class="fas fa-hospital"></i> Hospital más cercano: <strong>1.2 km</strong></li>
-                    <li><i class="fas fa-fire-extinguisher"></i> Bomberos: <strong>555-1234</strong></li>
-                </ul>
+        
+        <!-- Accesos rápidos -->
+        <div class="quick-access">
+            <h2>Accesos Rápidos</h2>
+            <div class="quick-grid">
+                <div class="quick-card">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Hospitales Cercanos</h3>
+                    <p>Ubica los centros médicos más próximos</p>
+                </div>
+                <div class="quick-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Zonas Seguras</h3>
+                    <p>Refugios y puntos de encuentro</p>
+                </div>
+                <div class="quick-card">
+                    <i class="fas fa-phone-alt"></i>
+                    <h3>Números de Emergencia</h3>
+                    <p>Contactos locales de ayuda</p>
+                </div>
+                <div class="quick-card">
+                    <i class="fas fa-first-aid"></i>
+                    <h3>Botiquín Virtual</h3>
+                    <p>Guía de primeros auxilios</p>
+                </div>
             </div>
         </div>
-    </section>
+        
+        <!-- Sección de emergencia -->
+        <div class="emergency-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> ¿Emergencia Inmediata?</h2>
+            <p>Si estás en peligro o presencias una emergencia, actúa ahora</p>
+            <div class="emergency-buttons">
+                <button class="emergency-btn" id="callEmergency">
+                    <i class="fas fa-phone-alt"></i> LLAMAR AL 911
+                </button>
+                <button class="emergency-btn" id="shareLocation">
+                    <i class="fas fa-location-arrow"></i> COMPARTIR UBICACIÓN
+                </button>
+                <button class="emergency-btn" id="emergencyGuide">
+                    <i class="fas fa-compass"></i> GUÍA DE EMERGENCIA
+                </button>
+            </div>
+        </div>
+    </main>
 
-    <!-- Footer (COPIADO DEL INDEX.HTML) -->
+    <!-- Footer mejorado -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
                 <h4>SOS</h4>
-                <p>Innovando en seguridad desde 2025.</p>
+                <p>Tu seguridad es nuestra prioridad</p>
                 <div class="social-icons">
                     <a href="#"><i class="fab fa-facebook"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div class="footer-section">
-                <h4>Enlaces rápidos</h4>
+                <h4>Enlaces Rápidos</h4>
                 <ul>
-                    <li><a href="#">Política de privacidad</a></li>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="protocolo.html">Todos los protocolos</a></li>
+                    <li><a href="#">Descargar App</a></li>
+                    <li><a href="#">Blog de seguridad</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
                     <li><a href="#">Términos de uso</a></li>
+                    <li><a href="#">Política de privacidad</a></li>
                     <li><a href="#">Aviso legal</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h4>Contacto</h4>
-                <p><i class="fas fa-map-marker-alt"></i> C. Amadeo de Saboya, 4 - 3 piso, 46010 Valencia.</p>
-                <p><i class="fas fa-phone"></i> Tel.: (+34) 963395017</p>
+                <p><i class="fas fa-map-marker-alt"></i> C. Amadeo de Saboya, 4 - 3 piso, 46010 Valencia</p>
+                <p><i class="fas fa-phone"></i> (+34) 963 39 50 17</p>
                 <p><i class="fas fa-envelope"></i> contacto@sosapp.com</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 UV - SOS. Todos los derechos reservados.</p>
+            <p>&copy; 2025 SOS Emergency Protocols. Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <!-- Scripts mejorados -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Mapa interactivo
+        const map = L.map('locationMap').setView([39.4699, -0.3763], 15); // Coordenadas de Valencia
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Marcadores de ejemplo (personalizar con datos reales)
+        const safeZoneIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41]
+        });
+        
+        const dangerZoneIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41]
+        });
+        
+        const hospitalIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41]
+        });
+        
+        // Añadir marcadores (coordenadas de ejemplo)
+        L.marker([39.4699, -0.3763], {icon: safeZoneIcon})
+            .addTo(map)
+            .bindPopup("<b>Zona Segura</b><br>Plaza del Ayuntamiento");
+            
+        L.marker([39.4715, -0.3738], {icon: dangerZoneIcon})
+            .addTo(map)
+            .bindPopup("<b>Zona de Peligro</b><br>Río Turia - Posible inundación");
+            
+        L.marker([39.4682, -0.3745], {icon: hospitalIcon})
+            .addTo(map)
+            .bindPopup("<b>Hospital General</b><br>A 1.2 km - 5 min en coche");
+        
         // Botón de emergencia
-        document.querySelector('.emergency-btn').addEventListener('click', function() {
-            if (confirm('¿Llamar al servicio de emergencias 911?')) {
+        document.getElementById('callEmergency').addEventListener('click', function() {
+            if(confirm('¿Deseas llamar al servicio de emergencias 911?')) {
                 window.location.href = 'tel:911';
             }
-            <script>
-    // Menú hamburguesa
-    document.querySelector('.burger-menu').addEventListener('click', function() {
-        document.querySelector('.nav-links').classList.toggle('active');
-    });
-
-    // Cierra el menú al hacer clic en un enlace (móvil)
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            document.querySelector('.nav-links').classList.remove('active');
         });
-    });
-</script>
-        });
-    </script>
-    <script>
-    // Seleccionar elementos
-    const burgerMenu = document.getElementById('burgerMenu');
-    const navLinks = document.getElementById('navLinks');
-
-    // Alternar menú al hacer clic
-    burgerMenu.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
         
-        // Cambiar ícono a "X" cuando está abierto
-        const icon = burgerMenu.querySelector('i');
-        if (navLinks.classList.contains('active')) {
-            icon.classList.replace('fa-bars', 'fa-times');
-        } else {
-            icon.classList.replace('fa-times', 'fa-bars');
-        }
-    });
-
-    // Cerrar menú al hacer clic en un enlace (móvil)
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            burgerMenu.querySelector('i').classList.replace('fa-times', 'fa-bars');
+        // Compartir ubicación
+        document.getElementById('shareLocation').addEventListener('click', function() {
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const message = `Necesito ayuda! Mi ubicación: https://www.google.com/maps?q=${lat},${lon}`;
+                    
+                    if(navigator.share) {
+                        navigator.share({
+                            title: 'Emergencia - Necesito ayuda',
+                            text: message,
+                        }).catch(err => {
+                            alert('Error al compartir: ' + err);
+                        });
+                    } else {
+                        // Fallback para navegadores sin API Share
+                        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                    }
+                });
+            } else {
+                alert('No se pudo acceder a tu ubicación');
+            }
         });
-    });
+        
+        // Menú hamburguesa
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navLinks = document.getElementById('navLinks');
+        
+        burgerMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = burgerMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+        
+        // Cerrar menú al hacer clic en enlace (mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                burgerMenu.querySelector('i').classList.remove('fa-times');
+                burgerMenu.querySelector('i').classList.add('fa-bars');
+            });
+        });
     </script>
 </body>
 </html>
