@@ -1,0 +1,9 @@
+// Conexión WebSocket para alertas en tiempo real
+const socket = new WebSocket('wss://tu-servidor.com/alertas');
+
+socket.onmessage = (event) => {
+    const alerta = JSON.parse(event.data);
+    L.marker([alerta.lat, alerta.lng])
+        .addTo(map)
+        .bindPopup(`<b>${alerta.tipo}</b><br>${alerta.descripcion}`);
+};
