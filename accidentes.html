@@ -3,119 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accidentes Comunes | SOS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
-    <link rel="stylesheet" href="CSS/styles.css">
-    <link rel="stylesheet" href="CSS/transitions.css">
-    <link rel="stylesheet" href="CSS/emergency.css">
+    <title>Accidentes | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --accent: #FFD166;
+            --accent-dark: #E6B74E;
+            --light: #FFFFFF;
+            --gray: #F5F5F5;
+            --text-dark: #333333;
+        }
+
+        .accident-protocol {
+            padding: 2rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .protocol-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .protocol-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .emergency-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .emergency-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border-bottom: 5px solid var(--accent);
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 209, 102, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-btn {
+            background: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .card-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .hospital-finder {
+            margin: 3rem 0;
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .map-container {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .first-aid-guide {
+            margin: 2rem 0;
+        }
+
+        .guide-steps {
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--accent);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .report-accident {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .report-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .report-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .emergency-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="category-header">
-            <a href="emergencias.html" class="back-button">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
-            <h1>Accidentes Comunes</h1>
-            <button class="filter-btn" id="filterBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
+    <section class="accident-protocol">
+        <header class="protocol-header">
+            <h1 class="protocol-title">Accidentes</h1>
+            <p>Protocolos para emergencias por accidentes comunes</p>
         </header>
 
-        <main class="emergency-list">
-            <div class="emergency-tabs">
-                <button class="tab-btn active" data-category="all">Todos</button>
-                <button class="tab-btn" data-category="home">Hogar</button>
-                <button class="tab-btn" data-category="traffic">Tráfico</button>
-                <button class="tab-btn" data-category="work">Trabajo</button>
+        <!-- Tarjetas de accidentes -->
+        <div class="emergency-cards">
+            <div class="emergency-card">
+                <h2 class="card-title">🚗 Accidente de Tráfico</h2>
+                <p>Qué hacer si eres víctima o testigo de un accidente vial.</p>
+                <button class="card-btn" onclick="location.href='protocolos/accidente-auto.html'">
+                    Ver protocolo <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-
-            <div class="emergency-items" id="accidentItems">
-                <!-- Los items se cargan dinámicamente desde JS -->
+            
+            <div class="emergency-card">
+                <h2 class="card-title">🔥 Quemaduras</h2>
+                <p>Primeros auxilios para quemaduras térmicas, químicas o eléctricas.</p>
+                <button class="card-btn" onclick="location.href='protocolos/quemaduras.html'">
+                    Ver protocolo <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
+            
+            <div class="emergency-card">
+                <h2 class="card-title">⚠ Caídas y Traumatismos</h2>
+                <p>Actuación ante fracturas, esguinces y golpes severos.</p>
+                <button class="card-btn" onclick="location.href='protocolos/caidas.html'">
+                    Ver protocolo <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
 
-            <div class="prevention-section">
-                <h3>Medidas Preventivas</h3>
-                <div class="prevention-tips">
-                    <div class="tip-card">
-                        <div class="tip-icon">🏠</div>
-                        <h4>En el Hogar</h4>
-                        <ul>
-                            <li>Mantener pisos libres de obstáculos</li>
-                            <li>Usar antideslizantes en bañeras</li>
-                            <li>Almacenar productos peligrosos con seguridad</li>
-                        </ul>
+        <!-- Buscador de hospitales -->
+        <div class="hospital-finder">
+            <h2>🏥 Hospitales con Trauma Center</h2>
+            <p>Ubica los centros médicos mejor equipados para emergencias:</p>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active">Todos</button>
+                <button class="filter-btn">24 horas</button>
+                <button class="filter-btn">Pediatría</button>
+                <button class="filter-btn">Quemados</button>
+            </div>
+            
+            <div class="map-container" id="hospitalMap"></div>
+        </div>
+
+        <!-- Guía rápida de primeros auxilios -->
+        <div class="first-aid-guide">
+            <h2>🩹 Guía Rápida de Primeros Auxilios</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Proteger</h3>
+                        <p>Asegurar el área del accidente para evitar más víctimas</p>
                     </div>
-                    <div class="tip-card">
-                        <div class="tip-icon">🚗</div>
-                        <h4>En la Vía</h4>
-                        <ul>
-                            <li>Siempre usar cinturón de seguridad</li>
-                            <li>Respetar límites de velocidad</li>
-                            <li>Evitar distracciones al conducir</li>
-                        </ul>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Alertar</h3>
+                        <p>Llamar a los servicios de emergencia (911)</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Socorrer</h3>
+                        <p>Aplicar primeros auxilios básicos según protocolo</p>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
 
-    <script src="JS/main.js"></script>
-    <script src="JS/emergency-data.js"></script>
+        <!-- Reportar accidente -->
+        <div class="report-accident">
+            <h2>¿Presencias un accidente?</h2>
+            <p>Reporta emergencias para alertar a servicios de rescate</p>
+            <button class="report-btn">
+                <i class="fas fa-ambulance"></i> REPORTAR ACCIDENTE
+            </button>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Cargar accidentes desde el archivo de datos
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('accidentItems');
-            
-            accidentData.forEach(accident => {
-                const item = document.createElement('a');
-                item.className = `emergency-item ${accident.category}`;
-                item.href = `protocolo.html?type=accident&id=${accident.id}`;
-                
-                item.innerHTML = `
-                    <div class="item-icon">${accident.icon}</div>
-                    <div class="item-info">
-                        <h3>${accident.title}</h3>
-                        <p>${accident.description}</p>
-                        <div class="item-meta">
-                            <span class="risk-level ${accident.risk}">${accident.riskText}</span>
-                            <span class="time">${accident.time}</span>
-                        </div>
-                    </div>
-                    <div class="item-arrow">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                `;
-                
-                container.appendChild(item);
-            });
+        // Mapa de hospitales
+        const hospitalMap = L.map('hospitalMap').setView([39.4699, -0.3763], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(hospitalMap);
 
-            // Filtrar por categoría
-            const filterButtons = document.querySelectorAll('.tab-btn');
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const category = this.getAttribute('data-category');
-                    
-                    // Actualizar botón activo
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Mostrar/ocultar items
-                    const items = document.querySelectorAll('.emergency-item');
-                    items.forEach(item => {
-                        if (category === 'all' || item.classList.contains(category)) {
-                            item.style.display = 'flex';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                });
+        // Hospitales de ejemplo
+        L.marker([39.4682, -0.3745]).addTo(hospitalMap)
+            .bindPopup("<b>Hospital General</b><br>Trauma Center Nivel 1<br>Abierto 24h");
+            
+        L.marker([39.4720, -0.3800]).addTo(hospitalMap)
+            .bindPopup("<b>Hospital Infantil</b><br>Trauma pediátrico");
+            
+        L.marker([39.4650, -0.3720]).addTo(hospitalMap)
+            .bindPopup("<b>Centro de Quemados</b><br>Especializado en quemaduras");
+
+        // Filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('.filter-btn.active').classList.remove('active');
+                this.classList.add('active');
+                // Aquí iría la lógica para filtrar hospitales
             });
+        });
+
+        // Botón de reporte
+        document.querySelector('.report-btn').addEventListener('click', function() {
+            if(confirm('¿Deseas reportar un accidente a las autoridades?')) {
+                window.location.href = 'tel:911';
+            }
         });
     </script>
 </body>
