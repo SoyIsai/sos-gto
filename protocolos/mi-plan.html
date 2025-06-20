@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Plan de Emergencia | SOS</title>
+    <style>
+        .plan-assistant {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .plan-step {
+            margin-bottom: 3rem;
+            display: none;
+        }
+        
+        .plan-step.active {
+            display: block;
+        }
+        
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .plan-option {
+            border: 2px solid #eee;
+            padding: 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .plan-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .plan-option.selected {
+            background: #FFF0F0;
+            border-color: var(--primary);
+        }
+        
+        .plan-progress {
+            height: 5px;
+            background: #eee;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="plan-assistant">
+        <h1>📝 Mi Plan Personalizado</h1>
+        <p>Guía paso a paso para crear tu plan familiar de emergencia</p>
+        
+        <div class="plan-progress">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+        
+        <!-- Paso 1 -->
+        <div class="plan-step active" id="step1">
+            <h2>🏠 Tu Hogar</h2>
+            <p>¿Qué tipo de vivienda tienes?</p>
+            
+            <div class="option-grid">
+                <div class="plan-option">
+                    <h3>Apartamento</h3>
+                    <p>Edificio de varios pisos</p>
+                </div>
+                <div class="plan-option">
+                    <h3>Casa</h3>
+                    <p>Vivienda unifamiliar</p>
+                </div>
+                <div class="plan-option">
+                    <h3>Piso Alto</h3>
+                    <p>+5 plantas</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Más pasos (se muestran según progreso) -->
+        
+        <div class="plan-actions">
+            <button id="prevStep">← Anterior</button>
+            <button id="nextStep">Siguiente →</button>
+            <button id="finishPlan" style="display:none;">✨ Generar Mi Plan</button>
+        </div>
+    </div>
+
+    <script>
+        // Lógica del asistente inteligente
+        // Genera PDF personalizado al finalizar
+    </script>
+</body>
+</html>
