@@ -1,0 +1,26 @@
+<div class="kit-features">
+    <!-- Scanner de productos -->
+    <div class="scanner">
+        <h3>📷 Escanea Medicamentos</h3>
+        <div id="scannerView"></div>
+        <button id="startScan">Escanear</button>
+    </div>
+    
+    <!-- Lista inteligente -->
+    <div class="smart-list">
+        <h3>✅ Checklist Automático</h3>
+        <div id="checklist">
+            <!-- Generado dinámicamente según ubicación y perfil -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Integración con API de medicamentos
+    function scanMedicine() {
+        if('BarcodeDetector' in window) {
+            const barcodeDetector = new BarcodeDetector();
+            // Lógica de escaneo...
+        }
+    }
+</script>
