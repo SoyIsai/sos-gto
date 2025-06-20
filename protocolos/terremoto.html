@@ -289,6 +289,17 @@
                 document.getElementById(phase).classList.add('active');
             });
         });
+        // Nuevo simulador
+document.getElementById('shakeDemo').addEventListener('mousedown', (e) => {
+    const intensity = document.getElementById('intensity').value;
+    simulateEarthquake(intensity);
+});
+
+function simulateEarthquake(intensity) {
+    // Efectos visuales según intensidad
+    document.body.style.transform = `rotate(${Math.random() * intensity}deg)`;
+    setTimeout(() => { document.body.style.transform = ''; }, 500);
+}
     </script>
 </body>
 </html>
