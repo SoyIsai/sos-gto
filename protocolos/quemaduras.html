@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Quemaduras | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --primary-light: #FF6B6B;
+            --accent: #FFA000;
+            --light: #FFFFFF;
+            --dark: #2F4858;
+            --gray: #F5F5F5;
+        }
+
+        .burn-protocol {
+            padding: 2rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .protocol-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 1rem;
+        }
+
+        .protocol-title {
+            font-size: 2rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .severity-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .severity-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid;
+        }
+
+        .first-degree {
+            border-color: #FFCDD2;
+        }
+
+        .second-degree {
+            border-color: #FF8A65;
+        }
+
+        .third-degree {
+            border-color: #D84315;
+        }
+
+        .severity-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .treatment-steps {
+            margin: 2rem 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--accent);
+            color: white;
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .emergency-panel {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .emergency-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .severity-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .step {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="burn-protocol">
+        <header class="protocol-header">
+            <h1 class="protocol-title"><span>🔥</span> Protocolo para Quemaduras</h1>
+            <p>Actuación según grado de la quemadura y tipo (térmica, química o eléctrica)</p>
+        </header>
+
+        <!-- Tipos de quemaduras -->
+        <div class="severity-cards">
+            <div class="severity-card first-degree">
+                <h3 class="severity-title"><span>🟡</span> 1er Grado</h3>
+                <p><strong>Síntomas:</strong> Enrojecimiento, dolor leve, sin ampollas</p>
+                <p><strong>Ejemplo:</strong> Quemadura solar leve</p>
+            </div>
+            
+            <div class="severity-card second-degree">
+                <h3 class="severity-title"><span>🟠</span> 2do Grado</h3>
+                <p><strong>Síntomas:</strong> Ampollas, dolor intenso, enrojecimiento</p>
+                <p><strong>Ejemplo:</strong> Contacto con líquido caliente</p>
+            </div>
+            
+            <div class="severity-card third-degree">
+                <h3 class="severity-title"><span>🔴</span> 3er Grado</h3>
+                <p><strong>Síntomas:</strong> Piel carbonizada/blanca, poco dolor (nervios dañados)</p>
+                <p><strong>Ejemplo:</strong> Contacto prolongado con fuego</p>
+            </div>
+        </div>
+
+        <!-- Pasos de tratamiento -->
+        <div class="treatment-steps">
+            <h2><i class="fas fa-first-aid"></i> Primeros Auxilios</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <h3>Enfriar la zona</h3>
+                    <p>Correr agua fresca (no helada) sobre la quemadura durante 10-15 minutos. No usar hielo.</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <h3>Retirar objetos</h3>
+                    <p>Quitar anillos, relojes o ropa ajustada antes de que hinche, excepto si está pegada a la piel.</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <h3>Cubrir la quemadura</h3>
+                    <p>Usar gasa estéril o paño limpio y húmedo. No aplicar algodón, manteca, hielo ni remedios caseros.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> QUÉ NO HACER</h3>
+            <ul>
+                <li>Reventar ampollas</li>
+                <li>Aplicar pasta dental, mantequilla o aceite</li>
+                <li>Usar algodón directamente</li>
+                <li>Retirar ropa pegada</li>
+            </ul>
+        </div>
+
+        <div class="emergency-panel">
+            <h2><i class="fas fa-ambulance"></i> Busca ayuda médica inmediata si:</h2>
+            <ul style="text-align: left; margin: 1rem auto; max-width: 500px;">
+                <li>Quemadura en cara, manos, pies o genitales</li>
+                <li>Quemadura mayor que la palma de la mano</li>
+                <li>Quemadura química o eléctrica</li>
+                <li>Signos de shock (piel fría/húmeda, pulso débil)</li>
+            </ul>
+            <button class="emergency-btn" onclick="window.location.href='tel:911'">
+                <i class="fas fa-phone-alt"></i> LLAMAR AL 911
+            </button>
+        </div>
+    </div>
+</body>
+</html>
