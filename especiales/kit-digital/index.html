@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kit Digital de Emergencia | SOS</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <style>
+        /* Estilos específicos */
+        .kit-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .kit-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .kit-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #F7F9FC;
+            border-radius: 8px;
+        }
+        @media (max-width: 768px) {
+            .kit-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="kit-container">
+        <div class="configurador">
+            <h2>🛠 Configura tu Kit</h2>
+            <div class="form-group">
+                <label>👨‍👩‍👧‍👦 Miembros:</label>
+                <input type="number" id="miembros" min="1" max="10" value="1">
+            </div>
+            <div class="form-group">
+                <label>📍 Zona de Riesgo:</label>
+                <select id="zona">
+                    <option value="sismo">Terremotos</option>
+                    <option value="inundacion">Inundaciones</option>
+                    <option value="incendio">Incendios</option>
+                </select>
+            </div>
+            <button id="generar">Generar Kit</button>
+        </div>
+        
+        <div class="kit-preview">
+            <h2>🧰 Tu Kit Personalizado</h2>
+            <div id="lista-kit">
+                <!-- Items generados dinámicamente -->
+                <div class="kit-item">
+                    <input type="checkbox" checked> 
+                    <span>Agua (4L por persona)</span>
+                </div>
+            </div>
+            <div class="qr-section">
+                <h3>📲 Código QR de tu Kit</h3>
+                <div id="qrcode"></div>
+                <button id="descargar">Descargar QR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script>
+        document.getElementById('generar').addEventListener('click', function() {
+            const miembros = document.getElementById('miembros').value;
+            const zona = document.getElementById('zona').value;
+            
+            // Generar lista dinámica (ejemplo simplificado)
+            const items = {
+                'sismo': ['Agua', 'Botiquín', 'Linterna', 'Radio'],
+                'inundacion': ['Chaleco salvavidas', 'Silbato', 'Manta térmica'],
+                'incendio': ['Mascarilla', 'Extintor', 'Capa ignífuga']
+            };
+            
+            let html = '';
+            items[zona].forEach(item => {
+                html += `
+                <div class="kit-item">
+                    <input type="checkbox" checked> 
+                    <span>${item} ${zona === 'sismo' ? `(${miembros * 1} unidad)` : ''}</span>
+                </div>`;
+            });
+            
+            document.getElementById('lista-kit').innerHTML = html;
+            
+            // Generar QR
+            new QRCode(document.getElementById("qrcode"), {
+                text: `KIT:${zona}:${miembros}`,
+                width: 150,
+                height: 150
+            });
+        });
+    </script>
+</body>
+</html>
