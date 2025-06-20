@@ -3,60 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Vivo | SOS</title>
+    <title>Mapa de Emergencias en Tiempo Real | SOS</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        #mapa-vivo { 
-            height: 100vh; 
+        :root {
+            --primary: #FF3A44;
+            --hospital: #2196F3;
+            --incendio: #FF5722;
+            --policia: #3F51B5;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #mapa-emergencias {
+            height: 100vh;
             width: 100%;
         }
         .map-controls {
             position: fixed;
-            top: 1rem;
-            right: 1rem;
+            top: 20px;
+            right: 20px;
             z-index: 1000;
-            background: white;
-            padding: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 300px;
+        }
+        .filter-option {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .filter-option input {
+            margin-right: 10px;
+        }
+        .emergency-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .legend {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div id="mapa-vivo"></div>
+    <div id="mapa-emergencias"></div>
     
     <div class="map-controls">
-        <button id="reportar">🚨 Reportar Emergencia</button>
-        <div class="filtros">
-            <label><input type="checkbox" checked> Médicas</label>
-            <label><input type="checkbox" checked> Naturales</label>
+        <h3>🚨 Filtros de Emergencia</h3>
+        
+        <div class="filter-option">
+            <input type="checkbox" id="filter-hospital" checked>
+            <label for="filter-hospital">Hospitales y Clínicas</label>
         </div>
+        
+        <div class="filter-option">
+            <input type="checkbox" id="filter-incendio" checked>
+            <label for="filter-incendio">Incendios</label>
+        </div>
+        
+        <div class="filter-option">
+            <input type="checkbox" id="filter-policia" checked>
+            <label for="filter-policia">Emergencias Policiales</label>
+        </div>
+        
+        <button class="emergency-btn" id="btn-reportar">
+            <i class="fas fa-plus"></i> Reportar Emergencia
+        </button>
+        
+        <div class="legend">
+            <h4>Leyenda:</h4>
+            <div class="legend-item">
+                <span class="legend-color" style="background: var(--hospital);"></span>
+                <span>Hospitales</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: var(--incendio);"></span>
+                <span>Incendios</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: var(--policia);"></span>
+                <span>Policía</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: var(--primary);"></span>
+                <span>Tú</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para reportar emergencia (oculto inicialmente) -->
+    <div id="modal-reporte" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:2rem; z-index:1001; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.2);">
+        <h3>📢 Reportar Emergencia</h3>
+        <select id="tipo-emergencia" style="width:100%; padding:10px; margin:10px 0;">
+            <option value="incendio">Incendio</option>
+            <option value="accidente">Accidente</option>
+            <option value="medica">Emergencia Médica</option>
+        </select>
+        <textarea id="descripcion" placeholder="Descripción breve..." style="width:100%; height:100px; margin:10px 0;"></textarea>
+        <button id="btn-enviar-reporte" style="background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:5px;">Enviar Reporte</button>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Mapa base
-        const map = L.map('mapa-vivo').setView([19.4326, -99.1332], 12); // Centro CDMX
+        // Inicialización del mapa
+        const map = L.map('mapa-emergencias').setView([19.4326, -99.1332], 13); // Centro de CDMX como ejemplo
         
+        // Capa base de OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        // Simulación de datos en tiempo real
-        function simularAlerta() {
-            const tipos = ['hospital', 'incendio', 'inundacion'];
-            const tipo = tipos[Math.floor(Math.random() * tipos.length)];
-            
-            L.marker([
-                19.4326 + (Math.random() * 0.1 - 0.05), 
-                -99.1332 + (Math.random() * 0.1 - 0.05)
-            ]).addTo(map)
-            .bindPopup(`<b>${tipo.toUpperCase()}</b><br>Reportado hace 5 min`);
-            
-            setTimeout(simularAlerta, 10000); // Nuevo cada 10 seg
-        }
+        // Iconos personalizados
+        const iconHospital = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+            iconSize: [25, 41]
+        });
         
-        simularAlerta();
+        const iconIncendio = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+            iconSize: [25, 41]
+        });
+        
+        const iconPolicia = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+            iconSize: [25, 41]
+        });
+        
+        const iconUsuario = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+            iconSize: [25, 41]
+        });
+
+        // Capas para cada tipo de emergencia
+        const capas = {
+            hospital: L.layerGroup(),
+            incendio: L.layerGroup(),
+            policia: L.layerGroup(),
+            usuario: L.layerGroup()
+        };
+
+        // Añadir capas al mapa
+        Object.values(capas).forEach(layer => layer.addTo(map));
+
+        // Datos de ejemplo (en producción usarías una API real)
+        const datosEmergencias = {
+            hospital: [
+                { nombre: "Hospital General", lat: 19.4285, lng: -99.1276 },
+                { nombre: "Clínica Norte", lat: 19.4412, lng: -99.1398 }
+            ],
+            incendio: [
+                { nombre: "Incendio en edificio", lat: 19.4350, lng: -99.1400, tiempo: "Hace 15 min" },
+                { nombre: "Quema controlada", lat: 19.4250, lng: -99.1200, tiempo: "Hace 2 horas" }
+            ],
+            policia: [
+                { nombre: "Accidente vial", lat: 19.4300, lng: -99.1350, tiempo: "Hace 5 min" }
+            ]
+        };
+
+        // Función para cargar datos en el mapa
+        function cargarDatos() {
+            // Limpiar capas primero
+            Object.values(capas).forEach(layer => layer.clearLayers());
+            
+            // Cargar hospitales
+            if(document.getElementById('filter-hospital').checked) {
+                datosEmergencias.hospital.forEach(h => {
+                    L.marker([h.lat, h.lng], {icon: iconHospital})
+                        .addTo(capas.hospital)
+                        .bindPopup(`<b>${h.nombre}</b><br><a href="https://maps.google.com?q=${h.lat},${h.lng}" target="_blank">Cómo llegar</a>`);
+                });
+            }
+            
+            // Cargar incendios
+            if(document.getElementById('filter-incendio').checked) {
+                datosEmergencias.incendio.forEach(i => {
+                    L.marker([i.lat, i.lng], {icon: iconIncendio})
+                        .addTo(capas.incendio)
+                        .bindPopup(`<b>${i.nombre}</b><br>${i.tiempo}`);
+                });
+            }
+            
+            // Cargar policía
+            if(document.getElementById('filter-policia').checked) {
+                datosEmergencias.policia.forEach(p => {
+                    L.marker([p.lat, p.lng], {icon: iconPolicia})
+                        .addTo(capas.policia)
+                        .bindPopup(`<b>${p.nombre}</b><br>${p.tiempo}`);
+                });
+            }
+            
+            // Añadir ubicación del usuario
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const userLatLng = [pos.coords.latitude, pos.coords.longitude];
+                    L.marker(userLatLng, {icon: iconUsuario})
+                        .addTo(capas.usuario)
+                        .bindPopup("<b>Tu ubicación</b>")
+                        .openPopup();
+                    
+                    map.setView(userLatLng, 15);
+                });
+            }
+        }
+
+        // Cargar datos iniciales
+        cargarDatos();
+
+        // Event listeners para filtros
+        document.querySelectorAll('.filter-option input').forEach(input => {
+            input.addEventListener('change', cargarDatos);
+        });
+
+        // Reportar emergencia
+        document.getElementById('btn-reportar').addEventListener('click', function() {
+            document.getElementById('modal-reporte').style.display = 'block';
+        });
+
+        document.getElementById('btn-enviar-reporte').addEventListener('click', function() {
+            const tipo = document.getElementById('tipo-emergencia').value;
+            const desc = document.getElementById('descripcion').value;
+            
+            alert(`Reporte enviado:\nTipo: ${tipo}\nDescripción: ${desc}`);
+            document.getElementById('modal-reporte').style.display = 'none';
+            
+            // En una implementación real, aquí enviarías los datos a tu servidor
+        });
+
+        // Actualizar datos cada 30 segundos (simulado)
+        setInterval(() => {
+            console.log("Actualizando datos del mapa...");
+            // En producción, aquí harías una petición a tu API
+        }, 30000);
     </script>
 </body>
 </html>
