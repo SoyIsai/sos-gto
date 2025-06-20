@@ -10,9 +10,9 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <style>
         :root {
-            --primary: #FF3A44;
-            --primary-light: #FF6B6B;
-            --primary-dark: #CC0000;
+            --primary: #000000;  /* Cambiado de rojo a negro */
+            --primary-light: #333333;
+            --primary-dark: #111111;
             --bg-light: #FFFFFF;
             --bg-gray: #F5F5F5;
             --text-dark: #333333;
@@ -40,6 +40,9 @@
             padding: 1rem 5%;
             background-color: var(--bg-light);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo-container {
@@ -88,13 +91,16 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-dark);
+            display: block;
         }
 
         .category-btn:hover {
             background-color: var(--primary);
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 58, 68, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .category-btn:hover .emoji {
@@ -160,6 +166,36 @@
             border-radius: 3px;
         }
 
+        /* Herramientas */
+        .herramientas-section {
+            margin: 3rem 0;
+            padding: 0 5%;
+        }
+
+        .herramientas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .herramienta-card {
+            background-color: var(--bg-light);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .herramienta-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
         /* Footer minimalista */
         .footer {
             background-color: var(--bg-gray);
@@ -173,9 +209,34 @@
             font-size: 0.9rem;
         }
 
+        /* Botón de emergencia */
+        .floating-emergency-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: #FF3A44; /* Mantenemos rojo solo para el botón de emergencia */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.4);
+            z-index: 999;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .floating-emergency-btn:hover {
+            transform: scale(1.1);
+            background-color: #CC0000;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .categories-grid {
+            .categories-grid, .herramientas-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -207,19 +268,19 @@
                 <span class="emoji">💊</span>
                 <h3 class="category-name">Salud</h3>
                 <p class="category-desc">Emergencias médicas y primeros auxilios</p>
-            </div>
+            </a>
             
             <a href="naturales.html" class="category-btn">
                 <span class="emoji">🌪️</span>
                 <h3 class="category-name">Desastres Naturales</h3>
                 <p class="category-desc">Protocolos para fenómenos naturales</p>
-            </div>
+            </a>
             
             <a href="accidentes.html" class="category-btn">
                 <span class="emoji">🚑</span>
                 <h3 class="category-name">Accidentes</h3>
                 <p class="category-desc">Emergencias cotidianas y accidentes</p>
-            </div>
+            </a>
         </div>
 
         <!-- Mapa de zonas -->
@@ -246,17 +307,23 @@
             </div>
         </div>
 
-        <!-- Secciones de protocolos (se muestran al hacer clic en categoría) -->
-        <section id="salud" class="protocol-section" style="display: none;">
-            <!-- Contenido dinámico se cargará aquí -->
-        </section>
-        
-        <section id="naturales" class="protocol-section" style="display: none;">
-            <!-- Contenido dinámico se cargará aquí -->
-        </section>
-        
-        <section id="accidentes" class="protocol-section" style="display: none;">
-            <!-- Contenido dinámico se cargará aquí -->
+        <!-- Sección de herramientas -->
+        <section class="herramientas-section">
+            <h2 class="map-title">🛠 Herramientas Especiales</h2>
+            <div class="herramientas-grid">
+                <a href="herramientas/kit-digital/" class="herramienta-card">
+                    <h3>🧰 Kit Digital</h3>
+                    <p>Genera tu kit personalizado</p>
+                </a>
+                <a href="herramientas/mapa-vivo/" class="herramienta-card">
+                    <h3>🗺 Mapa Vivo</h3>
+                    <p>Alertas en tiempo real</p>
+                </a>
+                <a href="herramientas/mi-plan/" class="herramienta-card">
+                    <h3>📝 Mi Plan</h3>
+                    <p>Crea tu plan familiar</p>
+                </a>
+            </div>
         </section>
     </main>
 
@@ -265,6 +332,11 @@
         <p>Presiona el botón de emergencia si necesitas ayuda inmediata</p>
         <p>&copy; 2023 SOS Protocolos. Todos los derechos reservados.</p>
     </footer>
+
+    <!-- Botón de emergencia flotante -->
+    <a href="tel:911" class="floating-emergency-btn">
+        <i class="fas fa-bell"></i>
+    </a>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -306,66 +378,6 @@
             fillOpacity: 0.3,
             radius: 300
         }).addTo(map).bindPopup("Hospital General - 1.2 km");
-
-        // Navegación a protocolos específicos
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const targetId = this.getAttribute('onclick').split("'")[1];
-                // Aquí iría la lógica para cargar los protocolos específicos
-                alert(`Cargando protocolos de ${this.querySelector('.category-name').textContent}`);
-                // window.location.href = `protocolos/${targetId}.html`;
-            });
-        });
-
-        // Botón de emergencia flotante
-        const emergencyBtn = document.createElement('a');
-        emergencyBtn.href = 'tel:911';
-        emergencyBtn.className = 'floating-emergency-btn';
-        emergencyBtn.innerHTML = '<i class="fas fa-bell"></i>';
-        emergencyBtn.style = `
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.4);
-            z-index: 999;
-            text-decoration: none;
-            transition: all 0.3s;
-        `;
-        emergencyBtn.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.1)';
-            this.style.backgroundColor = 'var(--primary-dark)';
-        });
-        emergencyBtn.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-            this.style.backgroundColor = 'var(--primary)';
-        });
-        document.body.appendChild(emergencyBtn);
-        <section class="herramientas-section">
-    <h2>🛠 Herramientas Especiales</h2>
-    <div class="herramientas-grid">
-        <a href="herramientas/kit-digital/" class="herramienta-card">
-            <h3>🧰 Kit Digital</h3>
-            <p>Genera tu kit personalizado</p>
-        </a>
-        <a href="herramientas/mapa-vivo/" class="herramienta-card">
-            <h3>🗺 Mapa Vivo</h3>
-            <p>Alertas en tiempo real</p>
-        </a>
-        <a href="herramientas/mi-plan/" class="herramienta-card">
-            <h3>📝 Mi Plan</h3>
-            <p>Crea tu plan familiar</p>
-        </a>
-    </div>
-</section>
     </script>
 </body>
 </html>
