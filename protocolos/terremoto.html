@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Terremoto | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --natural: #4ECDC4;
+            --natural-dark: #3AA99E;
+            --light: #FFFFFF;
+            --dark: #2F4858;
+            --gray: #F5F5F5;
+        }
+
+        .earthquake-protocol {
+            padding: 2rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .protocol-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--natural);
+            padding-bottom: 1rem;
+        }
+
+        .protocol-title {
+            font-size: 2rem;
+            color: var(--natural-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .phase-container {
+            margin: 3rem 0;
+        }
+
+        .phase-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .phase-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--gray);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .phase-tab.active {
+            background: var(--natural);
+            color: white;
+        }
+
+        .phase-content {
+            display: none;
+        }
+
+        .phase-content.active {
+            display: block;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--natural);
+            color: white;
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .safe-zones {
+            margin: 2rem 0;
+        }
+
+        .zone-list {
+            columns: 2;
+            margin-top: 1rem;
+        }
+
+        .zone-item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .emergency-kit {
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .zone-list {
+                columns: 1;
+            }
+            
+            .step {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="earthquake-protocol">
+        <header class="protocol-header">
+            <h1 class="protocol-title"><span>🌍</span> Protocolo Terremoto</h1>
+            <p>Qué hacer antes, durante y después de un sismo</p>
+        </header>
+
+        <!-- Fases del terremoto -->
+        <div class="phase-container">
+            <div class="phase-tabs">
+                <div class="phase-tab active" data-phase="before">Antes</div>
+                <div class="phase-tab" data-phase="during">Durante</div>
+                <div class="phase-tab" data-phase="after">Después</div>
+            </div>
+            
+            <div class="phase-content active" id="before">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Identifica zonas seguras</h3>
+                        <p>En cada habitación, busca lugares bajo muebles resistentes o junto a columnas.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Prepara kit de emergencia</h3>
+                        <p>Incluye agua, alimentos no perecederos, linterna, radio y medicamentos.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Plan familiar</h3>
+                        <p>Establece un punto de encuentro y contactos de emergencia.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="phase-content" id="during">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Agáchate, Cúbrete y Sujétate</h3>
+                        <p>Colócate bajo una mesa resistente, cubre cabeza y cuello, y sujétate hasta que termine el temblor.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Evita peligros</h3>
+                        <p>Aléjate de ventanas, espejos y objetos que puedan caer.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>No corras</h3>
+                        <p>Quedate dentro del edificio hasta que el temblor cese.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="phase-content" id="after">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Evacúa con calma</h3>
+                        <p>Usa las escaleras, no ascensores. Revisa posibles daños estructurales.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Revisa servicios</h3>
+                        <p>Verifica fugas de gas, cables eléctricos caídos y cortes de agua.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Mantente informado</h3>
+                        <p>Usa radio a pilas para recibir información oficial.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zonas seguras -->
+        <div class="safe-zones">
+            <h2><i class="fas fa-shield-alt"></i> Zonas Seguras en Edificios</h2>
+            <div class="zone-list">
+                <div class="zone-item"><span>✔</span> Marcos de puertas estructurales</div>
+                <div class="zone-item"><span>✔</span> Bajo mesas resistentes</div>
+                <div class="zone-item"><span>✔</span> Columnas y muros de carga</div>
+                <div class="zone-item"><span>✔</span> Lejos de ventanas y repisas</div>
+                <div class="zone-item"><span>❌</span> No usar ascensores</div>
+                <div class="zone-item"><span>❌</span> Evitar escaleras durante el sismo</div>
+            </div>
+        </div>
+
+        <!-- Mapa de refugios -->
+        <div>
+            <h2><i class="fas fa-map-marked-alt"></i> Refugios cercanos</h2>
+            <div class="map-container" id="shelterMap"></div>
+        </div>
+
+        <!-- Kit de emergencia -->
+        <div class="emergency-kit">
+            <h2><i class="fas fa-kit-medical"></i> Kit Básico Post-Terremoto</h2>
+            <div class="zone-list">
+                <div class="zone-item"><span>✔</span> Agua (4L por persona)</div>
+                <div class="zone-item"><span>✔</span> Alimentos no perecederos</div>
+                <div class="zone-item"><span>✔</span> Linterna + pilas extra</div>
+                <div class="zone-item"><span>✔</span> Radio portátil</div>
+                <div class="zone-item"><span>✔</span> Botiquín de primeros auxilios</div>
+                <div class="zone-item"><span>✔</span> Documentos importantes</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Mapa de refugios
+        const shelterMap = L.map('shelterMap').setView([39.4699, -0.3763], 14);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(shelterMap);
+
+        // Refugios de ejemplo
+        L.marker([39.472, -0.380]).addTo(shelterMap)
+            .bindPopup("<b>Refugio Norte</b><br>Plaza Principal<br>Capacidad: 200 personas");
+            
+        L.marker([39.466, -0.372]).addTo(shelterMap)
+            .bindPopup("<b>Refugio Sur</b><br>Escuela Secundaria<br>Capacidad: 150 personas");
+
+        // Cambio de fases
+        document.querySelectorAll('.phase-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelector('.phase-tab.active').classList.remove('active');
+                this.classList.add('active');
+                
+                const phase = this.dataset.phase;
+                document.querySelectorAll('.phase-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(phase).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
