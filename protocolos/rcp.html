@@ -286,6 +286,33 @@
             isPlaying = false;
             metroDisplay.textContent = '--';
         });
+        <!-- Añade al final del body -->
+<script>
+    // Nuevo metrónomo profesional
+    const beats = {
+        adulto: new Audio('assets/sounds/metro-adulto.mp3'),
+        niño: new Audio('assets/sounds/metro-niño.mp3'),
+        bebé: new Audio('assets/sounds/metro-bebe.mp3')
+    };
+    
+    // Integración con cámara para AR
+    function startARGuide() {
+        if(navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    document.getElementById('arView').srcObject = stream;
+                });
+        }
+    }
+</script>
+
+<!-- Nuevo panel de ayuda en vivo -->
+<div class="live-help">
+    <button id="helpBtn">🎥 Ayuda en Vivo con Experto</button>
+    <div id="videoCall" style="display:none;">
+        <!-- Espacio para video llamada -->
+    </div>
+</div>
     </script>
 </body>
 </html>
