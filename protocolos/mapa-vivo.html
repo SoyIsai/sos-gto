@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Vivo de Emergencias | SOS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        .live-map-container {
+            height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+        
+        .map-controls {
+            padding: 1rem;
+            background: white;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .map-filter {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        
+        .map-filter.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        #liveMap {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .emergency-report {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="live-map-container">
+        <div class="map-controls">
+            <h2>🔄 Mapa Vivo Comunitario</h2>
+            <div class="map-filters">
+                <span class="map-filter active">Todos</span>
+                <span class="map-filter">Incendios</span>
+                <span class="map-filter">Inundaciones</span>
+                <span class="map-filter">Médicos</span>
+                <span class="map-filter">Seguridad</span>
+            </div>
+        </div>
+        
+        <div id="liveMap"></div>
+        
+        <button class="emergency-report">
+            🚨 Reportar Emergencia
+        </button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Mapa base
+        const map = L.map('liveMap').setView([39.4699, -0.3763], 13);
+        
+        // Capas en tiempo real (ejemplo con datos simulados)
+        const emergencies = {
+            "incendio": L.layerGroup(),
+            "inundacion": L.layerGroup(),
+            "medico": L.layerGroup()
+        };
+        
+        // Simular datos en tiempo real
+        setInterval(() => {
+            // En una implementación real sería una conexión WebSocket
+            updateEmergencies();
+        }, 5000);
+    </script>
+</body>
+</html>
