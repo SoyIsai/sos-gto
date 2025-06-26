@@ -330,7 +330,37 @@ body {
 .accident-card {
     background: linear-gradient(135deg, #e9c46a, #f4a261);
 }
-
+/* Añadir estas clases si no existen */
+.protocolo-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.protocol-header {
+  background-color: #2F4858;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+.warning-box {
+  background-color: #FFF3CD;
+  border-left: 4px solid #FFC107;
+  padding: 10px;
+  margin: 20px 0;
+}
+.hidden { display: none; }
+.floating-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-size: 24px;
+}
 /* Página de lista de emergencias */
 .emergency-list {
     padding: 1rem;
