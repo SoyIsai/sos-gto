@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Emergencias | SOS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="../estilos.css">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="mapa-container">
+        <h1>🗺️ Mapa de Emergencias</h1>
+        
+        <div class="controles-mapa">
+            <div class="filtros">
+                <button class="filtro-btn active" data-capa="peligros">⚠️ Peligros</button>
+                <button class="filtro-btn" data-capa="hospitales">🏥 Hospitales</button>
+                <button class="filtro-btn" data-capa="refugios">🛟 Refugios</button>
+            </div>
+            <button id="miUbicacion">📍 Mi Ubicación</button>
+        </div>
+        
+        <div id="mapa"></div>
+        
+        <div class="leyenda">
+            <div class="leyenda-item"><span class="color peligro"></span> Peligros</div>
+            <div class="leyenda-item"><span class="color hospital"></span> Hospitales</div>
+            <div class="leyenda-item"><span class="color refugio"></span> Refugios</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="mapa.js"></script>
+</body>
+</html>
