@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo Terremoto | SOS</title>
+    <title>Protocolo Caídas y Traumatismos | SOS</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <style>
         :root {
             --primary: #FF3A44;
-            --natural: #4ECDC4;
-            --natural-dark: #3AA99E;
+            --health: #FF6B6B;
+            --health-dark: #E05555;
             --light: #FFFFFF;
             --dark: #2F4858;
             --gray: #F5F5F5;
@@ -25,7 +24,7 @@
             color: var(--dark);
         }
 
-        .earthquake-protocol {
+        .trauma-protocol {
             padding: 2rem 5%;
             max-width: 800px;
             margin: 0 auto;
@@ -34,24 +33,24 @@
         .protocol-header {
             text-align: center;
             margin-bottom: 2rem;
-            border-bottom: 2px solid var(--natural);
+            border-bottom: 2px solid var(--health);
             padding-bottom: 1rem;
         }
 
         .protocol-title {
             font-size: 2rem;
-            color: var(--natural-dark);
+            color: var(--health-dark);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 1rem;
         }
 
-        .phase-container {
-            margin: 3rem 0;
+        .type-container {
+            margin: 2rem 0;
         }
 
-        .phase-tabs {
+        .type-tabs {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1.5rem;
@@ -59,7 +58,7 @@
             justify-content: center;
         }
 
-        .phase-tab {
+        .type-tab {
             padding: 0.8rem 1.5rem;
             background: var(--gray);
             border-radius: 50px;
@@ -69,17 +68,17 @@
             border: none;
         }
 
-        .phase-tab.active {
-            background: var(--natural);
+        .type-tab.active {
+            background: var(--health);
             color: white;
         }
 
-        .phase-content {
+        .type-content {
             display: none;
             animation: fadeIn 0.5s ease;
         }
 
-        .phase-content.active {
+        .type-content.active {
             display: block;
         }
 
@@ -91,7 +90,7 @@
         }
 
         .step-number {
-            background: var(--natural);
+            background: var(--health);
             color: white;
             min-width: 35px;
             height: 35px;
@@ -103,40 +102,27 @@
             flex-shrink: 0;
         }
 
-        .safe-zones {
+        .symptoms-list {
             margin: 2rem 0;
         }
 
-        .zone-list {
-            columns: 2;
-            margin-top: 1rem;
-        }
-
-        .zone-item {
+        .symptom-item {
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .map-container {
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 1.5rem 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
+        .warning-box {
+            background: #FFF3F3;
+            border-left: 4px solid var(--health);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 10px 10px 0;
         }
 
-        .map-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            background: rgba(255,255,255,0.9);
-            padding: 8px 12px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        .warning-box strong {
+            color: var(--health-dark);
         }
 
         .emergency-kit {
@@ -146,20 +132,22 @@
             margin: 2rem 0;
         }
 
-        .btn-ver-mapa {
+        .btn-emergencia {
             display: inline-block;
             margin-top: 1rem;
             padding: 0.8rem 1.5rem;
-            background: var(--natural);
+            background: var(--primary);
             color: white;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
+            border: none;
+            cursor: pointer;
         }
 
-        .btn-ver-mapa:hover {
-            background: var(--natural-dark);
+        .btn-emergencia:hover {
+            background: #E02929;
         }
 
         @keyframes fadeIn {
@@ -168,224 +156,170 @@
         }
 
         @media (max-width: 768px) {
-            .zone-list {
-                columns: 1;
-            }
-            
             .step {
                 flex-direction: column;
-            }
-            
-            .map-container {
-                height: 300px;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="earthquake-protocol">
+    <div class="trauma-protocol">
         <header class="protocol-header">
-            <h1 class="protocol-title"><span>🌍</span> Protocolo Terremoto</h1>
-            <p>Qué hacer antes, durante y después de un sismo</p>
+            <h1 class="protocol-title"><span>⚠️</span> Protocolo Caídas y Traumatismos</h1>
+            <p>Primeros auxilios para fracturas, esguinces y traumatismos</p>
         </header>
 
-        <!-- Fases del terremoto - AHORA FUNCIONAN -->
-        <div class="phase-container">
-            <div class="phase-tabs">
-                <div class="phase-tab active" data-phase="before">Antes</div>
-                <div class="phase-tab" data-phase="during">Durante</div>
-                <div class="phase-tab" data-phase="after">Después</div>
+        <!-- Selector de tipo de lesión -->
+        <div class="type-container">
+            <div class="type-tabs">
+                <div class="type-tab active" data-type="fracture">Fracturas</div>
+                <div class="type-tab" data-type="sprain">Esguinces</div>
+                <div class="type-tab" data-type="head">Traumatismos</div>
             </div>
             
-            <div class="phase-content active" id="before">
+            <!-- Contenido para Fracturas -->
+            <div class="type-content active" id="fracture">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div>
-                        <h3>Identifica zonas seguras</h3>
-                        <p>En cada habitación, busca lugares bajo muebles resistentes o junto a columnas estructurales. Marca estas zonas en tu plano de casa.</p>
+                        <h3>Inmoviliza el área afectada</h3>
+                        <p>Evita cualquier movimiento de la zona lesionada. Si es una extremidad, colócala en una posición natural sin forzar.</p>
                     </div>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">2</div>
                     <div>
-                        <h3>Prepara kit de emergencia</h3>
-                        <p>Incluye agua (4L por persona), alimentos no perecederos, linterna, radio a pilas, botiquín, medicamentos y documentos importantes.</p>
+                        <h3>Aplica frío indirectamente</h3>
+                        <p>Envuelve hielo en un paño y aplícalo sobre la zona durante 15 minutos cada hora. Nunca coloques hielo directamente sobre la piel.</p>
                     </div>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">3</div>
                     <div>
-                        <h3>Plan familiar</h3>
-                        <p>Establece un punto de encuentro seguro fuera de casa y designa un contacto familiar lejano como referencia.</p>
+                        <h3>Busca atención médica</h3>
+                        <p>Las fracturas requieren tratamiento profesional. Mueve al paciente solo si es estrictamente necesario y con soporte adecuado.</p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="phase-content" id="during">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div>
-                        <h3>Agáchate, Cúbrete y Sujétate</h3>
-                        <p>Colócate bajo una mesa resistente, protege tu cabeza y cuello con tus brazos, y sujétate de una pata de la mesa hasta que termine el temblor.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div>
-                        <h3>Evita peligros</h3>
-                        <p>Aléjate de ventanas, espejos, libreros y objetos que puedan caer. No uses escaleras ni ascensores durante el sismo.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div>
-                        <h3>Mantén la calma</h3>
-                        <p>Si estás en la calle, aléjate de edificios y postes eléctricos. Si vas en auto, detente en un lugar seguro y permanece dentro.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="phase-content" id="after">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div>
-                        <h3>Evacúa con calma</h3>
-                        <p>Usa las escaleras, no ascensores. Revisa posibles daños estructurales antes de salir. Lleva tu kit de emergencia.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div>
-                        <h3>Revisa servicios</h3>
-                        <p>Verifica fugas de gas (no uses cerillos), cables eléctricos caídos y cortes de agua. Cierra llaves principales si hay daños.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div>
-                        <h3>Mantente informado</h3>
-                        <p>Usa radio a pilas para recibir información oficial. No satures las líneas telefónicas con llamadas no urgentes.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Zonas seguras -->
-        <div class="safe-zones">
-            <h2><i class="fas fa-shield-alt"></i> Zonas Seguras en Edificios</h2>
-            <div class="zone-list">
-                <div class="zone-item"><span>✔</span> Marcos de puertas estructurales</div>
-                <div class="zone-item"><span>✔</span> Bajo mesas resistentes</div>
-                <div class="zone-item"><span>✔</span> Columnas y muros de carga</div>
-                <div class="zone-item"><span>✔</span> Lejos de ventanas y repisas</div>
-                <div class="zone-item"><span>❌</span> No usar ascensores</div>
-                <div class="zone-item"><span>❌</span> Evitar escaleras durante el sismo</div>
-            </div>
-        </div>
+                <div class="symptoms-list">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Síntomas de fractura:</h3>
+                    <div class="symptom-item"><span>✔</span> Dolor intenso que empeora con el movimiento</div>
+                    <div class="symptom-item"><span>✔</span> Deformidad visible o hinchazón notable</div>
+                    <div class="symptom-item"><span>✔</span> Incapacidad para mover la extremidad</div>
+                    <div class="symptom-item"><span>✔</span> Crujido audible al momento de la lesión</div>
+                </div>
 
-        <!-- Mapa de refugios MEJORADO -->
-        <div>
-            <h2><i class="fas fa-map-marked-alt"></i> Refugios cercanos</h2>
-            <div class="map-container" id="shelterMap">
-                <div class="map-overlay">
-                    <button id="locateMe"><i class="fas fa-location-arrow"></i> Mi ubicación</button>
+                <div class="warning-box">
+                    <strong><i class="fas fa-skull-crossbones"></i> ¡NUNCA hagas esto!</strong>
+                    <p>No intentes recolocar el hueso por tu cuenta. No des masajes en la zona afectada. No permitas que la persona apoye peso sobre una posible fractura.</p>
+                </div>
+            </div>
+            
+            <!-- Contenido para Esguinces -->
+            <div class="type-content" id="sprain">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Reposo inmediato</h3>
+                        <p>Interrumpe cualquier actividad y evita apoyar peso sobre la articulación afectada durante las primeras 48 horas.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Terapia con frío</h3>
+                        <p>Aplica compresas frías (hielo envuelto en tela) durante 15-20 minutos cada 2-3 horas durante los primeros 2 días.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Compresión moderada</h3>
+                        <p>Envuelve la zona con una venda elástica, comenzando por debajo de la lesión y avanzando hacia arriba. No aprietes demasiado.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Elevación de la extremidad</h3>
+                        <p>Mantén la articulación elevada por encima del nivel del corazón para reducir la hinchazón, especialmente durante las primeras 48 horas.</p>
+                    </div>
+                </div>
+
+                <div class="symptoms-list">
+                    <h3><i class="fas fa-diagnoses"></i> Grados de esguince:</h3>
+                    <div class="symptom-item"><span>Grado 1</span> - Estiramiento leve de ligamentos (dolor moderado, hinchazón mínima)</div>
+                    <div class="symptom-item"><span>Grado 2</span> - Desgarro parcial (dolor intenso, hinchazón y hematoma)</div>
+                    <div class="symptom-item"><span>Grado 3</span> - Rotura completa (dolor severo, inestabilidad articular)</div>
+                </div>
+            </div>
+            
+            <!-- Contenido para Traumatismos -->
+            <div class="type-content" id="head">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Valora el estado de consciencia</h3>
+                        <p>Pregunta a la persona su nombre, dónde está y qué día es. Si no responde adecuadamente, llama a emergencias inmediatamente.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Controla posibles hemorragias</h3>
+                        <p>Si hay sangrado en el cuero cabelludo, aplica presión con gasa estéril o paño limpio. No presiones si sospechas fractura de cráneo.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Monitoriza signos de alarma</h3>
+                        <p>Observa pupilas desiguales, vómitos repetidos, convulsiones o somnolencia excesiva. Todos requieren atención médica urgente.</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong><i class="fas fa-ambulance"></i> Señales de EMERGENCIA:</strong>
+                    <div class="symptom-item"><span>✔</span> Pérdida de consciencia (aunque sea breve)</div>
+                    <div class="symptom-item"><span>✔</span> Confusión o desorientación persistente</div>
+                    <div class="symptom-item"><span>✔</span> Sangrado por oídos o nariz sin causa aparente</div>
+                    <div class="symptom-item"><span>✔</span> Debilidad en un lado del cuerpo</div>
+                    
+                    <button class="btn-emergencia" onclick="alert('Llamando a emergencias...')">
+                        <i class="fas fa-phone-alt"></i> Llamar al 911
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Kit de emergencia -->
         <div class="emergency-kit">
-            <h2><i class="fas fa-kit-medical"></i> Kit Básico Post-Terremoto</h2>
-            <div class="zone-list">
-                <div class="zone-item"><span>✔</span> Agua (4L por persona)</div>
-                <div class="zone-item"><span>✔</span> Alimentos no perecederos (3 días)</div>
-                <div class="zone-item"><span>✔</span> Linterna + pilas extra</div>
-                <div class="zone-item"><span>✔</span> Radio portátil</div>
-                <div class="zone-item"><span>✔</span> Botiquín de primeros auxilios</div>
-                <div class="zone-item"><span>✔</span> Copia de documentos</div>
-                <div class="zone-item"><span>✔</span> Silbato</div>
-                <div class="zone-item"><span>✔</span> Manta térmica</div>
+            <h2><i class="fas fa-kit-medical"></i> Kit Recomendado para Traumatismos</h2>
+            <div class="symptoms-list">
+                <div class="symptom-item"><span>✔</span> Vendajes elásticos de diferentes tamaños</div>
+                <div class="symptom-item"><span>✔</span> Férulas inflables o tablillas</div>
+                <div class="symptom-item"><span>✔</span> Compresas frías instantáneas</div>
+                <div class="symptom-item"><span>✔</span> Analgésicos (paracetamol, ibuprofeno)</div>
+                <div class="symptom-item"><span>✔</span> Linterna pequeña para revisar pupilas</div>
+                <div class="symptom-item"><span>✔</span> Tijeras de trauma para cortar ropa</div>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Mapa de refugios MEJORADO
-        const shelterMap = L.map('shelterMap').setView([19.4326, -99.1332], 13); // Centro de CDMX
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(shelterMap);
-
-        // Iconos personalizados
-        const shelterIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-            iconSize: [25, 41]
-        });
-        
-        const dangerIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-            iconSize: [25, 41]
-        });
-
-        // Refugios reales en CDMX (ejemplo)
-        const refugios = [
-            {nombre: "Albergue Benito Juárez", lat: 19.4350, lng: -99.1400, capacidad: "300 personas"},
-            {nombre: "Deportivo Venustiano Carranza", lat: 19.4421, lng: -99.0978, capacidad: "500 personas"},
-            {nombre: "Escuela Superior de Comercio", lat: 19.4289, lng: -99.1276, capacidad: "200 personas"}
-        ];
-
-        // Zonas de riesgo (ejemplo)
-        const zonasRiesgo = [
-            {nombre: "Zona Sísmica Centro", lat: 19.4326, lng: -99.1332, riesgo: "Alto"},
-            {nombre: "Zona Lago", lat: 19.4260, lng: -99.1500, riesgo: "Inundación"}
-        ];
-
-        // Añadir refugios al mapa
-        refugios.forEach(refugio => {
-            L.marker([refugio.lat, refugio.lng], {icon: shelterIcon})
-                .addTo(shelterMap)
-                .bindPopup(`<b>${refugio.nombre}</b><br>Capacidad: ${refugio.capacidad}<br><a href="https://maps.google.com?q=${refugio.lat},${refugio.lng}" target="_blank">Cómo llegar</a>`);
-        });
-
-        // Añadir zonas de riesgo
-        zonasRiesgo.forEach(zona => {
-            L.marker([zona.lat, zona.lng], {icon: dangerIcon})
-                .addTo(shelterMap)
-                .bindPopup(`<b>${zona.nombre}</b><br>Riesgo: ${zona.riesgo}`);
-        });
-
-        // Localización del usuario
-        document.getElementById('locateMe').addEventListener('click', function() {
-            if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    shelterMap.setView([pos.coords.latitude, pos.coords.longitude], 15);
-                    L.marker([pos.coords.latitude, pos.coords.longitude], {
-                        icon: L.icon({
-                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-                            iconSize: [25, 41]
-                        })
-                    }).addTo(shelterMap)
-                    .bindPopup("<b>Tu ubicación</b>")
-                    .openPopup();
-                });
-            } else {
-                alert("La geolocalización no está disponible en tu navegador");
-            }
-        });
-
-        // Cambio de fases FUNCIONANDO
-        document.querySelectorAll('.phase-tab').forEach(tab => {
+        // Cambio entre tipos de lesión
+        document.querySelectorAll('.type-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 // Quitar activo de todas las pestañas
-                document.querySelectorAll('.phase-tab').forEach(t => {
+                document.querySelectorAll('.type-tab').forEach(t => {
                     t.classList.remove('active');
                 });
                 
@@ -393,18 +327,18 @@
                 this.classList.add('active');
                 
                 // Ocultar todos los contenidos
-                document.querySelectorAll('.phase-content').forEach(content => {
+                document.querySelectorAll('.type-content').forEach(content => {
                     content.classList.remove('active');
                 });
                 
                 // Mostrar el contenido correspondiente
-                const phase = this.dataset.phase;
-                document.getElementById(phase).classList.add('active');
+                const type = this.dataset.type;
+                document.getElementById(type).classList.add('active');
             });
         });
 
-        // Sugerencia: Añadir capa de zonas sísmicas reales
-        console.log("Sugerencia: Integrar API del Sismológico Nacional para zonas de riesgo actualizadas");
+        // Sugerencia: Añadir ilustraciones médicas
+        console.log("Sugerencia: Agregar ilustraciones SVG de anatomía para cada tipo de lesión");
     </script>
 </body>
 </html>
