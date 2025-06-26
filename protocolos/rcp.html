@@ -111,6 +111,7 @@
             gap: 1rem;
             margin: 1.5rem 0;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .age-tab {
@@ -119,6 +120,7 @@
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
         }
 
         .age-tab.active {
@@ -131,15 +133,27 @@
             text-align: center;
         }
 
-        .video-placeholder {
+        .video-container {
             width: 100%;
-            height: 400px;
-            background: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
             border-radius: 10px;
-            margin: 1rem 0;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 340px;
+            border: none;
+        }
+
+        .age-specific {
+            display: none;
+        }
+
+        .age-specific.show {
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -147,8 +161,8 @@
                 flex-direction: column;
             }
             
-            .video-placeholder {
-                height: 250px;
+            .video-container iframe {
+                height: 200px;
             }
         }
     </style>
@@ -162,7 +176,7 @@
 
         <div class="emergency-alert">
             <h3><i class="fas fa-exclamation-triangle"></i> ANTES DE COMENZAR</h3>
-            <p>Verifica que la persona no responda y no respire normalmente. Pide ayuda y llama al servicio de emergencias antes de comenzar RCP.</p>
+            <p>Verifica que la persona no responda y no respire normalmente. Pide ayuda y llama al servicio de emergencias (911 en México) antes de comenzar RCP.</p>
         </div>
 
         <!-- Selector de edad -->
@@ -178,10 +192,15 @@
                 <div class="step-number">1</div>
                 <div class="step-content">
                     <h3>Posiciona a la persona</h3>
-                    <p>Coloca a la persona boca arriba sobre una superficie firme. Arrodíllate a su lado.</p>
-                    <p class="age-specific adult show">Para adultos: No inclines la cabeza demasiado</p>
-                    <p class="age-specific child" style="display:none">Para niños: Inclina ligeramente la cabeza hacia atrás</p>
-                    <p class="age-specific baby" style="display:none">Para bebés: Coloca sobre superficie plana, no inclines</p>
+                    <div class="age-specific adult show">
+                        <p><strong>Para adultos:</strong> Coloca a la persona boca arriba sobre una superficie firme. Arrodíllate a su lado. No inclines demasiado la cabeza.</p>
+                    </div>
+                    <div class="age-specific child">
+                        <p><strong>Para niños:</strong> Coloca al niño boca arriba sobre una superficie plana. Inclina ligeramente la cabeza hacia atrás para abrir la vía aérea.</p>
+                    </div>
+                    <div class="age-specific baby">
+                        <p><strong>Para bebés:</strong> Coloca al bebé sobre una superficie plana y firme. No inclines la cabeza demasiado.</p>
+                    </div>
                 </div>
             </div>
             
@@ -190,16 +209,19 @@
                 <div class="step-content">
                     <h3>Compresiones torácicas</h3>
                     <div class="age-specific adult show">
-                        <p>Coloca el talón de una mano en el centro del pecho (entre los pezones). Coloca la otra mano encima y entrelaza los dedos.</p>
-                        <p>Comprime el pecho al menos 5 cm de profundidad a un ritmo de 100-120 compresiones por minuto.</p>
+                        <p><strong>Técnica:</strong> Coloca el talón de una mano en el centro del pecho (entre los pezones). Pon la otra mano encima y entrelaza los dedos.</p>
+                        <p><strong>Profundidad:</strong> Comprime al menos 5 cm.</p>
+                        <p><strong>Ritmo:</strong> 100-120 compresiones por minuto (usa el metrónomo abajo).</p>
                     </div>
-                    <div class="age-specific child" style="display:none">
-                        <p>Usa una o dos manos (según tamaño del niño) en el centro del pecho.</p>
-                        <p>Comprime unos 5 cm de profundidad (1/3 del diámetro torácico).</p>
+                    <div class="age-specific child">
+                        <p><strong>Técnica:</strong> Usa una mano (o dos si el niño es grande) en el centro del pecho.</p>
+                        <p><strong>Profundidad:</strong> Aprox. 5 cm (1/3 del diámetro torácico).</p>
+                        <p><strong>Ritmo:</strong> 100-120 compresiones/min.</p>
                     </div>
-                    <div class="age-specific baby" style="display:none">
-                        <p>Usa dos dedos (índice y medio) justo debajo de la línea de los pezones.</p>
-                        <p>Comprime unos 4 cm de profundidad (1/3 del diámetro torácico).</p>
+                    <div class="age-specific baby">
+                        <p><strong>Técnica:</strong> Usa dos dedos (índice y medio) justo debajo de la línea de los pezones.</p>
+                        <p><strong>Profundidad:</strong> Aprox. 4 cm (1/3 del diámetro torácico).</p>
+                        <p><strong>Ritmo:</strong> 100-120 compresiones/min.</p>
                     </div>
                 </div>
             </div>
@@ -207,21 +229,24 @@
             <div class="step">
                 <div class="step-number">3</div>
                 <div class="step-content">
-                    <h3>Ventilaciones (si entrenado)</h3>
+                    <h3>Ventilaciones (si estás entrenado)</h3>
                     <div class="age-specific adult show">
-                        <p>Después de 30 compresiones, abre la vía aérea (inclinación cabeza-elevación mentón) y da 2 respiraciones de 1 segundo cada una.</p>
+                        <p><strong>Después de 30 compresiones:</strong> Abre la vía aérea (inclinación cabeza-elevación mentón) y da 2 respiraciones de 1 segundo cada una.</p>
+                        <p><strong>Ratio:</strong> 30 compresiones : 2 ventilaciones.</p>
                     </div>
-                    <div class="age-specific child" style="display:none">
-                        <p>30 compresiones seguidas de 2 respiraciones (cubriendo completamente boca y nariz del niño).</p>
+                    <div class="age-specific child">
+                        <p><strong>Después de 30 compresiones:</strong> Cubre completamente boca y nariz del niño con tu boca y da 2 respiraciones suaves.</p>
+                        <p><strong>Ratio:</strong> 30 compresiones : 2 ventilaciones.</p>
                     </div>
-                    <div class="age-specific baby" style="display:none">
-                        <p>30 compresiones seguidas de 2 respiraciones (cubriendo boca y nariz con tu boca).</p>
+                    <div class="age-specific baby">
+                        <p><strong>Después de 30 compresiones:</strong> Cubre boca y nariz con tu boca y da 2 respiraciones suaves (sopla solo con la fuerza de tus mejillas).</p>
+                        <p><strong>Ratio:</strong> 30 compresiones : 2 ventilaciones.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Metrónomo -->
+        <!-- Metrónomo funcional -->
         <div class="metronome">
             <h3><i class="fas fa-music"></i> Ritmo de Compresiones (100-120/min)</h3>
             <div class="metronome-display" id="metroDisplay">--</div>
@@ -230,36 +255,38 @@
             <audio id="metroAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-metronome-click-952.mp3" preload="auto"></audio>
         </div>
 
-        <!-- Video guía -->
+        <!-- Video guía real -->
         <div class="video-guide">
             <h3><i class="fas fa-video"></i> Video Demostrativo</h3>
-            <div class="video-placeholder">
-                <p>[Video demostración RCP - Espacio para integración]</p>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/9H3A2JJn3ew" title="Tutorial RCP" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <button class="metronome-btn">
-                <i class="fas fa-download"></i> Descargar Guía Completa
-            </button>
         </div>
     </div>
 
     <script>
-        // Selector de edad
+        // Selector de edad - FUNCIONA
         document.querySelectorAll('.age-tab').forEach(tab => {
             tab.addEventListener('click', function() {
-                document.querySelector('.age-tab.active').classList.remove('active');
+                // Remover activo de todas las pestañas
+                document.querySelectorAll('.age-tab').forEach(t => t.classList.remove('active'));
+                // Activar esta pestaña
                 this.classList.add('active');
                 
-                const age = this.dataset.age;
+                // Ocultar todos los contenidos
                 document.querySelectorAll('.age-specific').forEach(el => {
-                    el.style.display = 'none';
+                    el.classList.remove('show');
                 });
+                
+                // Mostrar contenido correspondiente
+                const age = this.dataset.age;
                 document.querySelectorAll(`.age-specific.${age}`).forEach(el => {
-                    el.style.display = 'block';
+                    el.classList.add('show');
                 });
             });
         });
 
-        // Metrónomo
+        // Metrónomo - FUNCIONA
         const metroDisplay = document.getElementById('metroDisplay');
         const startBtn = document.getElementById('startMetro');
         const stopBtn = document.getElementById('stopMetro');
@@ -286,33 +313,6 @@
             isPlaying = false;
             metroDisplay.textContent = '--';
         });
-        <!-- Añade al final del body -->
-<script>
-    // Nuevo metrónomo profesional
-    const beats = {
-        adulto: new Audio('assets/sounds/metro-adulto.mp3'),
-        niño: new Audio('assets/sounds/metro-niño.mp3'),
-        bebé: new Audio('assets/sounds/metro-bebe.mp3')
-    };
-    
-    // Integración con cámara para AR
-    function startARGuide() {
-        if(navigator.mediaDevices) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-                    document.getElementById('arView').srcObject = stream;
-                });
-        }
-    }
-</script>
-
-<!-- Nuevo panel de ayuda en vivo -->
-<div class="live-help">
-    <button id="helpBtn">🎥 Ayuda en Vivo con Experto</button>
-    <div id="videoCall" style="display:none;">
-        <!-- Espacio para video llamada -->
-    </div>
-</div>
     </script>
 </body>
 </html>
