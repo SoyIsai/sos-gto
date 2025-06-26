@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caídas y Traumatismos | SOS Protocolos</title>
+  <link rel="stylesheet" href="../../assets/css/styles.css">
+  <style>
+    /* Estilos específicos para esta página */
+    .lesion-section { display: none; }
+    .active { display: block; }
+    .symptom-list { list-style-type: none; padding: 0; }
+    .symptom-item { margin: 10px 0; }
+    .emergencia-btn {
+      background-color: #FF3A44;
+      color: white;
+      padding: 15px;
+      border-radius: 50%;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: none;
+    }
+    .illustration {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="protocol-header">
+    <h1>⚠️ Protocolo: Caídas y Traumatismos</h1>
+    <p>Guía paso a paso para actuar ante fracturas, esguinces y traumatismos craneales</p>
+  </header>
+
+  <main class="protocolo-container">
+    <!-- Selector de tipo de lesión -->
+    <section class="selector-section">
+      <label for="tipo-lesion"><strong>Selecciona el tipo de lesión:</strong></label>
+      <select id="tipo-lesion" class="selector">
+        <option value="" disabled selected>-- Elige una opción --</option>
+        <option value="fractura">Fractura ósea</option>
+        <option value="esguince">Esguince/Luxación</option>
+        <option value="craneal">Traumatismo craneal</option>
+      </select>
+    </section>
+
+    <!-- Contenido dinámico -->
+    <section id="fractura" class="lesion-section">
+      <h2>🦴 Fractura Ósea</h2>
+      <img src="../../assets/img/fractura-illustration.svg" alt="Ilustración de fractura" class="illustration">
+      
+      <h3>🔍 Síntomas:</h3>
+      <ul class="symptom-list">
+        <li class="symptom-item">✅ Dolor intenso en el área afectada</li>
+        <li class="symptom-item">✅ Deformidad visible o hinchazón</li>
+        <li class="symptom-item">✅ Incapacidad para mover la extremidad</li>
+      </ul>
+
+      <h3>🩹 Primeros Auxilios:</h3>
+      <ol class="steps-list">
+        <li>Inmoviliza el área con una férula o material rígido (revista, tabla).</li>
+        <li>Aplica hielo envuelto en tela por 15 minutos.</li>
+        <li>Eleva la extremidad si es posible para reducir hinchazón.</li>
+        <li>No intentes recolocar el hueso.</li>
+        <li>Traslada a centro médico.</li>
+      </ol>
+
+      <div class="warning-box">
+        <strong>🚨 Alerta:</strong> Si la fractura es expuesta (hueso visible), cubre con gasa estéril y NO laves.
+      </div>
+    </section>
+
+    <section id="esguince" class="lesion-section">
+      <h2>🦵 Esguince/Luxación</h2>
+      <img src="../../assets/img/esguince-illustration.svg" alt="Ilustración de esguince" class="illustration">
+      
+      <h3>🔍 Síntomas:</h3>
+      <ul class="symptom-list">
+        <li class="symptom-item">✅ Dolor al mover la articulación</li>
+        <li class="symptom-item">✅ Hinchazón y hematoma</li>
+        <li class="symptom-item">✅ Sensación de inestabilidad</li>
+      </ul>
+
+      <h3>🩹 Primeros Auxilios:</h3>
+      <ol class="steps-list">
+        <li>Aplica el método <strong>R.I.C.E</strong>:</li>
+        <ul>
+          <li><strong>R</strong>eposo: No apoyar peso</li>
+          <li><strong>I</strong>ce: Hielo 15 min cada 2 horas</li>
+          <li><strong>C</strong>ompresión: Venda elástica (no apretar)</li>
+          <li><strong>E</strong>levación: Sobre el nivel del corazón</li>
+        </ul>
+        <li>Evita calor en primeras 48 horas.</li>
+      </ol>
+    </section>
+
+    <section id="craneal" class="lesion-section">
+      <h2>🧠 Traumatismo Craneal</h2>
+      <img src="../../assets/img/craneal-illustration.svg" alt="Ilustración de traumatismo" class="illustration">
+      
+      <h3>🔍 Síntomas Peligrosos:</h3>
+      <ul class="symptom-list">
+        <li class="symptom-item">✅ Pérdida de conciencia (aunque sea breve)</li>
+        <li class="symptom-item">✅ Confusión o desorientación</li>
+        <li class="symptom-item">✅ Pupilas desiguales</li>
+        <li class="symptom-item">✅ Sangrado por oídos/nariz</li>
+      </ul>
+
+      <h3>🩹 Primeros Auxilios:</h3>
+      <ol class="steps-list">
+        <li>Mantén a la persona inmóvil (evita mover el cuello).</li>
+        <li>Si está inconsciente, colócala en <strong>posición lateral</strong>.</li>
+        <li>Controla sangrados con gasa estéril (sin presión fuerte).</li>
+        <li>Monitoriza conciencia cada 15 minutos.</li>
+        <li><strong>¡Busca atención médica inmediata!</strong></li>
+      </ol>
+    </section>
+
+    <!-- Kit Digital Integrado -->
+    <section id="kit-section" class="hidden">
+      <h3>👜 Kit Recomendado:</h3>
+      <div id="kit-content"></div>
+    </section>
+  </main>
+
+  <!-- Botones de acción -->
+  <button id="emergencia-btn" class="emergencia-btn">🚨<br>911</button>
+  <button id="kit-btn" class="floating-btn">👜<br>Kit</button>
+
+  <!-- Footer con integración a otras herramientas -->
+  <footer class="protocol-footer">
+    <button id="mapa-btn" class="footer-btn">🗺️ Ver Hospitales Cercanos</button>
+    <button id="plan-btn" class="footer-btn">📝 Añadir a Mi Plan</button>
+  </footer>
+
+  <script>
+    // ===== DOM Elements =====
+    const tipoLesionSelect = document.getElementById('tipo-lesion');
+    const lesionSections = document.querySelectorAll('.lesion-section');
+    const emergenciaBtn = document.getElementById('emergencia-btn');
+    const kitBtn = document.getElementById('kit-btn');
+    const kitSection = document.getElementById('kit-section');
+    const kitContent = document.getElementById('kit-content');
+    const mapaBtn = document.getElementById('mapa-btn');
+    const planBtn = document.getElementById('plan-btn');
+
+    // ===== Datos Dinámicos =====
+    const kits = {
+      fractura: ['Férula o material rígido', 'Vendas triangulares', 'Bolsa de hielo', 'Analgésicos (ibuprofeno)'],
+      esguince: ['Venda elástica', 'Compresa fría instantánea', 'Almohada para elevación'],
+      craneal: ['Linterna pequeña', 'Gasas estériles', 'Termómetro', 'Lista de contactos de emergencia']
+    };
+
+    // ===== Event Listeners =====
+    tipoLesionSelect.addEventListener('change', (e) => {
+      const selectedValue = e.target.value;
+      
+      // Oculta todas las secciones
+      lesionSections.forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Muestra la seleccionada
+      if (selectedValue) {
+        document.getElementById(selectedValue).classList.add('active');
+        emergenciaBtn.style.display = selectedValue === 'craneal' ? 'block' : 'none';
+      }
+    });
+
+    kitBtn.addEventListener('click', () => {
+      const selectedValue = tipoLesionSelect.value;
+      if (!selectedValue) return;
+      
+      kitContent.innerHTML = `
+        <h4>Para ${getLesionName(selectedValue)} necesitas:</h4>
+        <ul>${kits[selectedValue].map(item => `<li>${item}</li>`).join('')}</ul>
+      `;
+      
+      kitSection.classList.toggle('hidden');
+    });
+
+    emergenciaBtn.addEventListener('click', () => {
+      if (confirm('¿Llamar al servicio de emergencias (911)?')) {
+        // Simular llamada (en producción usar tel://)
+        console.log('Llamando a emergencias...');
+        alert('Emergencia confirmada. Mostrando ubicación en mapa.');
+        // Integración con mapa.js
+        if (window.mapaTools) {
+          window.mapaTools.mostrarRutaHospital();
+        }
+      }
+    });
+
+    mapaBtn.addEventListener('click', () => {
+      // Redirigir al mapa con parámetros
+      window.location.href = '../../herramientas/mapa-vivo/?tipo=hospital';
+    });
+
+    // ===== Funciones Utiles =====
+    function getLesionName(value) {
+      const names = {
+        fractura: 'fracturas',
+        esguince: 'esguinces',
+        craneal: 'traumatismos craneales'
+      };
+      return names[value] || '';
+    }
+  </script>
+</body>
+</html>
