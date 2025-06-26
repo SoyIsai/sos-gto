@@ -4,37 +4,280 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caídas y Traumatismos | SOS Protocolos</title>
-  <link rel="stylesheet" href="../../assets/CSS/styles.css">
   <style>
-    /* Estilos específicos para esta página */
-    .lesion-section { display: none; }
-    .active { display: block; }
-    .symptom-list { list-style-type: none; padding: 0; }
-    .symptom-item { margin: 10px 0; }
-    .emergencia-btn {
-      background-color: #FF3A44;
+    /* ===== ESTILOS GENERALES ===== */
+    :root {
+      --primary: #FF3A44;
+      --dark: #2F4858;
+      --light: #F8F9FA;
+      --warning: #FFF3CD;
+      --danger: #DC3545;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light);
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* ===== HEADER ===== */
+    .protocol-header {
+      background-color: var(--dark);
       color: white;
+      padding: 25px 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--primary);
+    }
+    
+    .protocol-header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    
+    .protocol-header p {
+      margin: 5px 0 0;
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+    
+    /* ===== CONTENEDOR PRINCIPAL ===== */
+    .protocolo-container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    
+    /* ===== SELECTOR DE LESIÓN ===== */
+    .selector-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+    
+    .selector-section label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    
+    .selector-section select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      background-color: white;
+      transition: border 0.3s;
+    }
+    
+    .selector-section select:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    
+    /* ===== SECCIONES DE LESIÓN ===== */
+    .lesion-section {
+      display: none;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .lesion-section h2 {
+      color: var(--dark);
+      margin-top: 0;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 8px;
+    }
+    
+    .lesion-section h3 {
+      color: var(--primary);
+      margin: 20px 0 10px;
+    }
+    
+    /* ===== LISTAS ===== */
+    .symptom-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .symptom-item {
+      background: #f8f9fa;
+      margin: 8px 0;
+      padding: 12px;
+      border-left: 4px solid var(--primary);
+      border-radius: 0 4px 4px 0;
+    }
+    
+    .steps-list {
+      padding-left: 20px;
+    }
+    
+    .steps-list li {
+      margin-bottom: 10px;
+      position: relative;
+    }
+    
+    .steps-list li:before {
+      content: "→";
+      color: var(--primary);
+      position: absolute;
+      left: -20px;
+    }
+    
+    /* ===== ILUSTRACIONES ===== */
+    .illustration {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+      display: block;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* ===== ALERTAS ===== */
+    .warning-box {
+      background-color: var(--warning);
+      border-left: 4px solid #FFC107;
       padding: 15px;
+      margin: 25px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    .warning-box strong {
+      color: var(--danger);
+    }
+    
+    /* ===== BOTONES ===== */
+    .emergencia-btn {
+      background-color: var(--danger);
+      color: white;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       position: fixed;
       bottom: 20px;
       right: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 100;
       display: none;
+      text-align: center;
+      line-height: 1.3;
     }
-    .illustration {
-      max-width: 100%;
-      height: auto;
+    
+    .floating-btn {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      text-align: center;
+      line-height: 1.3;
+    }
+    
+    .footer-btn {
+      background: var(--dark);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      margin: 10px 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    
+    .footer-btn:hover {
+      background: #1a2e3a;
+    }
+    
+    /* ===== FOOTER ===== */
+    .protocol-footer {
+      background: var(--dark);
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    /* ===== KIT DIGITAL ===== */
+    #kit-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       margin: 20px 0;
+    }
+    
+    #kit-section h4 {
+      margin-top: 0;
+      color: var(--dark);
+    }
+    
+    #kit-section ul {
+      padding-left: 20px;
+    }
+    
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .protocol-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .lesion-section {
+        padding: 20px 15px;
+      }
+      
+      .floating-btn {
+        bottom: 80px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+      
+      .emergencia-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- ===== HEADER ===== -->
   <header class="protocol-header">
     <h1>⚠️ Protocolo: Caídas y Traumatismos</h1>
     <p>Guía paso a paso para actuar ante fracturas, esguinces y traumatismos craneales</p>
   </header>
 
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
   <main class="protocolo-container">
     <!-- Selector de tipo de lesión -->
     <section class="selector-section">
@@ -50,7 +293,7 @@
     <!-- Contenido dinámico -->
     <section id="fractura" class="lesion-section">
       <h2>🦴 Fractura Ósea</h2>
-      <img src="../../assets/img/fractura-illustration.svg" alt="Ilustración de fractura" class="illustration">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRjNBMjIiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMTEyIDMyMEw0OCAzODRIMHYtNDhNMTkyIDI1NmwtNjQgNjRoLTQ4TTI5NiAxNjBsLTY0IDY0aC00OE00MDAgNjRsLTY0IDY0aC00OE00MDAgNjRsLTM0LjEgMTM2TTQwMCA2NGwtMTM2IDM0LjFNMTEyIDMyMGwxMzYtMzQuMU0xMTIgMzIwbDM0LjEgMTM2TTExMiAzMjBsLTM0LjEgMTM2Ii8+PC9zdmc+" alt="Ilustración de fractura" class="illustration">
       
       <h3>🔍 Síntomas:</h3>
       <ul class="symptom-list">
@@ -75,7 +318,7 @@
 
     <section id="esguince" class="lesion-section">
       <h2>🦵 Esguince/Luxación</h2>
-      <img src="../../assets/img/esguince-illustration.svg" alt="Ilustración de esguince" class="illustration">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRjNBMjIiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMjU2IDE2MGMwIDAgMTI4IDAgMTI4IDY0cy0xMjggNjQtMTI4IDE2MGMwLTk2LTEyOC05Ni0xMjgtMTYwczEyOC02NCAxMjgtNjR6Ii8+PC9zdmc+" alt="Ilustración de esguince" class="illustration">
       
       <h3>🔍 Síntomas:</h3>
       <ul class="symptom-list">
@@ -99,7 +342,7 @@
 
     <section id="craneal" class="lesion-section">
       <h2>🧠 Traumatismo Craneal</h2>
-      <img src="../../assets/img/craneal-illustration.svg" alt="Ilustración de traumatismo" class="illustration">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRjNBMjIiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMzg0IDI1NmMwIDcwLjctNTcuMyAxMjgtMTI4IDEyOHMtMTI4LTU3LjMtMTI4LTEyOCA1Ny4zLTEyOCAxMjgtMTI4IDEyOCA1Ny4zIDEyOCAxMjh6TTE4NCAyNTZoMTQ0TTEyMCAxNjBsNDAgNDBNMzUyIDE2MGwtNDAgNDBNMTQ0IDI1NmgyMjQiLz48L3N2Zz4=" alt="Ilustración de traumatismo" class="illustration">
       
       <h3>🔍 Síntomas Peligrosos:</h3>
       <ul class="symptom-list">
@@ -120,17 +363,17 @@
     </section>
 
     <!-- Kit Digital Integrado -->
-    <section id="kit-section" class="hidden">
+    <section id="kit-section" style="display: none;">
       <h3>👜 Kit Recomendado:</h3>
       <div id="kit-content"></div>
     </section>
   </main>
 
-  <!-- Botones de acción -->
+  <!-- ===== BOTONES FLOTANTES ===== -->
   <button id="emergencia-btn" class="emergencia-btn">🚨<br>911</button>
   <button id="kit-btn" class="floating-btn">👜<br>Kit</button>
 
-  <!-- Footer con integración a otras herramientas -->
+  <!-- ===== FOOTER ===== -->
   <footer class="protocol-footer">
     <button id="mapa-btn" class="footer-btn">🗺️ Ver Hospitales Cercanos</button>
     <button id="plan-btn" class="footer-btn">📝 Añadir a Mi Plan</button>
@@ -160,43 +403,50 @@
       
       // Oculta todas las secciones
       lesionSections.forEach(section => {
-        section.classList.remove('active');
+        section.style.display = 'none';
       });
       
       // Muestra la seleccionada
       if (selectedValue) {
-        document.getElementById(selectedValue).classList.add('active');
+        document.getElementById(selectedValue).style.display = 'block';
         emergenciaBtn.style.display = selectedValue === 'craneal' ? 'block' : 'none';
       }
     });
 
     kitBtn.addEventListener('click', () => {
       const selectedValue = tipoLesionSelect.value;
-      if (!selectedValue) return;
+      if (!selectedValue) {
+        alert('Por favor selecciona un tipo de lesión primero');
+        return;
+      }
       
       kitContent.innerHTML = `
         <h4>Para ${getLesionName(selectedValue)} necesitas:</h4>
-        <ul>${kits[selectedValue].map(item => `<li>${item}</li>`).join('')}</ul>
+        <ul>${kits[selectedValue].map(item => `<li>✔️ ${item}</li>`).join('')}</ul>
       `;
       
-      kitSection.classList.toggle('hidden');
+      kitSection.style.display = kitSection.style.display === 'none' ? 'block' : 'none';
     });
 
     emergenciaBtn.addEventListener('click', () => {
-      if (confirm('¿Llamar al servicio de emergencias (911)?')) {
-        // Simular llamada (en producción usar tel://)
-        console.log('Llamando a emergencias...');
-        alert('Emergencia confirmada. Mostrando ubicación en mapa.');
-        // Integración con mapa.js
-        if (window.mapaTools) {
-          window.mapaTools.mostrarRutaHospital();
-        }
+      if (confirm('¿Llamar al servicio de emergencias (911)?\n\nSe compartirá tu ubicación.')) {
+        alert('Emergencia confirmada. Llamando al 911...');
+        // En un entorno real, aquí iría la integración con la API de llamadas
       }
     });
 
     mapaBtn.addEventListener('click', () => {
-      // Redirigir al mapa con parámetros
-      window.location.href = '../../herramientas/mapa-vivo/?tipo=hospital';
+      alert('Redirigiendo al mapa de hospitales cercanos...');
+      // window.location.href = '../../herramientas/mapa-vivo/?tipo=hospital';
+    });
+
+    planBtn.addEventListener('click', () => {
+      const selectedValue = tipoLesionSelect.value;
+      if (!selectedValue) {
+        alert('Selecciona un tipo de lesión para añadir a tu plan');
+        return;
+      }
+      alert(`Protocolo para ${getLesionName(selectedValue)} añadido a "Mi Plan"`);
     });
 
     // ===== Funciones Utiles =====
