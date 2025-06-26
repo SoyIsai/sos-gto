@@ -1,0 +1,74 @@
+.mapa-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+#mapa {
+    height: 500px;
+    width: 100%;
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+
+.controles-mapa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.filtros {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filtro-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    background: #eee;
+    cursor: pointer;
+}
+
+.filtro-btn.active {
+    background: #2F4858;
+    color: white;
+}
+
+#miUbicacion {
+    padding: 0.5rem 1rem;
+    background: #FF3A44;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.leyenda {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.peligro { background-color: #FF3A44; }
+.hospital { background-color: #2196F3; }
+.refugio { background-color: #4CAF50; }
