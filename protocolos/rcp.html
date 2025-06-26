@@ -13,6 +13,16 @@
             --dark: #2F4858;
             --light: #FFFFFF;
             --gray: #F5F5F5;
+            --success: #4CAF50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
         }
 
         .rcp-protocol {
@@ -75,6 +85,7 @@
             margin-bottom: 0.8rem;
         }
 
+        /* Metrónomo Mejorado */
         .metronome {
             background: var(--gray);
             padding: 1.5rem;
@@ -84,28 +95,51 @@
         }
 
         .metronome-display {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
             margin: 1rem 0;
             color: var(--primary);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .beat-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: inline-block;
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+
+        .beat-indicator.active {
+            opacity: 1;
+            transform: scale(1.2);
+            background-color: var(--success);
         }
 
         .metronome-btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             margin: 0 0.5rem;
             transition: all 0.3s;
+            font-size: 1rem;
         }
 
         .metronome-btn:hover {
             background: var(--primary-light);
         }
 
+        /* Selector de Edad */
         .age-tabs {
             display: flex;
             gap: 1rem;
@@ -128,6 +162,7 @@
             color: white;
         }
 
+        /* Video Section */
         .video-guide {
             margin: 3rem 0;
             text-align: center;
@@ -140,29 +175,24 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            aspect-ratio: 16/9;
         }
 
+        /* ¡REEMPLAZA ESTA URL CON TU VIDEO DE YOUTUBE! */
         .video-container iframe {
             width: 100%;
-            height: 340px;
+            height: 100%;
             border: none;
         }
 
-        .age-specific {
-            display: none;
-        }
-
-        .age-specific.show {
-            display: block;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
             .step {
                 flex-direction: column;
             }
             
-            .video-container iframe {
-                height: 200px;
+            .metronome-display {
+                font-size: 2rem;
             }
         }
     </style>
@@ -246,26 +276,35 @@
             </div>
         </div>
 
-        <!-- Metrónomo funcional -->
+        <!-- Metrónomo Mejorado -->
         <div class="metronome">
-            <h3><i class="fas fa-music"></i> Ritmo de Compresiones (100-120/min)</h3>
-            <div class="metronome-display" id="metroDisplay">--</div>
-            <button class="metronome-btn" id="startMetro">Iniciar</button>
-            <button class="metronome-btn" id="stopMetro">Detener</button>
+            <h3><i class="fas fa-heartbeat"></i> Ritmo de Compresiones (100-120/min)</h3>
+            <div class="metronome-display">
+                <div class="beat-indicator" id="beat1"></div>
+                <div class="beat-indicator" id="beat2"></div>
+                <span id="bpmDisplay">--</span>
+            </div>
+            <button class="metronome-btn" id="startMetro"><i class="fas fa-play"></i> Iniciar</button>
+            <button class="metronome-btn" id="stopMetro"><i class="fas fa-stop"></i> Detener</button>
             <audio id="metroAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-metronome-click-952.mp3" preload="auto"></audio>
         </div>
 
-        <!-- Video guía real -->
+        <!-- Video guía - ¡INSERTA TU URL DE YOUTUBE AQUÍ! -->
         <div class="video-guide">
             <h3><i class="fas fa-video"></i> Video Demostrativo</h3>
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/9H3A2JJn3ew" title="Tutorial RCP" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <!-- REEMPLAZA ESTA URL CON TU VIDEO -->
+                <iframe src="https://youtu.be/EWGVc5kzb4Y" 
+                        title="Tutorial RCP" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
     <script>
-        // Selector de edad - FUNCIONA
+        // Selector de edad
         document.querySelectorAll('.age-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 // Remover activo de todas las pestañas
@@ -286,32 +325,52 @@
             });
         });
 
-        // Metrónomo - FUNCIONA
-        const metroDisplay = document.getElementById('metroDisplay');
+        // Metrónomo Mejorado
+        const beat1 = document.getElementById('beat1');
+        const beat2 = document.getElementById('beat2');
+        const bpmDisplay = document.getElementById('bpmDisplay');
         const startBtn = document.getElementById('startMetro');
         const stopBtn = document.getElementById('stopMetro');
         const audio = document.getElementById('metroAudio');
+        
         let metroInterval;
         let isPlaying = false;
-        let beat = true;
+        const bpm = 100; // 100-120 compresiones por minuto
+
+        function updateMetronome() {
+            // Alternar entre los dos indicadores
+            if (beat1.classList.contains('active')) {
+                beat1.classList.remove('active');
+                beat2.classList.add('active');
+            } else {
+                beat2.classList.remove('active');
+                beat1.classList.add('active');
+            }
+            
+            // Reproducir sonido
+            audio.currentTime = 0;
+            audio.play();
+        }
 
         startBtn.addEventListener('click', function() {
-            if(!isPlaying) {
+            if (!isPlaying) {
                 isPlaying = true;
-                metroDisplay.textContent = '▶ 100/min';
-                metroInterval = setInterval(function() {
-                    audio.currentTime = 0;
-                    audio.play();
-                    metroDisplay.textContent = beat ? '▶ COMPRIME' : '▶ LIBERA';
-                    beat = !beat;
-                }, 300); // 100 compresiones/min = 600ms/compresión (300ms para cada parte)
+                bpmDisplay.textContent = `${bpm} BPM`;
+                beat1.classList.add('active');
+                
+                // Ajustar el intervalo según el BPM
+                metroInterval = setInterval(updateMetronome, 60000 / bpm);
             }
         });
 
         stopBtn.addEventListener('click', function() {
-            clearInterval(metroInterval);
-            isPlaying = false;
-            metroDisplay.textContent = '--';
+            if (isPlaying) {
+                clearInterval(metroInterval);
+                isPlaying = false;
+                beat1.classList.remove('active');
+                beat2.classList.remove('active');
+                bpmDisplay.textContent = '--';
+            }
         });
     </script>
 </body>
