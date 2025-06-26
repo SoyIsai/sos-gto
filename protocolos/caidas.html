@@ -5,94 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caídas y Traumatismos | SOS Protocolos</title>
   <style>
-    /* ===== ESTILOS GENERALES ===== */
+    /* === ESTILOS COPIADOS DEL PROYECTO ORIGINAL === */
     :root {
       --primary: #FF3A44;
+      --secondary: #FF8A00;
       --dark: #2F4858;
-      --light: #F8F9FA;
-      --warning: #FFF3CD;
-      --danger: #DC3545;
+      --light: #F6F9FC;
+      --white: #FFFFFF;
     }
     
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Roboto', sans-serif;
       margin: 0;
       padding: 0;
       background-color: var(--light);
-      color: #333;
-      line-height: 1.6;
+      color: var(--dark);
     }
     
-    /* ===== HEADER ===== */
+    /* === HEADER IDÉNTICO AL ORIGINAL === */
     .protocol-header {
-      background-color: var(--dark);
-      color: white;
-      padding: 25px 20px;
-      text-align: center;
-      border-bottom: 4px solid var(--primary);
+      background-color: var(--white);
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     
     .protocol-header h1 {
+      color: var(--primary);
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    .protocol-header p {
-      margin: 5px 0 0;
-      opacity: 0.9;
-      font-size: 1rem;
-    }
-    
-    /* ===== CONTENEDOR PRINCIPAL ===== */
-    .protocolo-container {
+    /* === CONTENEDOR PRINCIPAL (IGUAL QUE protocolo.html) === */
+    .protocol-container {
       max-width: 800px;
       margin: 20px auto;
-      padding: 0 20px;
+      padding: 0 15px;
     }
     
-    /* ===== SELECTOR DE LESIÓN ===== */
-    .selector-section {
-      background: white;
+    /* === SELECTOR DE CATEGORÍA (ESTILO ORIGINAL) === */
+    .category-selector {
+      background: var(--white);
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
     }
     
-    .selector-section label {
+    .category-selector label {
       display: block;
       margin-bottom: 8px;
-      font-weight: bold;
+      font-weight: 500;
+      color: var(--dark);
     }
     
-    .selector-section select {
+    .category-selector select {
       width: 100%;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 6px;
-      font-size: 1rem;
-      background-color: white;
-      transition: border 0.3s;
-    }
-    
-    .selector-section select:focus {
-      border-color: var(--primary);
-      outline: none;
-    }
-    
-    /* ===== SECCIONES DE LESIÓN ===== */
-    .lesion-section {
-      display: none;
-      background: white;
-      padding: 25px;
+      padding: 12px 15px;
+      border: 2px solid #E0E6ED;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      font-size: 1rem;
+      background-color: var(--white);
+      color: var(--dark);
     }
     
-    .active {
+    /* === TARJETAS DE PROTOCOLO (COMO EN rcp.html) === */
+    .protocol-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      display: none;
+    }
+    
+    .protocol-card.active {
       display: block;
-      animation: fadeIn 0.5s ease-in-out;
+      animation: fadeIn 0.4s ease-out;
     }
     
     @keyframes fadeIn {
@@ -100,94 +91,78 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
-    .lesion-section h2 {
-      color: var(--dark);
-      margin-top: 0;
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: 8px;
-    }
-    
-    .lesion-section h3 {
+    .protocol-card h2 {
       color: var(--primary);
-      margin: 20px 0 10px;
+      margin-top: 0;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    /* ===== LISTAS ===== */
+    /* === LISTAS DE SÍNTOMAS (ESTILO ORIGINAL) === */
     .symptom-list {
-      list-style-type: none;
+      list-style: none;
       padding: 0;
+      margin: 20px 0;
     }
     
     .symptom-item {
-      background: #f8f9fa;
-      margin: 8px 0;
-      padding: 12px;
-      border-left: 4px solid var(--primary);
-      border-radius: 0 4px 4px 0;
+      background: var(--light);
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
+    /* === PASOS DEL PROTOCOLO (COMO EN rcp.html) === */
     .steps-list {
-      padding-left: 20px;
+      counter-reset: step-counter;
+      padding-left: 5px;
     }
     
     .steps-list li {
-      margin-bottom: 10px;
+      counter-increment: step-counter;
+      margin-bottom: 15px;
       position: relative;
+      padding-left: 40px;
     }
     
     .steps-list li:before {
-      content: "→";
-      color: var(--primary);
+      content: counter(step-counter);
       position: absolute;
-      left: -20px;
+      left: 0;
+      top: 0;
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
     }
     
-    /* ===== ILUSTRACIONES ===== */
-    .illustration {
-      max-width: 100%;
-      height: auto;
-      margin: 20px 0;
-      display: block;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    /* ===== ALERTAS ===== */
+    /* === ALERTAS (ESTILO ORIGINAL) === */
     .warning-box {
-      background-color: var(--warning);
-      border-left: 4px solid #FFC107;
+      background: #FFF3E0;
+      border-left: 4px solid var(--secondary);
       padding: 15px;
       margin: 25px 0;
-      border-radius: 0 4px 4px 0;
+      border-radius: 0 8px 8px 0;
     }
     
     .warning-box strong {
-      color: var(--danger);
+      color: var(--secondary);
     }
     
-    /* ===== BOTONES ===== */
-    .emergencia-btn {
-      background-color: var(--danger);
-      color: white;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      z-index: 100;
-      display: none;
-      text-align: center;
-      line-height: 1.3;
-    }
-    
+    /* === BOTONES FLOTANTES (IGUAL QUE rcp.html) === */
     .floating-btn {
       position: fixed;
-      bottom: 90px;
+      bottom: 20px;
       right: 20px;
       width: 60px;
       height: 60px;
@@ -196,113 +171,107 @@
       color: white;
       border: none;
       font-size: 24px;
+      box-shadow: 0 4px 12px rgba(255, 58, 68, 0.3);
       cursor: pointer;
       z-index: 100;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      text-align: center;
-      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .emergency-btn {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      font-size: 24px;
+      box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+      cursor: pointer;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+      font-size: 14px;
+    }
+    
+    /* === FOOTER (COMO EL ORIGINAL) === */
+    .protocol-footer {
+      background: var(--white);
+      padding: 15px 20px;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
     }
     
     .footer-btn {
-      background: var(--dark);
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      margin: 10px 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-    
-    .footer-btn:hover {
-      background: #1a2e3a;
-    }
-    
-    /* ===== FOOTER ===== */
-    .protocol-footer {
-      background: var(--dark);
-      padding: 20px;
-      text-align: center;
-      margin-top: 40px;
-    }
-    
-    /* ===== KIT DIGITAL ===== */
-    #kit-section {
-      background: white;
-      padding: 20px;
+      padding: 10px 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin: 20px 0;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    #kit-section h4 {
-      margin-top: 0;
-      color: var(--dark);
-    }
-    
-    #kit-section ul {
-      padding-left: 20px;
-    }
-    
-    /* ===== RESPONSIVE ===== */
+    /* === RESPONSIVE (AJUSTES ORIGINALES) === */
     @media (max-width: 600px) {
-      .protocol-header h1 {
-        font-size: 1.5rem;
+      .protocol-container {
+        padding: 0 10px;
       }
       
-      .lesion-section {
-        padding: 20px 15px;
+      .protocol-card {
+        padding: 15px;
       }
       
-      .floating-btn {
-        bottom: 80px;
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
-      }
-      
-      .emergencia-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 14px;
+      .footer-btn {
+        padding: 8px 15px;
+        font-size: 0.8rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- ===== HEADER ===== -->
+  <!-- === HEADER IDÉNTICO AL PROYECTO === -->
   <header class="protocol-header">
-    <h1>⚠️ Protocolo: Caídas y Traumatismos</h1>
-    <p>Guía paso a paso para actuar ante fracturas, esguinces y traumatismos craneales</p>
+    <h1>⚠️ Caídas y Traumatismos</h1>
   </header>
 
-  <!-- ===== CONTENIDO PRINCIPAL ===== -->
-  <main class="protocolo-container">
-    <!-- Selector de tipo de lesión -->
-    <section class="selector-section">
-      <label for="tipo-lesion"><strong>Selecciona el tipo de lesión:</strong></label>
-      <select id="tipo-lesion" class="selector">
-        <option value="" disabled selected>-- Elige una opción --</option>
+  <!-- === CONTENEDOR PRINCIPAL (MISMA ESTRUCTURA) === -->
+  <main class="protocol-container">
+    <!-- Selector de categoría (estilo original) -->
+    <div class="category-selector">
+      <label for="tipo-lesion">Tipo de lesión:</label>
+      <select id="tipo-lesion">
+        <option value="" disabled selected>Selecciona una opción</option>
         <option value="fractura">Fractura ósea</option>
         <option value="esguince">Esguince/Luxación</option>
         <option value="craneal">Traumatismo craneal</option>
       </select>
-    </section>
+    </div>
 
-    <!-- Contenido dinámico -->
-    <section id="fractura" class="lesion-section">
+    <!-- === TARJETAS DE PROTOCOLO (ESTILO ORIGINAL) === -->
+    <div id="fractura" class="protocol-card">
       <h2>🦴 Fractura Ósea</h2>
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRjNBMjIiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMTEyIDMyMEw0OCAzODRIMHYtNDhNMTkyIDI1NmwtNjQgNjRoLTQ4TTI5NiAxNjBsLTY0IDY0aC00OE00MDAgNjRsLTY0IDY0aC00OE00MDAgNjRsLTM0LjEgMTM2TTQwMCA2NGwtMTM2IDM0LjFNMTEyIDMyMGwxMzYtMzQuMU0xMTIgMzIwbDM0LjEgMTM2TTExMiAzMjBsLTM0LjEgMTM2Ii8+PC9zdmc+" alt="Ilustración de fractura" class="illustration">
       
-      <h3>🔍 Síntomas:</h3>
+      <h3>Síntomas:</h3>
       <ul class="symptom-list">
         <li class="symptom-item">✅ Dolor intenso en el área afectada</li>
         <li class="symptom-item">✅ Deformidad visible o hinchazón</li>
         <li class="symptom-item">✅ Incapacidad para mover la extremidad</li>
       </ul>
 
-      <h3>🩹 Primeros Auxilios:</h3>
+      <h3>Primeros Auxilios:</h3>
       <ol class="steps-list">
         <li>Inmoviliza el área con una férula o material rígido (revista, tabla).</li>
         <li>Aplica hielo envuelto en tela por 15 minutos.</li>
@@ -312,39 +281,37 @@
       </ol>
 
       <div class="warning-box">
-        <strong>🚨 Alerta:</strong> Si la fractura es expuesta (hueso visible), cubre con gasa estéril y NO laves.
+        <strong>¡ATENCIÓN!</strong> Si la fractura es expuesta (hueso visible), cubre con gasa estéril y NO laves.
       </div>
-    </section>
+    </div>
 
-    <section id="esguince" class="lesion-section">
+    <div id="esguince" class="protocol-card">
       <h2>🦵 Esguince/Luxación</h2>
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRjNBMjIiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMjU2IDE2MGMwIDAgMTI4IDAgMTI4IDY0cy0xMjggNjQtMTI4IDE2MGMwLTk2LTEyOC05Ni0xMjgtMTYwczEyOC02NCAxMjgtNjR6Ii8+PC9zdmc+" alt="Ilustración de esguince" class="illustration">
       
-      <h3>🔍 Síntomas:</h3>
+      <h3>Síntomas:</h3>
       <ul class="symptom-list">
         <li class="symptom-item">✅ Dolor al mover la articulación</li>
         <li class="symptom-item">✅ Hinchazón y hematoma</li>
         <li class="symptom-item">✅ Sensación de inestabilidad</li>
       </ul>
 
-      <h3>🩹 Primeros Auxilios:</h3>
+      <h3>Primeros Auxilios:</h3>
       <ol class="steps-list">
         <li>Aplica el método <strong>R.I.C.E</strong>:</li>
-        <ul>
-          <li><strong>R</strong>eposo: No apoyar peso</li>
-          <li><strong>I</strong>ce: Hielo 15 min cada 2 horas</li>
-          <li><strong>C</strong>ompresión: Venda elástica (no apretar)</li>
+        <ul style="list-style-type: none; padding-left: 20px;">
+          <li style="margin-bottom: 8px;"><strong>R</strong>eposo: No apoyar peso</li>
+          <li style="margin-bottom: 8px;"><strong>I</strong>ce: Hielo 15 min cada 2 horas</li>
+          <li style="margin-bottom: 8px;"><strong>C</strong>ompresión: Venda elástica (no apretar)</li>
           <li><strong>E</strong>levación: Sobre el nivel del corazón</li>
         </ul>
         <li>Evita calor en primeras 48 horas.</li>
       </ol>
-    </section>
+    </div>
 
-    <section id="craneal" class="lesion-section">
+    <div id="craneal" class="protocol-card">
       <h2>🧠 Traumatismo Craneal</h2>
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRjNBMjIiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMzg0IDI1NmMwIDcwLjctNTcuMyAxMjgtMTI4IDEyOHMtMTI4LTU3LjMtMTI4LTEyOCA1Ny4zLTEyOCAxMjgtMTI4IDEyOCA1Ny4zIDEyOCAxMjh6TTE4NCAyNTZoMTQ0TTEyMCAxNjBsNDAgNDBNMzUyIDE2MGwtNDAgNDBNMTQ0IDI1NmgyMjQiLz48L3N2Zz4=" alt="Ilustración de traumatismo" class="illustration">
       
-      <h3>🔍 Síntomas Peligrosos:</h3>
+      <h3>Síntomas Peligrosos:</h3>
       <ul class="symptom-list">
         <li class="symptom-item">✅ Pérdida de conciencia (aunque sea breve)</li>
         <li class="symptom-item">✅ Confusión o desorientación</li>
@@ -352,7 +319,7 @@
         <li class="symptom-item">✅ Sangrado por oídos/nariz</li>
       </ul>
 
-      <h3>🩹 Primeros Auxilios:</h3>
+      <h3>Primeros Auxilios:</h3>
       <ol class="steps-list">
         <li>Mantén a la persona inmóvil (evita mover el cuello).</li>
         <li>Si está inconsciente, colócala en <strong>posición lateral</strong>.</li>
@@ -360,104 +327,66 @@
         <li>Monitoriza conciencia cada 15 minutos.</li>
         <li><strong>¡Busca atención médica inmediata!</strong></li>
       </ol>
-    </section>
-
-    <!-- Kit Digital Integrado -->
-    <section id="kit-section" style="display: none;">
-      <h3>👜 Kit Recomendado:</h3>
-      <div id="kit-content"></div>
-    </section>
+    </div>
   </main>
 
-  <!-- ===== BOTONES FLOTANTES ===== -->
-  <button id="emergencia-btn" class="emergencia-btn">🚨<br>911</button>
-  <button id="kit-btn" class="floating-btn">👜<br>Kit</button>
+  <!-- === BOTONES FLOTANTES (IGUALES A rcp.html) === -->
+  <button id="emergency-btn" class="emergency-btn">🚨<br>911</button>
+  <button id="kit-btn" class="floating-btn">👜</button>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- === FOOTER (MISMO QUE PROYECTO) === -->
   <footer class="protocol-footer">
-    <button id="mapa-btn" class="footer-btn">🗺️ Ver Hospitales Cercanos</button>
-    <button id="plan-btn" class="footer-btn">📝 Añadir a Mi Plan</button>
+    <button class="footer-btn">🗺️ Mapa de Hospitales</button>
+    <button class="footer-btn">📝 Guardar en Mi Plan</button>
   </footer>
 
   <script>
-    // ===== DOM Elements =====
-    const tipoLesionSelect = document.getElementById('tipo-lesion');
-    const lesionSections = document.querySelectorAll('.lesion-section');
-    const emergenciaBtn = document.getElementById('emergencia-btn');
-    const kitBtn = document.getElementById('kit-btn');
-    const kitSection = document.getElementById('kit-section');
-    const kitContent = document.getElementById('kit-content');
-    const mapaBtn = document.getElementById('mapa-btn');
-    const planBtn = document.getElementById('plan-btn');
-
-    // ===== Datos Dinámicos =====
-    const kits = {
-      fractura: ['Férula o material rígido', 'Vendas triangulares', 'Bolsa de hielo', 'Analgésicos (ibuprofeno)'],
-      esguince: ['Venda elástica', 'Compresa fría instantánea', 'Almohada para elevación'],
-      craneal: ['Linterna pequeña', 'Gasas estériles', 'Termómetro', 'Lista de contactos de emergencia']
-    };
-
-    // ===== Event Listeners =====
-    tipoLesionSelect.addEventListener('change', (e) => {
-      const selectedValue = e.target.value;
+    // === FUNCIONALIDAD IDÉNTICA A OTRAS PÁGINAS ===
+    document.addEventListener('DOMContentLoaded', function() {
+      const tipoLesion = document.getElementById('tipo-lesion');
+      const protocolCards = document.querySelectorAll('.protocol-card');
+      const emergencyBtn = document.getElementById('emergency-btn');
+      const kitBtn = document.getElementById('kit-btn');
       
-      // Oculta todas las secciones
-      lesionSections.forEach(section => {
-        section.style.display = 'none';
+      // Cambiar protocolo visible
+      tipoLesion.addEventListener('change', function() {
+        const selectedValue = this.value;
+        
+        // Oculta todas las tarjetas
+        protocolCards.forEach(card => {
+          card.classList.remove('active');
+        });
+        
+        // Muestra la seleccionada
+        if (selectedValue) {
+          document.getElementById(selectedValue).classList.add('active');
+          
+          // Mostrar botón de emergencia solo para traumatismo craneal
+          emergencyBtn.style.display = selectedValue === 'craneal' ? 'flex' : 'none';
+        }
       });
       
-      // Muestra la seleccionada
-      if (selectedValue) {
-        document.getElementById(selectedValue).style.display = 'block';
-        emergenciaBtn.style.display = selectedValue === 'craneal' ? 'block' : 'none';
-      }
-    });
-
-    kitBtn.addEventListener('click', () => {
-      const selectedValue = tipoLesionSelect.value;
-      if (!selectedValue) {
-        alert('Por favor selecciona un tipo de lesión primero');
-        return;
-      }
+      // Botón de kit (simulado)
+      kitBtn.addEventListener('click', function() {
+        alert('Kit digital abierto (esta funcionalidad se conectará con el módulo existente)');
+      });
       
-      kitContent.innerHTML = `
-        <h4>Para ${getLesionName(selectedValue)} necesitas:</h4>
-        <ul>${kits[selectedValue].map(item => `<li>✔️ ${item}</li>`).join('')}</ul>
-      `;
+      // Botón de emergencia
+      emergencyBtn.addEventListener('click', function() {
+        if (confirm('¿Necesitas llamar a emergencias?\nSe activará tu ubicación.')) {
+          alert('Llamando al 911...');
+        }
+      });
       
-      kitSection.style.display = kitSection.style.display === 'none' ? 'block' : 'none';
-    });
-
-    emergenciaBtn.addEventListener('click', () => {
-      if (confirm('¿Llamar al servicio de emergencias (911)?\n\nSe compartirá tu ubicación.')) {
-        alert('Emergencia confirmada. Llamando al 911...');
-        // En un entorno real, aquí iría la integración con la API de llamadas
+      // Mostrar primera tarjeta si hay hash en la URL
+      if (window.location.hash) {
+        const card = document.getElementById(window.location.hash.substring(1));
+        if (card) {
+          card.classList.add('active');
+          tipoLesion.value = window.location.hash.substring(1);
+        }
       }
     });
-
-    mapaBtn.addEventListener('click', () => {
-      alert('Redirigiendo al mapa de hospitales cercanos...');
-      // window.location.href = '../../herramientas/mapa-vivo/?tipo=hospital';
-    });
-
-    planBtn.addEventListener('click', () => {
-      const selectedValue = tipoLesionSelect.value;
-      if (!selectedValue) {
-        alert('Selecciona un tipo de lesión para añadir a tu plan');
-        return;
-      }
-      alert(`Protocolo para ${getLesionName(selectedValue)} añadido a "Mi Plan"`);
-    });
-
-    // ===== Funciones Utiles =====
-    function getLesionName(value) {
-      const names = {
-        fractura: 'fracturas',
-        esguince: 'esguinces',
-        craneal: 'traumatismos craneales'
-      };
-      return names[value] || '';
-    }
   </script>
 </body>
 </html>
