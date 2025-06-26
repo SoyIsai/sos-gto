@@ -1,392 +1,344 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caídas y Traumatismos | SOS Protocolos</title>
-  <style>
-    /* === ESTILOS COPIADOS DEL PROYECTO ORIGINAL === */
-    :root {
-      --primary: #FF3A44;
-      --secondary: #FF8A00;
-      --dark: #2F4858;
-      --light: #F6F9FC;
-      --white: #FFFFFF;
-    }
-    
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--light);
-      color: var(--dark);
-    }
-    
-    /* === HEADER IDÉNTICO AL ORIGINAL === */
-    .protocol-header {
-      background-color: var(--white);
-      padding: 15px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .protocol-header h1 {
-      color: var(--primary);
-      margin: 0;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    /* === CONTENEDOR PRINCIPAL (IGUAL QUE protocolo.html) === */
-    .protocol-container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
-    
-    /* === SELECTOR DE CATEGORÍA (ESTILO ORIGINAL) === */
-    .category-selector {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 25px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    }
-    
-    .category-selector label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: var(--dark);
-    }
-    
-    .category-selector select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E0E6ED;
-      border-radius: 8px;
-      font-size: 1rem;
-      background-color: var(--white);
-      color: var(--dark);
-    }
-    
-    /* === TARJETAS DE PROTOCOLO (COMO EN rcp.html) === */
-    .protocol-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-      display: none;
-    }
-    
-    .protocol-card.active {
-      display: block;
-      animation: fadeIn 0.4s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .protocol-card h2 {
-      color: var(--primary);
-      margin-top: 0;
-      font-size: 1.3rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    /* === LISTAS DE SÍNTOMAS (ESTILO ORIGINAL) === */
-    .symptom-list {
-      list-style: none;
-      padding: 0;
-      margin: 20px 0;
-    }
-    
-    .symptom-item {
-      background: var(--light);
-      padding: 12px 15px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    /* === PASOS DEL PROTOCOLO (COMO EN rcp.html) === */
-    .steps-list {
-      counter-reset: step-counter;
-      padding-left: 5px;
-    }
-    
-    .steps-list li {
-      counter-increment: step-counter;
-      margin-bottom: 15px;
-      position: relative;
-      padding-left: 40px;
-    }
-    
-    .steps-list li:before {
-      content: counter(step-counter);
-      position: absolute;
-      left: 0;
-      top: 0;
-      background: var(--primary);
-      color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-    }
-    
-    /* === ALERTAS (ESTILO ORIGINAL) === */
-    .warning-box {
-      background: #FFF3E0;
-      border-left: 4px solid var(--secondary);
-      padding: 15px;
-      margin: 25px 0;
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .warning-box strong {
-      color: var(--secondary);
-    }
-    
-    /* === BOTONES FLOTANTES (IGUAL QUE rcp.html) === */
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      font-size: 24px;
-      box-shadow: 0 4px 12px rgba(255, 58, 68, 0.3);
-      cursor: pointer;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .emergency-btn {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--secondary);
-      color: white;
-      border: none;
-      font-size: 24px;
-      box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
-      cursor: pointer;
-      z-index: 100;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.2;
-      font-size: 14px;
-    }
-    
-    /* === FOOTER (COMO EL ORIGINAL) === */
-    .protocol-footer {
-      background: var(--white);
-      padding: 15px 20px;
-      margin-top: 40px;
-      display: flex;
-      justify-content: space-between;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-    }
-    
-    .footer-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    /* === RESPONSIVE (AJUSTES ORIGINALES) === */
-    @media (max-width: 600px) {
-      .protocol-container {
-        padding: 0 10px;
-      }
-      
-      .protocol-card {
-        padding: 15px;
-      }
-      
-      .footer-btn {
-        padding: 8px 15px;
-        font-size: 0.8rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Caídas y Traumatismos | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --health: #FF6B6B;
+            --health-dark: #E05555;
+            --light: #FFFFFF;
+            --dark: #2F4858;
+            --gray: #F5F5F5;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .trauma-protocol {
+            padding: 2rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .protocol-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--health);
+            padding-bottom: 1rem;
+        }
+
+        .protocol-title {
+            font-size: 2rem;
+            color: var(--health-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .type-container {
+            margin: 2rem 0;
+        }
+
+        .type-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .type-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--gray);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            border: none;
+        }
+
+        .type-tab.active {
+            background: var(--health);
+            color: white;
+        }
+
+        .type-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .type-content.active {
+            display: block;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--health);
+            color: white;
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .symptoms-list {
+            margin: 2rem 0;
+        }
+
+        .symptom-item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-box {
+            background: #FFF3F3;
+            border-left: 4px solid var(--health);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box strong {
+            color: var(--health-dark);
+        }
+
+        .emergency-kit {
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .btn-emergencia {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-emergencia:hover {
+            background: #E02929;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .step {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- === HEADER IDÉNTICO AL PROYECTO === -->
-  <header class="protocol-header">
-    <h1>⚠️ Caídas y Traumatismos</h1>
-  </header>
+    <div class="trauma-protocol">
+        <header class="protocol-header">
+            <h1 class="protocol-title"><span>⚠️</span> Protocolo Caídas y Traumatismos</h1>
+            <p>Primeros auxilios para fracturas, esguinces y traumatismos</p>
+        </header>
 
-  <!-- === CONTENEDOR PRINCIPAL (MISMA ESTRUCTURA) === -->
-  <main class="protocol-container">
-    <!-- Selector de categoría (estilo original) -->
-    <div class="category-selector">
-      <label for="tipo-lesion">Tipo de lesión:</label>
-      <select id="tipo-lesion">
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="fractura">Fractura ósea</option>
-        <option value="esguince">Esguince/Luxación</option>
-        <option value="craneal">Traumatismo craneal</option>
-      </select>
+        <!-- Selector de tipo de lesión -->
+        <div class="type-container">
+            <div class="type-tabs">
+                <div class="type-tab active" data-type="fracture">Fracturas</div>
+                <div class="type-tab" data-type="sprain">Esguinces</div>
+                <div class="type-tab" data-type="head">Traumatismos</div>
+            </div>
+            
+            <!-- Contenido para Fracturas -->
+            <div class="type-content active" id="fracture">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Inmoviliza el área afectada</h3>
+                        <p>Evita cualquier movimiento de la zona lesionada. Si es una extremidad, colócala en una posición natural sin forzar.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Aplica frío indirectamente</h3>
+                        <p>Envuelve hielo en un paño y aplícalo sobre la zona durante 15 minutos cada hora. Nunca coloques hielo directamente sobre la piel.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Busca atención médica</h3>
+                        <p>Las fracturas requieren tratamiento profesional. Mueve al paciente solo si es estrictamente necesario y con soporte adecuado.</p>
+                    </div>
+                </div>
+
+                <div class="symptoms-list">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Síntomas de fractura:</h3>
+                    <div class="symptom-item"><span>✔</span> Dolor intenso que empeora con el movimiento</div>
+                    <div class="symptom-item"><span>✔</span> Deformidad visible o hinchazón notable</div>
+                    <div class="symptom-item"><span>✔</span> Incapacidad para mover la extremidad</div>
+                    <div class="symptom-item"><span>✔</span> Crujido audible al momento de la lesión</div>
+                </div>
+
+                <div class="warning-box">
+                    <strong><i class="fas fa-skull-crossbones"></i> ¡NUNCA hagas esto!</strong>
+                    <p>No intentes recolocar el hueso por tu cuenta. No des masajes en la zona afectada. No permitas que la persona apoye peso sobre una posible fractura.</p>
+                </div>
+            </div>
+            
+            <!-- Contenido para Esguinces -->
+            <div class="type-content" id="sprain">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Reposo inmediato</h3>
+                        <p>Interrumpe cualquier actividad y evita apoyar peso sobre la articulación afectada durante las primeras 48 horas.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Terapia con frío</h3>
+                        <p>Aplica compresas frías (hielo envuelto en tela) durante 15-20 minutos cada 2-3 horas durante los primeros 2 días.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Compresión moderada</h3>
+                        <p>Envuelve la zona con una venda elástica, comenzando por debajo de la lesión y avanzando hacia arriba. No aprietes demasiado.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Elevación de la extremidad</h3>
+                        <p>Mantén la articulación elevada por encima del nivel del corazón para reducir la hinchazón, especialmente durante las primeras 48 horas.</p>
+                    </div>
+                </div>
+
+                <div class="symptoms-list">
+                    <h3><i class="fas fa-diagnoses"></i> Grados de esguince:</h3>
+                    <div class="symptom-item"><span>Grado 1</span> - Estiramiento leve de ligamentos (dolor moderado, hinchazón mínima)</div>
+                    <div class="symptom-item"><span>Grado 2</span> - Desgarro parcial (dolor intenso, hinchazón y hematoma)</div>
+                    <div class="symptom-item"><span>Grado 3</span> - Rotura completa (dolor severo, inestabilidad articular)</div>
+                </div>
+            </div>
+            
+            <!-- Contenido para Traumatismos -->
+            <div class="type-content" id="head">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Valora el estado de consciencia</h3>
+                        <p>Pregunta a la persona su nombre, dónde está y qué día es. Si no responde adecuadamente, llama a emergencias inmediatamente.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Controla posibles hemorragias</h3>
+                        <p>Si hay sangrado en el cuero cabelludo, aplica presión con gasa estéril o paño limpio. No presiones si sospechas fractura de cráneo.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Monitoriza signos de alarma</h3>
+                        <p>Observa pupilas desiguales, vómitos repetidos, convulsiones o somnolencia excesiva. Todos requieren atención médica urgente.</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong><i class="fas fa-ambulance"></i> Señales de EMERGENCIA:</strong>
+                    <div class="symptom-item"><span>✔</span> Pérdida de consciencia (aunque sea breve)</div>
+                    <div class="symptom-item"><span>✔</span> Confusión o desorientación persistente</div>
+                    <div class="symptom-item"><span>✔</span> Sangrado por oídos o nariz sin causa aparente</div>
+                    <div class="symptom-item"><span>✔</span> Debilidad en un lado del cuerpo</div>
+                    
+                    <button class="btn-emergencia" onclick="alert('Llamando a emergencias...')">
+                        <i class="fas fa-phone-alt"></i> Llamar al 911
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kit de emergencia -->
+        <div class="emergency-kit">
+            <h2><i class="fas fa-kit-medical"></i> Kit Recomendado para Traumatismos</h2>
+            <div class="symptoms-list">
+                <div class="symptom-item"><span>✔</span> Vendajes elásticos de diferentes tamaños</div>
+                <div class="symptom-item"><span>✔</span> Férulas inflables o tablillas</div>
+                <div class="symptom-item"><span>✔</span> Compresas frías instantáneas</div>
+                <div class="symptom-item"><span>✔</span> Analgésicos (paracetamol, ibuprofeno)</div>
+                <div class="symptom-item"><span>✔</span> Linterna pequeña para revisar pupilas</div>
+                <div class="symptom-item"><span>✔</span> Tijeras de trauma para cortar ropa</div>
+            </div>
+        </div>
     </div>
 
-    <!-- === TARJETAS DE PROTOCOLO (ESTILO ORIGINAL) === -->
-    <div id="fractura" class="protocol-card">
-      <h2>🦴 Fractura Ósea</h2>
-      
-      <h3>Síntomas:</h3>
-      <ul class="symptom-list">
-        <li class="symptom-item">✅ Dolor intenso en el área afectada</li>
-        <li class="symptom-item">✅ Deformidad visible o hinchazón</li>
-        <li class="symptom-item">✅ Incapacidad para mover la extremidad</li>
-      </ul>
-
-      <h3>Primeros Auxilios:</h3>
-      <ol class="steps-list">
-        <li>Inmoviliza el área con una férula o material rígido (revista, tabla).</li>
-        <li>Aplica hielo envuelto en tela por 15 minutos.</li>
-        <li>Eleva la extremidad si es posible para reducir hinchazón.</li>
-        <li>No intentes recolocar el hueso.</li>
-        <li>Traslada a centro médico.</li>
-      </ol>
-
-      <div class="warning-box">
-        <strong>¡ATENCIÓN!</strong> Si la fractura es expuesta (hueso visible), cubre con gasa estéril y NO laves.
-      </div>
-    </div>
-
-    <div id="esguince" class="protocol-card">
-      <h2>🦵 Esguince/Luxación</h2>
-      
-      <h3>Síntomas:</h3>
-      <ul class="symptom-list">
-        <li class="symptom-item">✅ Dolor al mover la articulación</li>
-        <li class="symptom-item">✅ Hinchazón y hematoma</li>
-        <li class="symptom-item">✅ Sensación de inestabilidad</li>
-      </ul>
-
-      <h3>Primeros Auxilios:</h3>
-      <ol class="steps-list">
-        <li>Aplica el método <strong>R.I.C.E</strong>:</li>
-        <ul style="list-style-type: none; padding-left: 20px;">
-          <li style="margin-bottom: 8px;"><strong>R</strong>eposo: No apoyar peso</li>
-          <li style="margin-bottom: 8px;"><strong>I</strong>ce: Hielo 15 min cada 2 horas</li>
-          <li style="margin-bottom: 8px;"><strong>C</strong>ompresión: Venda elástica (no apretar)</li>
-          <li><strong>E</strong>levación: Sobre el nivel del corazón</li>
-        </ul>
-        <li>Evita calor en primeras 48 horas.</li>
-      </ol>
-    </div>
-
-    <div id="craneal" class="protocol-card">
-      <h2>🧠 Traumatismo Craneal</h2>
-      
-      <h3>Síntomas Peligrosos:</h3>
-      <ul class="symptom-list">
-        <li class="symptom-item">✅ Pérdida de conciencia (aunque sea breve)</li>
-        <li class="symptom-item">✅ Confusión o desorientación</li>
-        <li class="symptom-item">✅ Pupilas desiguales</li>
-        <li class="symptom-item">✅ Sangrado por oídos/nariz</li>
-      </ul>
-
-      <h3>Primeros Auxilios:</h3>
-      <ol class="steps-list">
-        <li>Mantén a la persona inmóvil (evita mover el cuello).</li>
-        <li>Si está inconsciente, colócala en <strong>posición lateral</strong>.</li>
-        <li>Controla sangrados con gasa estéril (sin presión fuerte).</li>
-        <li>Monitoriza conciencia cada 15 minutos.</li>
-        <li><strong>¡Busca atención médica inmediata!</strong></li>
-      </ol>
-    </div>
-  </main>
-
-  <!-- === BOTONES FLOTANTES (IGUALES A rcp.html) === -->
-  <button id="emergency-btn" class="emergency-btn">🚨<br>911</button>
-  <button id="kit-btn" class="floating-btn">👜</button>
-
-  <!-- === FOOTER (MISMO QUE PROYECTO) === -->
-  <footer class="protocol-footer">
-    <button class="footer-btn">🗺️ Mapa de Hospitales</button>
-    <button class="footer-btn">📝 Guardar en Mi Plan</button>
-  </footer>
-
-  <script>
-    // === FUNCIONALIDAD IDÉNTICA A OTRAS PÁGINAS ===
-    document.addEventListener('DOMContentLoaded', function() {
-      const tipoLesion = document.getElementById('tipo-lesion');
-      const protocolCards = document.querySelectorAll('.protocol-card');
-      const emergencyBtn = document.getElementById('emergency-btn');
-      const kitBtn = document.getElementById('kit-btn');
-      
-      // Cambiar protocolo visible
-      tipoLesion.addEventListener('change', function() {
-        const selectedValue = this.value;
-        
-        // Oculta todas las tarjetas
-        protocolCards.forEach(card => {
-          card.classList.remove('active');
+    <script>
+        // Cambio entre tipos de lesión
+        document.querySelectorAll('.type-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Quitar activo de todas las pestañas
+                document.querySelectorAll('.type-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Activar esta pestaña
+                this.classList.add('active');
+                
+                // Ocultar todos los contenidos
+                document.querySelectorAll('.type-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Mostrar el contenido correspondiente
+                const type = this.dataset.type;
+                document.getElementById(type).classList.add('active');
+            });
         });
-        
-        // Muestra la seleccionada
-        if (selectedValue) {
-          document.getElementById(selectedValue).classList.add('active');
-          
-          // Mostrar botón de emergencia solo para traumatismo craneal
-          emergencyBtn.style.display = selectedValue === 'craneal' ? 'flex' : 'none';
-        }
-      });
-      
-      // Botón de kit (simulado)
-      kitBtn.addEventListener('click', function() {
-        alert('Kit digital abierto (esta funcionalidad se conectará con el módulo existente)');
-      });
-      
-      // Botón de emergencia
-      emergencyBtn.addEventListener('click', function() {
-        if (confirm('¿Necesitas llamar a emergencias?\nSe activará tu ubicación.')) {
-          alert('Llamando al 911...');
-        }
-      });
-      
-      // Mostrar primera tarjeta si hay hash en la URL
-      if (window.location.hash) {
-        const card = document.getElementById(window.location.hash.substring(1));
-        if (card) {
-          card.classList.add('active');
-          tipoLesion.value = window.location.hash.substring(1);
-        }
-      }
-    });
-  </script>
+
+        // Sugerencia: Añadir ilustraciones médicas
+        console.log("Sugerencia: Agregar ilustraciones SVG de anatomía para cada tipo de lesión");
+    </script>
 </body>
 </html>
