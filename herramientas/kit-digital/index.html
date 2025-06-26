@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Kits | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="../estilos.css">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🧰 Generador de Kits de Emergencia</h1>
+        
+        <div class="selector-emergencia">
+            <label for="tipoEmergencia">Tipo de emergencia:</label>
+            <select id="tipoEmergencia">
+                <option value="terremoto">Terremoto</option>
+                <option value="incendio">Incendio</option>
+                <option value="medico">Emergencia Médica</option>
+                <option value="personalizado">Personalizado</option>
+            </select>
+        </div>
+
+        <div class="kit-container">
+            <div class="lista-items" id="listaItems">
+                <!-- Items generados dinámicamente -->
+            </div>
+            
+            <div class="acciones">
+                <button id="btnImprimir">🖨️ Imprimir Lista</button>
+                <button id="btnCompartir">📤 Compartir</button>
+                <progress id="progresoKit" value="0" max="100"></progress>
+                <span id="porcentaje">0% completado</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="generador.js"></script>
+</body>
+</html>
