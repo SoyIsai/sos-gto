@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mapa de Crisis Móvil | SOS</title>
+    <title>Mapa de Crisis Inteligente | SOS</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,71 +16,61 @@
             --light: #F8F9FA;
         }
 
-        * {
-            box-sizing: border-box;
+        body {
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: var(--dark);
             color: white;
-            height: 100vh;
-            width: 100vw;
             overflow: hidden;
-            touch-action: none;
-            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         #map-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
+            height: 100vh;
+            width: 100vw;
         }
 
         #map {
-            width: 100%;
             height: 100%;
+            width: 100%;
         }
 
-        /* Panel móvil optimizado */
-        .mobile-panel {
+        /* Panel de control optimizado para móvil */
+        .control-panel {
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100%;
+            right: 0;
+            z-index: 1000;
             background: rgba(18, 18, 18, 0.95);
-            border-radius: 20px 20px 0 0;
-            padding: 15px;
+            border-radius: 16px 16px 0 0;
+            padding: 1rem;
             box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
-            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transform: translateY(calc(100% - 60px));
-            transition: transform 0.3s ease;
-            max-height: 80vh;
+            transition: transform 0.3s ease-out;
+            max-height: 70vh;
             overflow-y: auto;
         }
 
-        .mobile-panel.expanded {
+        .control-panel.expanded {
             transform: translateY(0);
-        }
-
-        .panel-handle {
-            width: 40px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-            margin: 0 auto 10px;
         }
 
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .panel-title {
@@ -88,228 +79,255 @@
             color: var(--accent);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
-        .close-panel {
+        .toggle-panel {
             background: none;
             border: none;
             color: white;
             font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
         }
 
-        /* Filtros móviles */
-        .filter-scroll {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            -webkit-overflow-scrolling: touch;
+        /* Filtros optimizados */
+        .filter-section {
+            margin-bottom: 1rem;
         }
 
-        .filter-scroll::-webkit-scrollbar {
-            display: none;
+        .filter-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .filter-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
         }
 
         .filter-btn {
-            flex: 0 0 auto;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 0.5rem;
+            border-radius: 15px;
             border: none;
             background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 0.9rem;
+            cursor: pointer;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 5px;
-            white-space: nowrap;
+            gap: 0.3rem;
+            transition: all 0.2s;
+            font-size: 0.7rem;
         }
 
         .filter-btn.active {
             background: var(--primary);
-            font-weight: 600;
+            font-weight: bold;
         }
 
-        /* Alertas móviles */
-        .alerts-container {
-            margin-top: 15px;
-            max-height: 40vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .alert-item {
-            background: rgba(255, 58, 68, 0.15);
-            border-left: 3px solid var(--primary);
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .alert-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-
-        .alert-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .alert-time {
-            font-size: 0.75rem;
-            opacity: 0.7;
-        }
-
-        .alert-desc {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        /* Botón de emergencia */
-        .emergency-btn {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Botón de geolocalización */
-        .locate-btn {
-            position: fixed;
-            bottom: 150px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            font-size: 1.2rem;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Leyenda móvil */
-        .legend-btn {
-            position: fixed;
-            bottom: 150px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            font-size: 1.2rem;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .legend-panel {
-            position: fixed;
-            bottom: 210px;
-            left: 20px;
-            background: rgba(18, 18, 18, 0.9);
-            padding: 12px;
-            border-radius: 10px;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            display: none;
-            width: calc(100% - 40px);
-            max-width: 300px;
-        }
-
-        .legend-panel.show {
-            display: block;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-
-        .legend-color {
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
-            margin-right: 8px;
+        .filter-btn i {
+            font-size: 1rem;
         }
 
         /* Barra de búsqueda */
-        .search-container {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            z-index: 1000;
-            display: flex;
-            gap: 8px;
+        .search-bar {
+            position: relative;
+            margin-bottom: 1rem;
         }
 
         .search-input {
-            flex: 1;
-            padding: 12px 15px 12px 40px;
-            border-radius: 30px;
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border-radius: 25px;
             border: none;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
+            font-size: 0.9rem;
         }
 
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
         }
 
         .search-icon {
             position: absolute;
-            left: 15px;
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Adaptaciones para iOS */
-        @supports (-webkit-touch-callout: none) {
-            .mobile-panel {
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-            
-            .emergency-btn {
-                bottom: calc(80px + env(safe-area-inset-bottom));
-            }
-            
-            .locate-btn {
-                bottom: calc(150px + env(safe-area-inset-bottom));
-            }
+        /* Alertas optimizadas */
+        .alerts-section {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            scrollbar-width: thin;
+        }
+
+        .alert-item {
+            background: rgba(255, 58, 68, 0.15);
+            border-left: 3px solid var(--primary);
+            padding: 0.7rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .alert-item:hover {
+            background: rgba(255, 58, 68, 0.25);
+        }
+
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+
+        .alert-time {
+            font-size: 0.6rem;
+            opacity: 0.7;
+        }
+
+        .alert-desc {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Botón de emergencia optimizado */
+        .emergency-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 15px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 58, 68, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .emergency-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 58, 68, 0.7);
+        }
+
+        /* Modo AR optimizado */
+        .ar-mode {
+            position: fixed;
+            bottom: 80px;
+            left: 15px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(5px);
+            font-size: 0.8rem;
+        }
+
+        /* Leyenda optimizada */
+        .legend {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.9);
+            padding: 0.8rem;
+            border-radius: 10px;
+            max-width: 150px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.7rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+        }
+
+        /* Popups mejorados */
+        .leaflet-popup-content {
+            font-size: 0.8rem !important;
+            margin: 0.5rem 0.8rem !important;
+        }
+
+        .leaflet-popup-content h3 {
+            font-size: 0.9rem;
+            margin: 0 0 0.3rem 0;
+            color: var(--primary);
+        }
+
+        .leaflet-popup-content p {
+            margin: 0.2rem 0;
+        }
+
+        .evac-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        /* Efectos especiales */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -317,274 +335,293 @@
     <div id="map-container">
         <div id="map"></div>
         
-        <!-- Barra de búsqueda -->
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="Buscar refugios, hospitales...">
-        </div>
-        
-        <!-- Panel móvil -->
-        <div class="mobile-panel" id="mobilePanel">
-            <div class="panel-handle" id="panelHandle"></div>
+        <!-- Panel de control optimizado para móvil -->
+        <div class="control-panel" id="controlPanel">
             <div class="panel-header">
                 <h2 class="panel-title"><i class="fas fa-map-marked-alt"></i> Mapa de Crisis</h2>
-                <button class="close-panel" id="closePanel">
-                    <i class="fas fa-times"></i>
+                <button class="toggle-panel" id="togglePanel">
+                    <i class="fas fa-chevron-up"></i>
                 </button>
             </div>
             
-            <!-- Filtros -->
-            <div class="filter-scroll">
-                <button class="filter-btn active" data-layer="peligros">
-                    <i class="fas fa-fire"></i> Peligros
-                </button>
-                <button class="filter-btn" data-layer="hospitales">
-                    <i class="fas fa-hospital"></i> Hospitales
-                </button>
-                <button class="filter-btn" data-layer="refugios">
-                    <i class="fas fa-home"></i> Refugios
-                </button>
-                <button class="filter-btn" data-layer="rutas">
-                    <i class="fas fa-route"></i> Rutas
-                </button>
-                <button class="filter-btn" data-layer="comunidad">
-                    <i class="fas fa-users"></i> Comunidad
-                </button>
+            <!-- Búsqueda -->
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar ubicación...">
+            </div>
+            
+            <!-- Filtros en grid -->
+            <div class="filter-section">
+                <div class="filter-title">Filtrar por:</div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-layer="peligros">
+                        <i class="fas fa-fire"></i> Peligros
+                    </button>
+                    <button class="filter-btn" data-layer="hospitales">
+                        <i class="fas fa-hospital"></i> Hospitales
+                    </button>
+                    <button class="filter-btn" data-layer="refugios">
+                        <i class="fas fa-home"></i> Refugios
+                    </button>
+                    <button class="filter-btn" data-layer="rutas">
+                        <i class="fas fa-route"></i> Rutas
+                    </button>
+                    <button class="filter-btn" data-layer="policia">
+                        <i class="fas fa-shield-alt"></i> Policía
+                    </button>
+                    <button class="filter-btn" data-layer="comunidad">
+                        <i class="fas fa-users"></i> Comunidad
+                    </button>
+                </div>
             </div>
             
             <!-- Alertas -->
-            <div class="alerts-container">
-                <div class="alert-item">
-                    <div class="alert-header">
-                        <span class="alert-title">Incendio reportado</span>
-                        <span class="alert-time">Hace 15 min</span>
+            <div class="filter-section">
+                <div class="filter-title">Alertas Recientes</div>
+                <div class="alerts-section">
+                    <div class="alert-item pulse">
+                        <div class="alert-title">
+                            <span>Incendio forestal</span>
+                            <span class="alert-time">Hace 12 min</span>
+                        </div>
+                        <div class="alert-desc">Bosque de Chapultepec - Evacuar zona norte</div>
                     </div>
-                    <div class="alert-desc">Av. Principal #123 - Evitar zona</div>
-                </div>
-                <div class="alert-item">
-                    <div class="alert-header">
-                        <span class="alert-title">Refugio temporal</span>
-                        <span class="alert-time">Hace 1 hora</span>
+                    <div class="alert-item">
+                        <div class="alert-title">
+                            <span>Refugio habilitado</span>
+                            <span class="alert-time">Hace 25 min</span>
+                        </div>
+                        <div class="alert-desc">Estadio Azteca - Capacidad 45%</div>
                     </div>
-                    <div class="alert-desc">Escuela Secundaria Local - Capacidad 80%</div>
+                    <div class="alert-item">
+                        <div class="alert-title">
+                            <span>Corte de energía</span>
+                            <span class="alert-time">Hace 1 hora</span>
+                        </div>
+                        <div class="alert-desc">Colonia Roma - Reparación en curso</div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- Botón de emergencia -->
-        <button class="emergency-btn" id="emergencyBtn">
+        <button class="emergency-btn pulse" id="emergencyBtn">
             <i class="fas fa-bell"></i>
         </button>
         
-        <!-- Botón de geolocalización -->
-        <button class="locate-btn" id="locateBtn">
-            <i class="fas fa-location-arrow"></i>
+        <!-- Modo AR -->
+        <button class="ar-mode" id="arMode">
+            <i class="fas fa-camera"></i> Modo AR
         </button>
         
-        <!-- Botón de leyenda -->
-        <button class="legend-btn" id="legendBtn">
-            <i class="fas fa-info"></i>
-        </button>
-        
-        <!-- Panel de leyenda -->
-        <div class="legend-panel" id="legendPanel">
+        <!-- Leyenda simplificada -->
+        <div class="legend">
             <div class="legend-item">
                 <div class="legend-color" style="background: #FF3A44;"></div>
-                <span>Peligros activos</span>
+                <span>Peligros</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #4CAF50;"></div>
-                <span>Zonas seguras</span>
+                <span>Refugios</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #2196F3;"></div>
-                <span>Ayuda médica</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #FFC107;"></div>
-                <span>Recursos</span>
+                <span>Hospitales</span>
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     <script>
-        // 10 MEJORAS PARA MÓVIL:
-        // 1. Interfaz táctil optimizada con gestos
-        // 2. Panel deslizable para mejor uso con una mano
-        // 3. Diseño adaptado a Safe Areas de iOS
-        // 4. Botones grandes para fácil acceso
-        // 5. Navegación simplificada en pantallas pequeñas
-        // 6. Menos dependencias para mejor rendimiento
-        // 7. Scroll suave con -webkit-overflow-scrolling
-        // 8. Feedback táctil inmediato
-        // 9. Modo de bajo consumo de batería
-        // 10. Compatibilidad con gestos del sistema
-
-        // Inicialización del mapa
+        // Inicialización del mapa centrado en CDMX
         const map = L.map('map', {
-            zoomControl: false,
-            tap: false, // Mejor compatibilidad con algunos dispositivos
-            touchZoom: true,
-            scrollWheelZoom: false,
-            dragging: true,
-            zoomSnap: 0.5
+            zoomControl: true,
+            preferCanvas: true,
+            zoomControl: false
         }).setView([19.4326, -99.1332], 13);
 
-        // Capa base optimizada para móvil
+        // Capa base estilo oscuro
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '© OpenStreetMap',
-            detectRetina: true // Mejor visualización en pantallas HD
+            attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        // Marcadores optimizados para móvil
-        const dangerIcon = L.divIcon({
-            html: '<i class="fas fa-exclamation-triangle" style="color: #FF3A44; font-size: 24px;"></i>',
-            iconSize: [24, 24],
-            className: 'pulse-marker'
+        // Añadir control de zoom personalizado
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
+
+        // Capa de calor para zonas peligrosas
+        const heatData = [
+            [19.4326, -99.1332, 0.6],  // Centro histórico
+            [19.4350, -99.1400, 0.8],  // Zona con más reportes
+            [19.4289, -99.1276, 0.3],  // Zona con menos riesgo
+            [19.4190, -99.1550, 0.7],  // Zona norte
+            [19.4100, -99.1700, 0.5],  // Zona poniente
+            [19.4450, -99.1000, 0.4]   // Zona oriente
+        ];
+        
+        const heatLayer = L.heatLayer(heatData, {
+            radius: 25,
+            blur: 15,
+            maxZoom: 17,
+            gradient: {0.4: 'blue', 0.6: 'lime', 0.8: 'yellow', 1.0: 'red'}
+        }).addTo(map);
+
+        // Iconos personalizados
+        const dangerIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            iconSize: [20, 34],
+            iconAnchor: [10, 34],
+            popupAnchor: [1, -34]
         });
 
-        const safeIcon = L.divIcon({
-            html: '<i class="fas fa-shield-alt" style="color: #4CAF50; font-size: 24px;"></i>',
-            iconSize: [24, 24]
+        const safeIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            iconSize: [20, 34],
+            iconAnchor: [10, 34],
+            popupAnchor: [1, -34]
         });
 
-        // Ejemplo de marcadores
-        L.marker([19.4326, -99.1332], {icon: dangerIcon})
-            .addTo(map)
-            .bindPopup(`
-                <div style="font-size: 0.9rem;">
-                    <h3 style="margin: 0 0 5px 0; font-size: 1.1rem;">Incendio reportado</h3>
-                    <p><strong>Ubicación:</strong> Av. Principal #123</p>
-                    <button onclick="showEvacuationRoute()" style="background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 5px; margin-top: 8px; width: 100%;">
-                        Mostrar ruta segura
-                    </button>
-                </div>
-            `);
-
-        L.marker([19.4350, -99.1400], {icon: safeIcon})
-            .addTo(map)
-            .bindPopup(`
-                <div style="font-size: 0.9rem;">
-                    <h3 style="margin: 0 0 5px 0; font-size: 1.1rem;">Refugio seguro</h3>
-                    <p><strong>Capacidad:</strong> 120 personas</p>
-                    <button onclick="navigateToShelter()" style="background: #4CAF50; color: white; border: none; padding: 8px 12px; border-radius: 5px; margin-top: 8px; width: 100%;">
-                        Cómo llegar
-                    </button>
-                </div>
-            `);
-
-        // Control del panel móvil
-        const mobilePanel = document.getElementById('mobilePanel');
-        const panelHandle = document.getElementById('panelHandle');
-        const closePanel = document.getElementById('closePanel');
-        
-        let panelStartY = 0;
-        let panelStartTranslateY = 0;
-        
-        // Abrir/cerrar panel al tocar el handle
-        panelHandle.addEventListener('click', togglePanel);
-        closePanel.addEventListener('click', togglePanel);
-        
-        function togglePanel() {
-            mobilePanel.classList.toggle('expanded');
-        }
-        
-        // Swipe para abrir/cerrar panel
-        panelHandle.addEventListener('touchstart', (e) => {
-            panelStartY = e.touches[0].clientY;
-            panelStartTranslateY = mobilePanel.classList.contains('expanded') ? 0 : (mobilePanel.offsetHeight - 60);
+        const hospitalIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            iconSize: [20, 34],
+            iconAnchor: [10, 34],
+            popupAnchor: [1, -34]
         });
-        
-        document.addEventListener('touchmove', (e) => {
-            if (panelStartY === 0) return;
-            
-            const currentY = e.touches[0].clientY;
-            const deltaY = currentY - panelStartY;
-            let newTranslateY = panelStartTranslateY + deltaY;
-            
-            // Limitar el movimiento
-            newTranslateY = Math.max(0, Math.min(newTranslateY, mobilePanel.offsetHeight - 60));
-            
-            mobilePanel.style.transform = `translateY(${newTranslateY}px)`;
+
+        const policeIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+            iconSize: [20, 34],
+            iconAnchor: [10, 34],
+            popupAnchor: [1, -34]
         });
-        
-        document.addEventListener('touchend', () => {
-            if (panelStartY === 0) return;
-            
-            const currentTranslate = parseInt(mobilePanel.style.transform.replace('translateY(', '').replace('px)', '')) || 0;
-            const threshold = mobilePanel.offsetHeight / 3;
-            
-            if (currentTranslate > threshold) {
-                mobilePanel.classList.remove('expanded');
-            } else {
-                mobilePanel.classList.add('expanded');
+
+        // Marcadores de peligro (más realistas)
+        const dangerMarkers = [
+            {
+                coords: [19.4326, -99.1332],
+                title: "Incendio en edificio",
+                desc: "Av. Juárez #45 - 3er piso en llamas",
+                time: "14:30",
+                reports: "12 confirmados"
+            },
+            {
+                coords: [19.4190, -99.1550],
+                title: "Inundación reportada",
+                desc: "Calle Morena - Agua a 50cm de altura",
+                time: "13:45",
+                reports: "5 confirmados"
+            },
+            {
+                coords: [19.4280, -99.1450],
+                title: "Fuga de gas",
+                desc: "Col. Condesa - Evacuar manzana completa",
+                time: "15:20",
+                reports: "3 confirmados"
+            },
+            {
+                coords: [19.4100, -99.1700],
+                title: "Derrumbe parcial",
+                desc: "Av. Revolución - Carril cerrado",
+                time: "11:15",
+                reports: "7 confirmados"
             }
-            
-            panelStartY = 0;
-            panelStartTranslateY = 0;
-        });
-        
-        // Filtros interactivos
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Efecto táctil
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 100);
-                
-                // Aquí se controlaría la visibilidad de capas
-                console.log("Mostrando capa:", this.dataset.layer);
-            });
-        });
-        
-        // Botón de emergencia
-        document.getElementById('emergencyBtn').addEventListener('click', function() {
-            vibrate(); // Feedback háptico
-            
-            if (confirm('¿Necesitas ayuda de emergencia? Esto alertará a las autoridades con tu ubicación.')) {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(position => {
-                        const { latitude, longitude } = position.coords;
-                        
-                        // Simular llamada a emergencia
-                        alert(`🚨 Alerta enviada!\nUbicación: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-                        
-                        // Mostrar ruta al hospital más cercano (simulado)
-                        L.marker([latitude, longitude], {
-                            icon: L.divIcon({
-                                html: '<i class="fas fa-user" style="color: white; background: var(--primary); border-radius: 50%; padding: 5px; font-size: 18px;"></i>',
-                                iconSize: [28, 28]
-                            })
-                        }).addTo(map).bindPopup('Tu ubicación').openPopup();
-                        
-                        // Simular ruta (en una app real usarías Leaflet Routing Machine)
-                        L.polyline([
-                            [latitude, longitude],
-                            [19.4289, -99.1276] // Hospital simulado
-                        ], {
-                            color: '#FF3A44',
-                            weight: 5,
-                            dashArray: '10, 10'
-                        }).addTo(map);
-                        
-                    }, error => {
-                        alert("Activa la ubicación para alertas precisas");
-                    });
-                } else {
-                    alert("Tu navegador no soporta geolocalización");
-                }
+        ];
+
+        // Marcadores de hospitales (más realistas)
+        const hospitalMarkers = [
+            {
+                coords: [19.4289, -99.1276],
+                name: "Hospital General",
+                services: "Emergencias, traumatología",
+                status: "Capacidad 70%"
+            },
+            {
+                coords: [19.4200, -99.1500],
+                name: "Clínica Condesa",
+                services: "Primeros auxilios, pediatría",
+                status: "Capacidad 40%"
+            },
+            {
+                coords: [19.4350, -99.1000],
+                name: "Centro Médico Oriente",
+                services: "Emergencias, UCI",
+                status: "Capacidad 85%"
+            },
+            {
+                coords: [19.4150, -99.1800],
+                name: "Hospital Polanco",
+                services: "Quemados, cirugía",
+                status: "Capacidad 60%"
             }
+        ];
+
+        // Marcadores de refugios
+        const shelterMarkers = [
+            {
+                coords: [19.4350, -99.1400],
+                name: "Estadio Azteca",
+                capacity: "1200 personas",
+                resources: "Alimentos, agua, camas"
+            },
+            {
+                coords: [19.4250, -99.1250],
+                name: "Escuela Primaria",
+                capacity: "300 personas",
+                resources: "Alimentos, primeros auxilios"
+            },
+            {
+                coords: [19.4100, -99.1600],
+                name: "Centro Comunitario",
+                capacity: "150 personas",
+                resources: "Agua, cobijas"
+            }
+        ];
+
+        // Marcadores de policía
+        const policeMarkers = [
+            {
+                coords: [19.4300, -99.1350],
+                name: "Estación Central",
+                status: "Disponible",
+                phones: "555-123-4567"
+            },
+            {
+                coords: [19.4250, -99.1450],
+                name: "Puesto de mando",
+                status: "En operación",
+                phones: "555-765-4321"
+            }
+        ];
+
+        // Añadir marcadores de peligro
+        dangerMarkers.forEach(marker => {
+            L.marker(marker.coords, {icon: dangerIcon})
+                .addTo(map)
+                .bindPopup(`
+                    <h3>${marker.title}</h3>
+                    <p><strong>Ubicación:</strong> ${marker.desc}</p>
+                    <p><strong>Hora:</strong> ${marker.time}</p>
+                    <p><strong>Reportes:</strong> ${marker.reports}</p>
+                    <button class="evac-btn">Mostrar ruta segura</button>
+                `);
         });
-        
-        // Botón de geolocalización
-        document.getElementById('locateBtn').addEventListener('click', function() {
-            vibrate();
-            
-            if (navigator.geolocation) {
-                navigator.geolocatio
+
+        // Añadir marcadores de hospitales
+        hospitalMarkers.forEach(hospital => {
+            L.marker(hospital.coords, {icon: hospitalIcon})
+                .addTo(map)
+                .bindPopup(`
+                    <h3>${hospital.name}</h3>
+                    <p><strong>Servicios:</strong> ${hospital.services}</p>
+                    <p><strong>Estado:</strong> ${hospital.status}</p>
+                    <button class="evac-btn">Cómo llegar</button>
+                `);
+        });
+
+        // Añadir marcadores de refugios
+        shelterMarkers.forEach(shelter => {
+            L.marker(shelter.coords, {icon: safeIcon})
+                .addTo(map)
