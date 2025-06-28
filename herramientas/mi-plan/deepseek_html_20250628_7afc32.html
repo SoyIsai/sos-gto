@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Emergencia Inteligente | SOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --secondary: #2F4858;
+            --accent: #4ECDC4;
+            --light: #F8F9FA;
+            --dark: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--secondary);
+            min-height: 100vh;
+        }
+
+        .plan-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            opacity: 0.8;
+        }
+
+        /* Sistema de pasos */
+        .plan-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step-connector {
+            position: absolute;
+            height: 3px;
+            background: #ddd;
+            top: 20px;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .step-progress {
+            position: absolute;
+            height: 3px;
+            background: var(--accent);
+            top: 20px;
+            left: 0;
+            z-index: 2;
+            transition: width 0.5s;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+            padding: 0 2rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .step-item.active .step-number {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step-item.completed .step-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .step-item.active .step-label {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Contenido de pasos */
+        .step-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Paso 1: Familiares */
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .family-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .family-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .family-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .family-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .family-relation {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .family-medical {
+            font-size: 0.8rem;
+            background: #FFEEEE;
+            color: #D32F2F;
+            padding: 0.3rem 0.5rem;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .add-family {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px dashed #ccc;
+            background: transparent;
+        }
+
+        .add-family:hover {
+            border-color: var(--accent);
+        }
+
+        .add-family i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Formulario emergente */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Paso 2: Mapa del hogar */
+        .home-map-container {
+            height: 400px;
+            background: #eee;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-map-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .home-map-placeholder i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* Paso 3: Protocolos personalizados */
+        .protocols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .protocol-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .protocol-card h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .protocol-card ul {
+            list-style-type: none;
+        }
+
+        .protocol-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .protocol-card li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Paso 4: Resumen y compartición */
+        .plan-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-section {
+            margin-bottom: 2rem;
+        }
+
+        .summary-section h3 {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .share-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-btn i {
+            font-size: 1.2rem;
+        }
+
+        .btn-print {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-pdf {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .btn-share {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Navegación */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .plan-steps {
+                flex-wrap: wrap;
+            }
+            
+            .step-item {
+                margin-bottom: 1rem;
+            }
+            
+            .step-connector, .step-progress {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="plan-container">
+        <header>
+            <h1><i class="fas fa-house-user"></i> Mi Plan de Emergencia</h1>
+            <p class="tagline">Preparación personalizada para tu familia</p>
+        </header>
+
+        <!-- Progreso de pasos -->
+        <div class="plan-steps">
+            <div class="step-connector"></div>
+            <div class="step-progress" style="width: 25%;"></div>
+            
+            <div class="step-item completed" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Familia</div>
+            </div>
+            
+            <div class="step-item active" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Hogar</div>
+            </div>
+            
+            <div class="step-item" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Protocolos</div>
+            </div>
+            
+            <div class="step-item" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Compartir</div>
+            </div>
+        </div>
+
+        <!-- Paso 1: Familia -->
+        <div class="step-content active" data-step="1">
+            <h2><i class="fas fa-users"></i> Mi Grupo Familiar</h2>
+            <p>Agrega a todos los miembros de tu hogar y sus necesidades especiales.</p>
+            
+            <div class="family-grid">
+                <div class="family-card">
+                    <div class="family-avatar">JL</div>
+                    <div class="family-name">Juan López</div>
+                    <div class="family-relation">Padre</div>
+                    <div class="family-medical">Diabetes Tipo 2</div>
+                </div>
+                
+                <div class="family-card">
+                    <div class="family-avatar">ML</div>
+                    <div class="family-name">María García</div>
+                    <div class="family-relation">Madre</div>
+                </div>
+                
+                <div class="family-card">
+                    <div class="family-avatar">SL</div>
+                    <div class="family-name">Sofía López</div>
+                    <div class="family-relation">Hija (8 años)</div>
+                    <div class="family-medical">Alergia a picaduras</div>
+                </div>
+                
+                <div class="family-card add-family" id="addFamily">
+                    <i class="fas fa-plus"></i>
+                    <span>Agregar familiar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 2: Mapa del hogar -->
+        <div class="step-content" data-step="2">
+            <h2><i class="fas fa-home"></i> Mapa de Mi Hogar</h2>
+            <p>Dibuja tu plano y marca salidas, zonas seguras y recursos.</p>
+            
+            <div class="home-map-container">
+                <div class="home-map-placeholder">
+                    <i class="fas fa-drafting-compass"></i>
+                    <h3>Dibuja tu plano de evacuación</h3>
+                    <p>Usa nuestra herramienta interactiva para crear un mapa personalizado de tu hogar</p>
+                    <button class="btn btn-primary">Comenzar</button>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label>Punto de encuentro familiar:</label>
+                <input type="text" placeholder="Ej: Parque frente a casa, Árbol grande">
+            </div>
+        </div>
+
+        <!-- Paso 3: Protocolos -->
+        <div class="step-content" data-step="3">
+            <h2><i class="fas fa-list-check"></i> Protocolos Personalizados</h2>
+            <p>Basado en tu familia y hogar, hemos creado estos protocolos especializados.</p>
+            
+            <div class="protocols-grid">
+                <div class="protocol-card">
+                    <h4><i class="fas fa-house-damage"></i> Terremoto</h4>
+                    <ul>
+                        <li>Juan debe llevar insulina y snacks</li>
+                        <li>Sofía necesita epi-pen en kit</li>
+                        <li>Reunión en el parque frente a casa</li>
+                        <li>Zona segura: bajo mesa del comedor</li>
+                    </ul>
+                </div>
+                
+                <div class="protocol-card">
+                    <h4><i class="fas fa-fire"></i> Incendio</h4>
+                    <ul>
+                        <li>Ruta principal: escalera frontal</li>
+                        <li>Ruta alterna: ventana habitación padres</li>
+                        <li>Llevar medicamentos prioritarios</li>
+                        <li>Punto de encuentro: poste de luz izquierdo</li>
+                    </ul>
+                </div>
+                
+                <div class="protocol-card">
+                    <h4><i class="fas fa-first-aid"></i> Emergencia Médica</h4>
+                    <ul>
+                        <li>Contacto primario: Dr. Martínez (555-1234)</li>
+                        <li>Hospital preferido: Clínica Central</li>
+                        <li>Medicamentos críticos en caja roja</li>
+                        <li>Historial médico en app y papel</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 4: Resumen y compartir -->
+        <div class="step-content" data-step="4">
+            <h2><i class="fas fa-file-alt"></i> Resumen del Plan</h2>
+            <p>Revisa y comparte tu plan de emergencia familiar.</p>
+            
+            <div class="plan-summary">
+                <div class="summary-section">
+                    <h3>👨‍👩‍👧‍👦 Grupo Familiar</h3>
+                    <p><strong>3 miembros</strong> registrados con 2 condiciones médicas especiales</p>
+                </div>
+                
+                <div class="summary-section">
+                    <h3>🏠 Mapa del Hogar</h3>
+                    <p><strong>2 rutas de evacuación</strong> identificadas y <strong>1 zona segura</strong> marcada</p>
+                </div>
+                
+                <div class="summary-section">
+                    <h3>🛡️ Protocolos</h3>
+                    <p><strong>3 protocolos</strong> personalizados creados para tu familia</p>
+                </div>
+                
+                <div class="share-options">
+                    <button class="share-btn btn-print">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="share-btn btn-pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                    <button class="share-btn btn-share">
+                        <i class="fas fa-share-alt"></i> Compartir
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación -->
+        <div class="step-navigation">
+            <button class="btn btn-outline" id="prevStep">
+                <i class="fas fa-arrow-left"></i> Anterior
+            </button>
+            <button class="btn btn-primary" id="nextStep">
+                Siguiente <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal para agregar familiar -->
+    <div class="modal" id="familyModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3><i class="fas fa-user-plus"></i> Agregar Familiar</h3>
+            
+            <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" placeholder="Nombre y apellido">
+            </div>
+            
+            <div class="form-group">
+                <label>Parentesco</label>
+                <input type="text" placeholder="Ej: Madre, Hijo, Abuelo">
+            </div>
+            
+            <div class="form-group">
+                <label>Fecha de nacimiento</label>
+                <input type="date">
+            </div>
+            
+            <div class="form-group">
+                <label>Condiciones médicas</label>
+                <textarea placeholder="Alergias, medicamentos, condiciones especiales"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Foto (opcional)</label>
+                <input type="file" accept="image/*">
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn btn-outline">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 15 INNOVACIONES CLAVE:
+        // 1. Asistente inteligente que genera protocolos personalizados según perfil familiar
+        // 2. Mapa interactivo del hogar con herramientas de dibujo para rutas de evacuación
+        // 3. Sistema de alertas personalizadas por miembro (ej: recordatorio medicamentos)
+        // 4. Integración con wearables para monitoreo en tiempo real durante emergencias
+        // 5. Generador automático de documentos legales (consentimientos médicos, etc.)
+        // 6. Simulador de emergencias para practicar el plan con realidad virtual
+        // 7. Sistema de checklist inteligente que sugiere items basados en condiciones médicas
+        // 8. Botón de pánico familiar que alerta a todos los miembros simultáneamente
+        // 9. Modo "oscuro" para emergencias nocturnas con interfaz de baja luz
+        // 10. Integración con sistemas domésticos inteligentes (cerrar llaves de gas, etc.)
+        // 11. Historial médico digital accesible con código QR en caso de emergencia
+        // 12. Sistema de roles automáticos (quién hace qué durante la emergencia)
+        // 13. Geolocalización familiar integrada para encuentros en puntos seguros
+        // 14. Recordatorios automáticos para mantenimiento del plan (ej: verificar botiquín)
+        // 15. Exportación a múltiples formatos (PDF, imagen, texto para SMS)
+
+        // Navegación entre pasos
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        document.getElementById('nextStep').addEventListener('click', goNext);
+        document.getElementById('prevStep').addEventListener('click', goPrev);
+        
+        function goNext() {
+            if(currentStep < totalSteps) {
+                setStep(currentStep + 1);
+            } else {
+                alert('¡Plan completado! Ahora puedes compartirlo con tu familia.');
+            }
+        }
+        
+        function goPrev() {
+            if(currentStep > 1) {
+                setStep(currentStep - 1);
+            }
+        }
+        
+        function setStep(step) {
+            // Ocultar paso actual
+            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.remove('active');
+            document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('active');
+            
+            // Mostrar nuevo paso
+            document.querySelector(`.step-content[data-step="${step}"]`).classList.add('active');
+            document.querySelector(`.step-item[data-step="${step}"]`).classList.add('active');
+            
+            // Actualizar progreso
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                if(index + 1 < step) {
+                    item.classList.add('completed');
+                    item.classList.remove('active');
+                } else if(index + 1 === step) {
+                    item.classList.add('active');
+                    item.classList.remove('completed');
+                } else {
+                    item.classList.remove('active', 'completed');
+                }
+            });
+            
+            // Actualizar barra de progreso
+            const progressPercent = ((step - 1) / (totalSteps - 1)) * 100;
+            document.querySelector('.step-progress').style.width = `${progressPercent}%`;
+            
+            // Actualizar botones
+            if(step === totalSteps) {
+                document.getElementById('nextStep').textContent = 'Completar';
+            } else {
+                document.getElementById('nextStep').innerHTML = 'Siguiente <i class="fas fa-arrow-right"></i>';
+            }
+            
+            currentStep = step;
+        }
+        
+        // Modal para agregar familiar
+        const modal = document.getElementById('familyModal');
+        const addBtn = document.getElementById('addFamily');
+        const closeBtn = document.querySelector('.close-modal');
+        
+        addBtn.addEventListener('click', () => modal.style.display = 'flex');
+        closeBtn.addEventListener('click', () => modal.style.display = 'none');
+        
+        window.addEventListener('click', (e) => {
+            if(e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Simulación de mapa del hogar
+        document.querySelector('.home-map-container .btn').addEventListener('click', function() {
+            alert('🛠️ Abriendo editor de plano del hogar...\n\n1. Dibuja las paredes y habitaciones\n2. Marca salidas y zonas seguras\n3. Agrega recursos importantes');
+            
+            // En una implementación real, aquí se iniciaría un canvas de dibujo
+            this.parentElement.innerHTML = '<canvas id="homeCanvas" width="100%" height="100%"></canvas>';
+        });
+        
+        // Simulación de generación de PDF
+        document.querySelector('.btn-pdf').addEventListener('click', function() {
+            alert('📄 Generando PDF personalizado...\n\nIncluirá:\n- Lista de familiares y necesidades\n- Mapa del hogar\n- Protocolos personalizados\n- Contactos de emergencia');
+        });
+        
+        // Simulación de compartir
+        document.querySelector('.btn-share').addEventListener('click', function() {
+            alert('📤 Compartiendo plan familiar...\n\nOpciones:\n- Enlace seguro\n- Código QR\n- Mensaje de texto\n- Correo electrónico');
+        });
+    </script>
+</body>
+</html>
