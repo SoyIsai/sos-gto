@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kit de Supervivencia Digital | SOS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <title>Kit de Emergencia Inteligente | SOS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #FF3A44;
+            --primary-light: #FF6B6B;
             --secondary: #2F4858;
             --accent: #4ECDC4;
             --light: #F8F9FA;
             --dark: #212529;
+            --gray: #E9ECEF;
+            --success: #28A745;
         }
 
         * {
@@ -26,207 +29,116 @@
             background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 80px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 100%;
+            padding: 1rem;
             margin: 0 auto;
-            padding: 2rem;
         }
 
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            padding: 1.5rem 0;
             position: relative;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.8rem;
             color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        h1:after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            color: var(--secondary);
-            opacity: 0.8;
-        }
-
-        /* Nuevo: Modo emergencia activa */
-        .emergency-mode {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.3);
-        }
-
-        /* Panel interactivo */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 2rem;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
-
-        /* Panel de navegación */
-        .nav-panel {
-            background: var(--secondary);
-            color: white;
-            padding: 2rem;
-        }
-
-        .scenario-selector {
-            margin-bottom: 2rem;
-        }
-
-        .scenario-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .scenario-list {
-            list-style: none;
-        }
-
-        .scenario-item {
-            padding: 0.8rem 1rem;
             margin-bottom: 0.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.8rem;
         }
 
-        .scenario-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .subtitle {
+            color: var(--secondary);
+            opacity: 0.8;
+            font-size: 1rem;
         }
 
-        .scenario-item.active {
-            background: var(--primary);
-            font-weight: bold;
-        }
-
-        .scenario-icon {
-            font-size: 1.2rem;
-        }
-
-        /* Panel de contenido */
-        .content-panel {
-            padding: 2rem;
-        }
-
-        /* Tarjeta de kit */
-        .kit-card {
+        /* Selector de emergencia */
+        .emergency-selector {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        .kit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .selector-group {
             margin-bottom: 1.5rem;
         }
 
-        .kit-title {
-            font-size: 1.5rem;
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
             color: var(--secondary);
         }
 
-        .kit-progress {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        select, input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--gray);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
-        .progress-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: conic-gradient(var(--accent) 0%, #eee 0%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .progress-value {
-            font-weight: bold;
-            font-size: 1.1rem;
-            background: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 58, 68, 0.2);
         }
 
         /* Lista de items */
         .kit-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .item-list {
+            list-style: none;
         }
 
         .item-card {
-            background: var(--light);
+            background: white;
             border-radius: 10px;
-            padding: 1.2rem;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
             gap: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: all 0.3s;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray);
         }
 
         .item-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .item-checkbox {
-            appearance: none;
-            width: 22px;
+            min-width: 22px;
             height: 22px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--gray);
             border-radius: 6px;
+            appearance: none;
             cursor: pointer;
             position: relative;
             transition: all 0.2s;
@@ -234,8 +146,8 @@
         }
 
         .item-checkbox:checked {
-            background: var(--accent);
-            border-color: var(--accent);
+            background: var(--primary);
+            border-color: var(--primary);
         }
 
         .item-checkbox:checked::after {
@@ -253,7 +165,7 @@
         }
 
         .item-name {
-            font-weight: 600;
+            font-weight: 500;
             margin-bottom: 0.2rem;
         }
 
@@ -266,335 +178,420 @@
             font-size: 0.7rem;
             padding: 0.2rem 0.5rem;
             border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .priority-high {
             background: #FFEEBA;
             color: #8D6E00;
         }
 
-        /* Sección de acciones */
-        .kit-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+        .priority-critical {
+            background: #FFD1D1;
+            color: #D32F2F;
         }
 
-        .action-btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
+        /* Barra de progreso */
+        .progress-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .progress-title {
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        progress {
+            width: 100%;
+            height: 12px;
             border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        progress::-webkit-progress-bar {
+            background-color: var(--gray);
+            border-radius: 10px;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: var(--primary);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .progress-text span {
             font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Botones de acción */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .btn {
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
             transition: all 0.3s;
         }
 
-        .primary-btn {
+        .btn-primary {
             background: var(--primary);
             color: white;
         }
 
-        .secondary-btn {
+        .btn-secondary {
             background: var(--secondary);
             color: white;
         }
 
-        .outline-btn {
-            background: transparent;
-            border: 2px solid var(--secondary);
+        .btn-outline {
+            background: white;
             color: var(--secondary);
+            border: 2px solid var(--secondary);
         }
 
-        .action-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Nuevo: Sección de inteligencia */
-        .intelligence-section {
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
             background: white;
             border-radius: 15px;
-            padding: 2rem;
-            margin-top: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s;
         }
 
-        .intelligence-header {
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .intelligence-title {
-            font-size: 1.2rem;
-            color: var(--secondary);
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--primary);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .intelligence-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
         }
 
-        .intelligence-card {
-            background: var(--light);
-            border-radius: 10px;
-            padding: 1.5rem;
-        }
-
-        .intelligence-card h4 {
-            margin-bottom: 0.5rem;
-            color: var(--primary);
+        .modal-body {
+            margin-bottom: 1.5rem;
         }
 
         /* Responsive */
-        @media (max-width: 992px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-
-            .intelligence-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 576px) {
+        @media (min-width: 768px) {
             .container {
-                padding: 1rem;
+                max-width: 600px;
+                padding: 2rem;
             }
 
-            .kit-items {
-                grid-template-columns: 1fr;
+            .action-buttons {
+                position: static;
+                box-shadow: none;
+                padding: 0;
+                margin-top: 2rem;
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
             }
 
-            .kit-actions {
-                flex-direction: column;
+            .btn {
+                padding: 0.8rem 1.5rem;
             }
-        }
-
-        /* Animaciones */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
         }
     </style>
 </head>
 <body>
-    <!-- Modo emergencia -->
-    <div class="emergency-mode pulse">
-        <i class="fas fa-bell"></i>
-        <span>MODO EMERGENCIA</span>
-    </div>
-
     <div class="container">
         <header>
-            <h1><i class="fas fa-kit-medical"></i> Kit de Supervivencia Digital</h1>
-            <p class="tagline">Preparación inteligente para cualquier situación</p>
+            <h1><i class="fas fa-kit-medical"></i> Kit de Emergencia</h1>
+            <p class="subtitle">Preparado para cualquier situación</p>
         </header>
 
-        <div class="dashboard">
-            <!-- Panel de navegación -->
-            <div class="nav-panel">
-                <div class="scenario-selector">
-                    <h3 class="scenario-title"><i class="fas fa-list"></i> Escenarios</h3>
-                    <ul class="scenario-list">
-                        <li class="scenario-item active">
-                            <i class="fas fa-house-damage scenario-icon"></i>
-                            <span>Desastres Naturales</span>
-                        </li>
-                        <li class="scenario-item">
-                            <i class="fas fa-heartbeat scenario-icon"></i>
-                            <span>Emergencias Médicas</span>
-                        </li>
-                        <li class="scenario-item">
-                            <i class="fas fa-car-crash scenario-icon"></i>
-                            <span>Accidentes</span>
-                        </li>
-                        <li class="scenario-item">
-                            <i class="fas fa-plane scenario-icon"></i>
-                            <span>Viajes</span>
-                        </li>
-                        <li class="scenario-item">
-                            <i class="fas fa-bolt scenario-icon"></i>
-                            <span>Cortes de Energía</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="user-kits">
-                    <h3 class="scenario-title"><i class="fas fa-user-circle"></i> Mis Kits</h3>
-                    <ul class="scenario-list">
-                        <li class="scenario-item">
-                            <i class="fas fa-home scenario-icon"></i>
-                            <span>Kit Hogar</span>
-                        </li>
-                        <li class="scenario-item">
-                            <i class="fas fa-car scenario-icon"></i>
-                            <span>Kit Vehículo</span>
-                        </li>
-                        <li class="scenario-item">
-                            <i class="fas fa-briefcase scenario-icon"></i>
-                            <span>Kit Trabajo</span>
-                        </li>
-                        <button class="scenario-item" style="background: transparent; color: var(--accent);">
-                            <i class="fas fa-plus scenario-icon"></i>
-                            <span>Crear Nuevo Kit</span>
-                        </button>
-                    </ul>
-                </div>
+        <div class="emergency-selector">
+            <div class="selector-group">
+                <label for="emergency-type"><i class="fas fa-triangle-exclamation"></i> Tipo de Emergencia</label>
+                <select id="emergency-type">
+                    <option value="terremoto">Terremoto</option>
+                    <option value="incendio">Incendio</option>
+                    <option value="inundacion">Inundación</option>
+                    <option value="medica">Emergencia Médica</option>
+                    <option value="personalizado">Personalizado</option>
+                </select>
             </div>
 
-            <!-- Panel de contenido -->
-            <div class="content-panel">
-                <!-- Tarjeta de kit -->
-                <div class="kit-card">
-                    <div class="kit-header">
-                        <h2 class="kit-title">Kit para Terremotos</h2>
-                        <div class="kit-progress">
-                            <div class="progress-circle" style="background: conic-gradient(var(--accent) 75%, #eee 0%)">
-                                <div class="progress-value">75%</div>
-                            </div>
-                            <span>Completado</span>
-                        </div>
-                    </div>
+            <div class="selector-group">
+                <label for="family-members"><i class="fas fa-people-group"></i> Miembros del Hogar</label>
+                <input type="number" id="family-members" min="1" max="20" value="1">
+            </div>
+        </div>
 
-                    <div class="kit-items">
-                        <div class="item-card">
-                            <input type="checkbox" class="item-checkbox" checked>
-                            <div class="item-info">
-                                <div class="item-name">Agua potable</div>
-                                <div class="item-desc">4 litros por persona/día</div>
-                            </div>
-                            <span class="item-priority">Alta</span>
-                        </div>
+        <div class="kit-items">
+            <h2 class="section-title"><i class="fas fa-list-check"></i> Lista de Elementos</h2>
+            <ul class="item-list" id="item-list">
+                <!-- Los items se generan dinámicamente -->
+            </ul>
+        </div>
 
-                        <div class="item-card">
-                            <input type="checkbox" class="item-checkbox" checked>
-                            <div class="item-info">
-                                <div class="item-name">Botiquín primeros auxilios</div>
-                                <div class="item-desc">Incluye medicamentos básicos</div>
-                            </div>
-                            <span class="item-priority">Crítica</span>
-                        </div>
+        <div class="progress-container">
+            <h3 class="progress-title">Progreso de tu Kit</h3>
+            <progress id="kit-progress" value="0" max="100"></progress>
+            <p class="progress-text">Tienes <span id="completed-count">0</span> de <span id="total-count">0</span> elementos completados</p>
+        </div>
 
-                        <div class="item-card">
-                            <input type="checkbox" class="item-checkbox">
-                            <div class="item-info">
-                                <div class="item-name">Radio portátil</div>
-                                <div class="item-desc">Con pilas extras</div>
-                            </div>
-                            <span class="item-priority">Media</span>
-                        </div>
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="save-btn">
+                <i class="fas fa-floppy-disk"></i> Guardar
+            </button>
+            <button class="btn btn-secondary" id="share-btn">
+                <i class="fas fa-share-alt"></i> Compartir
+            </button>
+        </div>
+    </div>
 
-                        <div class="item-card">
-                            <input type="checkbox" class="item-checkbox" checked>
-                            <div class="item-info">
-                                <div class="item-name">Linterna</div>
-                                <div class="item-desc">LED recargable</div>
-                            </div>
-                            <span class="item-priority">Alta</span>
-                        </div>
-
-                        <div class="item-card">
-                            <input type="checkbox" class="item-checkbox">
-                            <div class="item-info">
-                                <div class="item-name">Documentos importantes</div>
-                                <div class="item-desc">En bolsa hermética</div>
-                            </div>
-                            <span class="item-priority">Media</span>
-                        </div>
-
-                        <div class="item-card">
-                            <input type="checkbox" class="item-checkbox">
-                            <div class="item-info">
-                                <div class="item-name">Alimentos no perecederos</div>
-                                <div class="item-desc">Para 3 días</div>
-                            </div>
-                            <span class="item-priority">Alta</span>
-                        </div>
-                    </div>
-
-                    <div class="kit-actions">
-                        <button class="action-btn primary-btn">
-                            <i class="fas fa-print"></i> Imprimir Kit
-                        </button>
-                        <button class="action-btn secondary-btn">
-                            <i class="fas fa-share-alt"></i> Compartir Plan
-                        </button>
-                        <button class="action-btn outline-btn">
-                            <i class="fas fa-shopping-cart"></i> Comprar Faltantes
-                        </button>
-                        <button class="action-btn outline-btn">
-                            <i class="fas fa-bell"></i> Recordatorios
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Sección de inteligencia -->
-                <div class="intelligence-section">
-                    <div class="intelligence-header">
-                        <h3 class="intelligence-title"><i class="fas fa-lightbulb"></i> Inteligencia de Emergencia</h3>
-                        <button class="action-btn outline-btn">
-                            <i class="fas fa-sync-alt"></i> Actualizar
-                        </button>
-                    </div>
-
-                    <div class="intelligence-content">
-                        <div class="intelligence-card">
-                            <h4><i class="fas fa-map-marked-alt"></i> Refugios cercanos</h4>
-                            <p>3 refugios activos en un radio de 5km. El más cercano: Escuela Primaria Juárez (1.2km)</p>
-                            <button class="action-btn outline-btn" style="margin-top: 0.5rem; padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-                                Ver en mapa
-                            </button>
-                        </div>
-
-                        <div class="intelligence-card">
-                            <h4><i class="fas fa-exclamation-triangle"></i> Alertas recientes</h4>
-                            <p>Simulacro de terremoto programado para el 15/10. Zona de riesgo: 2.4km al noreste.</p>
-                            <button class="action-btn outline-btn" style="margin-top: 0.5rem; padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-                                Ver detalles
-                            </button>
-                        </div>
-                    </div>
+    <!-- Modal para compartir -->
+    <div class="modal" id="share-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-share-alt"></i> Compartir Kit</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Elige cómo quieres compartir tu kit de emergencia:</p>
+                <div class="share-options" style="margin-top: 1.5rem; display: grid; gap: 1rem;">
+                    <button class="btn btn-outline" style="justify-content: flex-start;">
+                        <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> Correo Electrónico
+                    </button>
+                    <button class="btn btn-outline" style="justify-content: flex-start;">
+                        <i class="fas fa-message" style="margin-right: 0.5rem;"></i> Mensaje de Texto
+                    </button>
+                    <button class="btn btn-outline" style="justify-content: flex-start;">
+                        <i class="fas fa-print" style="margin-right: 0.5rem;"></i> Imprimir Lista
+                    </button>
+                    <button class="btn btn-outline" style="justify-content: flex-start;">
+                        <i class="fas fa-file-pdf" style="margin-right: 0.5rem;"></i> Generar PDF
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 10 MEJORAS INNOVADORAS IMPLEMENTADAS:
-        // 1. Modo emergencia activa con notificación visual
-        // 2. Panel de navegación intuitivo por escenarios
-        // 3. Sistema de progreso visual con círculo animado
-        // 4. Priorización inteligente de items (crítica, alta, media)
-        // 5. Integración con compras online de items faltantes
-        // 6. Sección de inteligencia con datos en tiempo real
-        // 7. Sistema de recordatorios para mantenimiento
-        // 8. Diseño responsive para todos los dispositivos
-        // 9. Visualización de refugios y alertas cercanas
-        // 10. Personalización de kits por usuario
+        // Datos de los kits
+        const kits = {
+            terremoto: [
+                { name: "Agua potable", desc: "4 litros por persona por día", priority: "critical" },
+                { name: "Alimentos no perecederos", desc: "Para al menos 3 días", priority: "high" },
+                { name: "Botiquín de primeros auxilios", desc: "Incluye medicamentos esenciales", priority: "critical" },
+                { name: "Linterna", desc: "Con pilas extras o recargable", priority: "high" },
+                { name: "Radio portátil", desc: "A pilas o de manivela", priority: "medium" },
+                { name: "Documentos importantes", desc: "En bolsa hermética", priority: "high" },
+                { name: "Silbato", desc: "Para pedir ayuda", priority: "medium" },
+                { name: "Manta térmica", desc: "Para cada miembro de la familia", priority: "high" }
+            ],
+            incendio: [
+                { name: "Mascarilla anti-humo", desc: "Para cada miembro", priority: "critical" },
+                { name: "Linterna resistente", desc: "Con pilas de repuesto", priority: "high" },
+                { name: "Extintor pequeño", desc: "Para fuegos eléctricos y de cocina", priority: "critical" },
+                { name: "Cuerda de evacuación", desc: "Para pisos superiores", priority: "medium" },
+                { name: "Copia de llaves", desc: "De todas las puertas", priority: "high" },
+                { name: "Ropa de abrigo", desc: "Para cada miembro", priority: "medium" }
+            ],
+            inundacion: [
+                { name: "Chaleco salvavidas", desc: "Para cada miembro", priority: "critical" },
+                { name: "Bolsa seca", desc: "Para documentos y electrónicos", priority: "high" },
+                { name: "Botas de agua", desc: "Para cada miembro", priority: "high" },
+                { name: "Bolsas de arena", desc: "Para contener agua", priority: "medium" },
+                { name: "Bomba manual", desc: "Para sacar agua", priority: "medium" }
+            ],
+            medica: [
+                { name: "Medicamentos recetados", desc: "Suministro para 7 días", priority: "critical" },
+                { name: "Termómetro digital", desc: "Con pilas de repuesto", priority: "high" },
+                { name: "Tijeras de trauma", desc: "Para cortar ropa si es necesario", priority: "medium" },
+                { name: "Guantes estériles", desc: "Varios pares", priority: "high" },
+                { name: "Lista de contactos médicos", desc: "Incluye alergias y condiciones", priority: "critical" }
+            ]
+        };
 
-        document.querySelector('.emergency-mode').addEventListener('click', function() {
-            alert('Modo emergencia activado: Mostrando rutas de evacuación y contactos de emergencia');
-            document.body.style.backgroundColor = '#FFF0F0';
-        });
+        // Elementos del DOM
+        const emergencyTypeSelect = document.getElementById('emergency-type');
+        const familyMembersInput = document.getElementById('family-members');
+        const itemList = document.getElementById('item-list');
+        const kitProgress = document.getElementById('kit-progress');
+        const completedCount = document.getElementById('completed-count');
+        const totalCount = document.getElementById('total-count');
+        const saveBtn = document.getElementById('save-btn');
+        const shareBtn = document.getElementById('share-btn');
+        const shareModal = document.getElementById('share-modal');
+        const closeModal = document.querySelector('.close-modal');
 
-        // Simulación de cambio de escenario
-        document.querySelectorAll('.scenario-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        // Estado de la aplicación
+        let currentItems = [];
+        let checkedItems = JSON.parse(localStorage.getItem('checkedItems')) || {};
+
+        // Inicializar la aplicación
+        function init() {
+            loadKit('terremoto');
+            setupEventListeners();
+        }
+
+        // Cargar kit según tipo de emergencia
+        function loadKit(type) {
+            currentItems = kits[type] || [];
+            renderItems();
+            updateProgress();
+        }
+
+        // Renderizar items en la lista
+        function renderItems() {
+            itemList.innerHTML = '';
+            
+            currentItems.forEach((item, index) => {
+                const itemId = `${emergencyTypeSelect.value}-${index}`;
+                const isChecked = checkedItems[itemId] || false;
                 
-                // Aquí iría la lógica para cargar el kit correspondiente
-                const sc
+                const li = document.createElement('li');
+                li.className = 'item-card';
+                li.innerHTML = `
+                    <input type="checkbox" class="item-checkbox" id="${itemId}" ${isChecked ? 'checked' : ''}>
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                    </div>
+                    <span class="item-priority priority-${item.priority === 'critical' ? 'critical' : 'high'}">
+                        ${item.priority === 'critical' ? 'Crítica' : 'Alta'}
+                    </span>
+                `;
+                
+                itemList.appendChild(li);
+                
+                // Agregar event listener al checkbox
+                const checkbox = li.querySelector('.item-checkbox');
+                checkbox.addEventListener('change', function() {
+                    checkedItems[itemId] = this.checked;
+                    updateProgress();
+                    saveToLocalStorage();
+                });
+            });
+            
+            totalCount.textContent = currentItems.length;
+        }
+
+        // Actualizar barra de progreso
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+            
+            kitProgress.value = percentage;
+            completedCount.textContent = checked;
+            totalCount.textContent = total;
+        }
+
+        // Guardar en localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Cambiar tipo de emergencia
+            emergencyTypeSelect.addEventListener('change', function() {
+                loadKit(this.value);
+            });
+            
+            // Cambiar número de familiares
+            familyMembersInput.addEventListener('change', function() {
+                // Podríamos ajustar cantidades según miembros
+                console.log(`Kit ajustado para ${this.value} personas`);
+            });
+            
+            // Botón guardar
+            saveBtn.addEventListener('click', function() {
+                saveToLocalStorage();
+                
+                // Feedback visual
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Guardado';
+                saveBtn.style.backgroundColor = 'var(--success)';
+                
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.style.backgroundColor = 'var(--primary)';
+                }, 2000);
+            });
+            
+     
