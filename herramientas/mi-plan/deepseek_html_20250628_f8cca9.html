@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Plan de Emergencia Familiar | SOS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --primary-light: #FF6B6B;
+            --dark: #2F4858;
+            --light: #FFFFFF;
+            --gray: #F5F5F5;
+            --success: #4CAF50;
+            --warning: #FFA000;
+            --info: #2196F3;
+            --text-dark: #333;
+            --text-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: var(--text-light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* ===== PROGRESS STEPS ===== */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: var(--primary);
+            z-index: 2;
+            transform: translateY(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 3;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step.completed {
+            background: var(--success);
+            color: white;
+        }
+
+        /* ===== FORM STEPS ===== */
+        .form-step {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* ===== FAMILY MEMBERS GRID ===== */
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .family-card {
+            background: var(--gray);
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .family-card .delete-member {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* ===== MAP CONTAINER ===== */
+        #meetingMap {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+        }
+
+        /* ===== PROTOCOLS SECTION ===== */
+        .protocol-card {
+            background: var(--gray);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .protocol-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* ===== NAVIGATION BUTTONS ===== */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--dark);
+            color: var(--dark);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== PANIC BUTTON ===== */
+        .panic-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.4);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== SUMMARY SECTION ===== */
+        .summary-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* ===== DARK MODE TOGGLE ===== */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--dark);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .family-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-step {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Dark Mode Toggle -->
+        <div class="dark-mode-toggle" id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+
+        <h1><i class="fas fa-house-user"></i> Mi Plan de Emergencia Familiar</h1>
+        
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="step active" data-step="1">1</div>
+            <div class="step" data-step="2">2</div>
+            <div class="step" data-step="3">3</div>
+            <div class="step" data-step="4">4</div>
+            <div class="step" data-step="5">5</div>
+        </div>
+        
+        <!-- Step 1: Family Members -->
+        <div class="form-step active" data-step="1">
+            <h2><i class="fas fa-users"></i> Mi Familia</h2>
+            <p>Agrega a todos los miembros de tu hogar, incluyendo mascotas.</p>
+            
+            <div class="form-group">
+                <label for="memberName">Nombre completo</label>
+                <input type="text" id="memberName" placeholder="Ej: Juan Pérez">
+            </div>
+            
+            <div class="form-group">
+                <label for="memberRole">Parentesco/Rol</label>
+                <input type="text" id="memberRole" placeholder="Ej: Padre, Madre, Hijo, Mascota">
+            </div>
+            
+            <div class="form-group">
+                <label for="memberNeeds">Necesidades especiales</label>
+                <textarea id="memberNeeds" placeholder="Alergias, medicamentos, discapacidades"></textarea>
+            </div>
+            
+            <button class="btn btn-primary" id="addMemberBtn">
+                <i class="fas fa-plus"></i> Agregar Familiar
+            </button>
+            
+            <div class="family-grid" id="familyMembersGrid">
+                <!-- Family members will be added here dynamically -->
+            </div>
+        </div>
+        
+        <!-- Step 2: Emergency Contacts -->
+        <div class="form-step" data-step="2">
+            <h2><i class="fas fa-address-book"></i> Contactos de Emergencia</h2>
+            <p>Agrega al menos 2 contactos fuera de tu hogar.</p>
+            
+            <div class="form-group">
+                <label for="contactName">Nombre del contacto</label>
+                <input type="text" id="contactName" placeholder="Nombre completo">
+            </div>
+            
+            <div class="form-group">
+                <label for="contactPhone">Teléfono</label>
+                <input type="tel" id="contactPhone" placeholder="+52 55 1234 5678">
+            </div>
+            
+            <div class="form-group">
+                <label for="contactRelation">Relación</label>
+                <input type="text" id="contactRelation" placeholder="Ej: Vecino, Familiar, Amigo">
+            </div>
+            
+            <button class="btn btn-primary" id="addContactBtn">
+                <i class="fas fa-plus"></i> Agregar Contacto
+            </button>
+            
+            <div class="family-grid" id="emergencyContactsGrid">
+                <!-- Emergency contacts will be added here dynamically -->
+            </div>
+        </div>
+        
+        <!-- Step 3: Meeting Points -->
+        <div class="form-step" data-step="3">
+            <h2><i class="fas fa-map-marked-alt"></i> Puntos de Encuentro</h2>
+            <p>Establece lugares seguros para reunirse en caso de emergencia.</p>
+            
+            <div class="form-group">
+                <label for="meetingName">Nombre del punto de encuentro</label>
+                <input type="text" id="meetingName" placeholder="Ej: Parque Central, Escuela Primaria">
+            </div>
+            
+            <div class="form-group">
+                <label for="meetingAddress">Dirección aproximada</label>
+                <input type="text" id="meetingAddress" placeholder="Calle, número, colonia">
+            </div>
+            
+            <div class="form-group">
+                <label>Ubicación en el mapa (haz clic para marcar)</label>
+                <div id="meetingMap"></div>
+            </div>
+            
+            <button class="btn btn-primary" id="addMeetingBtn">
+                <i class="fas fa-map-pin"></i> Agregar Punto
+            </button>
+            
+            <div class="family-grid" id="meetingPointsGrid">
+                <!-- Meeting points will be added here dynamically -->
+            </div>
+        </div>
+        
+        <!-- Step 4: Emergency Protocols -->
+        <div class="form-step" data-step="4">
+            <h2><i class="fas fa-list-check"></i> Protocolos de Emergencia</h2>
+            <p>Selecciona los protocolos relevantes para tu zona.</p>
+            
+            <div class="form-group">
+                <label>¿Qué riesgos existen en tu zona?</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="risks" value="earthquake"> Terremotos
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="risks" value="flood"> Inundaciones
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="risks" value="fire"> Incendios
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="risks" value="hurricane"> Huracanes
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="risks" value="medical"> Emergencias médicas
+                    </label>
+                </div>
+            </div>
+            
+            <div id="protocolsContainer">
+                <!-- Protocols will be added here dynamically based on selected risks -->
+            </div>
+        </div>
+        
+        <!-- Step 5: Review & Save -->
+        <div class="form-step" data-step="5">
+            <h2><i class="fas fa-file-alt"></i> Resumen y Guardar</h2>
+            <p>Revisa tu plan y guárdalo para acceder fácilmente.</p>
+            
+            <div class="summary-section" id="planSummary">
+                <!-- Summary will be generated here -->
+            </div>
+            
+            <div class="form-navigation">
+                <button class="btn btn-outline" id="prevStepBtn">
+                    <i class="fas fa-arrow-left"></i> Anterior
+                </button>
+                <button class="btn btn-primary" id="savePlanBtn">
+                    <i class="fas fa-save"></i> Guardar Plan
+                </button>
+                <button class="btn btn-primary" id="generatePdfBtn">
+                    <i class="fas fa-file-pdf"></i> Generar PDF
+                </button>
+            </div>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="form-navigation" id="mainNavigation" style="display: none;">
+            <button class="btn btn-outline" id="prevBtn">
+                <i class="fas fa-arrow-left"></i> Anterior
+            </button>
+            <button class="btn btn-primary" id="nextBtn">
+                Siguiente <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Panic Button -->
+    <div class="panic-btn" id="panicBtn">
+        <i class="fas fa-bell"></i>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+        
+        // DOM Elements
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const panicBtn = document.getElementById('panicBtn');
+        const steps = document.querySelectorAll('.step');
+        const formSteps = document.querySelectorAll('.form-step');
+        const progressBar = document.getElementById('progressBar');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const prevStepBtn = document.getElementById('prevStepBtn');
+        
+        // Form elements
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        const familyMembersGrid = document.getElementById('familyMembersGrid');
+        const addContactBtn = document.getElementById('addContactBtn');
+        const emergencyContactsGrid = document.getElementById('emergencyContactsGrid');
+        const addMeetingBtn = document.getElementById('addMeetingBtn');
+        const meetingPointsGrid = document.getElementById('meetingPointsGrid');
+        const savePlanBtn = document.getElementById('savePlanBtn');
+        const generatePdfBtn = document.getElementById('generatePdfBtn');
+        const planSummary = document.getElementById('planSummary');
+        
+        // Data storage
+        let currentStep = 1;
+        let familyMembers = [];
+        let emergencyContacts = [];
+        let meetingPoints = [];
+        let selectedRisks = [];
+        let map;
+        let markers = [];
+        
+        // Initialize the map
+        function initMap() {
+            map = L.map('meetingMap').setView([19.4326, -99.1332], 13); // Default to Mexico City
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            map.on('click', function(e) {
+                // Clear previous markers
+                markers.forEach(marker => map.removeLayer(marker));
+                markers = [];
+                
+                // Add new marker
+                const marker = L.marker(e.latlng).addTo(map)
+                    .bindPopup(`Punto de encuentro: ${document.getElementById('meetingName').value || 'Nuevo punto'}`)
+                    .openPopup();
+                
+                markers.push(marker);
+                
+                // Update address field if empty
+                if (!document.getElementById('meetingAddress').value) {
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('meetingAddress').value = data.display_name || '';
+                        });
+                }
+            });
+        }
+        
+        // Initialize the app
+        function init() {
+            initMap();
+            loadSavedData();
+            updateProgressBar();
+            showCurrentStep();
+            
+            // Event listeners
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+            panicBtn.addEventListener('click', triggerEmergency);
+            nextBtn.addEventListener('click', goToNextStep);
+            prevBtn.addEventListener('click', goToPrevStep);
+            prevStepBtn.addEventListener('click', goToPrevStep);
+            addMemberBtn.addEventListener('click', addFamilyMember);
+            addContactBtn.addEventListener('click', addEmergencyContact);
+            addMeetingBtn.addEventListener('click', addMeetingPoint);
+            savePlanBtn.addEventListener('click', savePlan);
+            generatePdfBtn.addEventListener('click', generatePdf);
+            
+            // Risk selection
+            document.querySelectorAll('input[name="risks"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateProtocols);
+            });
+        }
+        
+        // Toggle dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+        
+        // Emergency panic button
+        function triggerEmergency() {
+            if (confirm('¿Estás en una emergencia? Esto llamará al 911 y enviará tu ubicación a tus contactos.')) {
+                // Call emergency number
+                window.location.href = 'tel:911';
+                
+                // Send location to emergency contacts (simulated)
+                if (emergencyContacts.length > 0) {
+                    alert(`Ubicación enviada a: ${emergencyContacts.map(c => c.name).join(', ')}`);
+                }
+                
+                // In a real app, you would use the Geolocation API and SMS API
+                navigator.geolocation.getCurrentPosition(position => {
+                    console.log('Emergency location:', position.coords);
+                });
+            }
+        }
+        
+        // Navigation functions
+        function goToNextStep() {
+            if (validateCurrentStep()) {
+                currentStep++;
+                updateProgressBar();
+                showCurrentStep();
+            }
+        }
+        
+        function goToPrevStep() {
+            currentStep--;
+            updateProgressBar();
+            showCurrentStep();
+        }
+        
+        function updateProgressBar() {
+            const progress = ((currentStep - 1) / (steps.length - 1)) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            steps.forEach((step, index) => {
+                if (index < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (index === currentStep - 1) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+        
+        function showCurrentStep() {
+            formSteps.forEach(step => {
+                if (parseInt(step.dataset.step) === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            
+            // Show/hide navigation buttons
+            if (currentStep === 1) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
+            }
+            
+            if (currentStep === steps.length) {
+                nextBtn.style.display = 'none';
+                document.getElementById('mainNavigation').style.display = 'none';
+                generateSummary();
+            } else {
+                nextBtn.style.display = 'flex';
+                document.getElementById('mainNavigation').style.display = 'flex';
+            }
+        }
+        
+        // Form validation
+        function validateCurrentStep() {
+            switch(currentStep) {
+                case 1: // Family members
+                    if (familyMembers.length === 0) {
+                        alert('Por favor agrega al menos un miembro de la familia');
+                        return false;
+                    }
+                    return true;
+                case 2: // Emergency contacts
+                    if (emergencyContacts.length < 2) {
+                        alert('Por favor agrega al menos 2 contactos de emergencia');
+                        return false;
+                    }
+                    return true;
+                case 3: // Meeting points
+                    if (meetingPoints.length === 0) {
+                        alert('Por favor agrega al menos un punto de encuentro');
+                        return false;
+                    }
+                    return true;
+                case 4: // Protocols
+                    if (selectedRisks.length === 0) {
+                        alert('Por favor selecciona al menos un riesgo');
+                        return false;
+                    }
+                    return true;
+                default:
+                    return true;
+            }
+        }
+        
+        // Family members functions
+        function addFamilyMember() {
+            const name = document.getElementById('memberName').value.trim();
+            const role = document.getElementById('memberRole').value.trim();
+            const needs = document.getElementById('memberNeeds').value.trim();
+            
+            if (!name || !role) {
+                alert('Por favor completa nombre y parentesco');
+                return;
+            }
+            
+            const member = {
+                id: Date.now(),
+                name,
+                role,
+                needs
+            };
+            
+            familyMembers.push(member);
+            renderFamilyMembers();
+            
+            // Clear form
+            document.getElementById('memberName').value = '';
+            document.getElementById('memberRole').value = '';
+            document.getElementById('memberNeeds').value = '';
+        }
+        
+        function renderFamilyMembers() {
+            familyMembersGrid.innerHTML = '';
+            
+            familyMembers.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'family-card';
+                card.innerHTML = `
+                    <div class="delete-member" data-id="${member.id}">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h3>${member.name}</h3>
+                    <p><strong>Rol:</strong> ${member.role}</p>
+                    ${member.needs ? `<p><strong>Necesidades:</strong> ${member.needs}</p>` : ''}
+                `;
+                
+                familyMembersGrid.appendChild(card);
+            });
+            
+            // Add delete event listeners
+            document.querySelectorAll('.delete-member').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    familyMembers = familyMembers.filter(member => member.id !== id);
+                    renderFamilyMembers();
+                });
+            });
+        }
+        
+        // Emergency contacts functions
+        function addEmergencyContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            const relation = document.getElementById('contactRelation').value.trim();
+            
+            if (!name || !phone) {
+                alert('Por favor completa nombre y teléfono');
+                return;
+            }
+            
+            // Simple phone validation
+            if (!/^[\d\s\+\-\(\)]{10,}$/.test(phone)) {
+                alert('Por favor ingresa un número de teléfono válido');
+                return;
+            }
+            
+            const contact = {
+                id: Date.now(),
+                name,
+                phone,
+                relation
+            };
+            
+            emergencyContacts.push(contact);
+            renderEmergencyContacts();
+            
+            // Clear form
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactPhone').value = '';
+            document.getElementById('contactRelation').value = '';
+        }
+        
+        function renderEmergencyContacts() {
+            emergencyContactsGrid.innerHTML = '';
+            
+            emergencyContacts.forEach(contact => {
+                const card = document.createElement('div');
+                card.className = 'family-card';
+                card.innerHTML = `
+                    <div class="delete-member" data-id="${contact.id}">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h3>${contact.name}</h3>
+                    <p><strong>Teléfono:</strong> ${contact.phone}</p>
+                    <p><strong>Relación:</strong> ${contact.relation}</p>
+                `;
+                
+                emergencyContactsGrid.appendChild(card);
+            });
+            
+            // Add delete event listeners
+            document.querySelectorAll('.delete-member').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    emergencyContacts = emergencyContacts.filter(contact => contact.id !== id);
+                    renderEmergencyContacts();
+                });
+            });
+        }
+        
+        // Meeting points functions
+        function addMeetingPoint() {
+            const name = document.getElementById('meetingName').value.trim();
+            const address = document.getElementById('meetingAddress').value.trim();
+            
+            if (!name || !address || markers.length === 0) {
+                alert('Por favor completa nombre, dirección y marca la ubicación en el mapa');
+                return;
+            }
+            
+            const point = {
+                id: Date.now(),
+                name,
+                address,
+                lat: markers[0].getLatLng().lat,
+                lng: markers[0].getLatLng().lng
+            };
+            
+            meetingPoints.push(point);
+            renderMeetingPoints();
+            
+            // Clear form
+            document.getElementById('meetingName').value = '';
+            document.getElementById('meetingAddress').value = '';
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+        
+        function renderMeetingPoints() {
+            meetingPointsGrid.innerHTML = '';
+            
+            meetingPoints.forEach(point => {
+                const card = document.createElement('div');
+                card.className = 'family-card';
+                card.innerHTML = `
+                    <div class="delete-member" data-id="${point.id}">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h3>${point.name}</h3>
+                    <p><strong>Dirección:</strong> ${point.address}</p>
+                    <p><small>Coordenadas: ${point.lat.toFixed(4)}, ${point.lng.toFixed(4)}</small></p>
+                `;
+                
+                meetingPointsGrid.appendChild(card);
+            });
+            
+            // Add delete event listeners
+            document.querySelectorAll('.delete-member').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    meetingPoints = meetingPoints.filter(point => point.id !== id);
+                    renderMeetingPoints();
+                });
+            });
+        }
+        
+        // Protocols functions
+        function updateProtocols() {
+            selectedRisks = Array.from(document.querySelectorAll('input[name="risks"]:checked')).map(el => el.value);
+            renderProtocols();
+        }
+        
+        function renderProtocols() {
+            const protocolsContainer = document.getElementById('protocolsContainer');
+            protocolsContainer.innerHTML = '';
+            
+            const protocols = {
+                earthquake: {
+                    title: 'Protocolo para Terremotos',
+                    steps: [
+                        'Agáchate, Cúbrete y Agárrate durante el sismo',
+                        'Aléjate de ventanas y objetos que puedan caer',
+                        'No uses ascensores durante ni después del sismo',
+                        'Revisa posibles fugas de gas o daños estructurales',
+                        'Dirígete al punto de encuentro familiar'
+                    ]
+                },
+                flood: {
+                    title: 'Protocolo para Inundaciones',
+                    steps: [
+                        'Desconecta la electricidad si el agua está subiendo',
+                        'Sube a pisos superiores o zonas altas',
+                        'Evita caminar o conducir por agua en movimiento',
+                        'No intentes cruzar corrientes de agua',
+                        'Lleva contigo documentos importantes y kit de emergencia'
+                    ]
+                },
+                fire: {
+                    title: 'Protocolo para Incendios',
+                    steps: [
+                        'Sal inmediatamente, no pierdas tiempo recogiendo pertenencias',
+                        'Gatea si hay humo (el aire más limpio está cerca del piso)',
+                        'Prueba las perillas de las puertas antes de abrirlas (si están calientes, no abras)',
+                        'Usa las escaleras, nunca los ascensores',
+                        'Si no puedes salir, cierra puertas y coloca toallas húmedas en las rendijas'
+                    ]
+                },
+                hurricane: {
+                    title: 'Protocolo para Huracanes',
+                    steps: [
+                        'Refúgiate en la habitación más segura de tu casa (sin ventanas)',
+                        'Ten un suministro de agua y alimentos para varios días',
+                        'Protege ventanas con tablas o cinta adhesiva',
+                        'Desconecta aparatos eléctricos',
+                        'Mantente informado con una radio de baterías'
+                    ]
+                },
+                medical: {
+                    title: 'Protocolo para Emergencias Médicas',
+                    steps: [
+                        'Llama al servicio de emergencias (911)',
+                        'Proporciona información clara: qué pasó, cuántas personas afectadas, estado de conciencia',
+                        'No muevas a la persona a menos que esté en peligro inmediato',
+                        'Aplica primeros auxilios si estás capacitado',
+                        'Ten a la mano información médica importante (alergias, medicamentos)'
+                    ]
+                }
+            };
+            
+            selectedRisks.forEach(risk => {
+                if (protocols[risk]) {
+                    const protocolCard = document.createElement('div');
+                    protocolCard.className = 'protocol-card';
+                    
+                    let stepsHtml = '<ol>';
+                    protocols[risk].steps.forEach(step => {
+                        stepsHtml += `<li>${step}</li>`;
+                    });
+                    stepsHtml += '</ol>';
+                    
+                    protocolCard.innerHTML = `
+                        <h3>${protocols[risk].title}</h3>
+                        ${stepsHtml}
+                    `;
+                    
+                    protocolsContainer.appendChild(protocolCard);
+                }
+            });
+        }
+        
+        // Save plan to localStorage
+        function savePlan() {
+            const plan = {
+                familyMembers,
+                emergencyContacts,
+                meetingPoints,
+                selectedRisks,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('emergencyPlan', JSON.stringify(plan));
+            alert('Plan guardado exitosamente. Puedes regresar en cualquier momento para actualizarlo.');
+        }
+        
+        // Load saved data
+        function loadSavedData() {
+            const savedPlan = localStorage.getItem('emergencyPlan');
+            if (savedPlan) {
+                const plan = JSON.parse(savedPlan);
+                familyMembers = plan.familyMembers || [];
+                emergencyContacts = plan.emergencyContacts || [];
+                meetingPoints = plan.meetingPoints || [];
+                selectedRisks = plan.selectedRisks || [];
+                
+                // Check if risks checkboxes need to be checked
+                selectedRisks.forEach(risk => {
+                    const checkbox = document.querySelector(`input[name="risks"][value="${risk}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+                
+                renderFamilyMembers();
+                renderEmergencyContacts();
+                renderMeetingPoints();
+                renderProtocols();
+            }
+        }
+        
+        // Generate summary
+        function generateSummary() {
+            let html = `
+                <div class="summary-item">
+                    <h3><i class="fas fa-users"></i> Familia (${familyMembers.length} miembros)</h3>
+                    <ul>
+                        ${familyMembers.map(member => `
+                            <li>
+                                <strong>${member.name}</strong> - ${member.role}
+                                ${member.needs ? `<br><small>Necesidades: ${member.needs}</small>` : ''}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div class="summary-item">
+                    <h3><i class="fas fa-address-book"></i> Contactos de Emergencia (${emergencyContacts.length})</h3>
+                    <ul>
+                        ${emergencyContacts.map(contact => `
+                            <li>
+                                <strong>${contact.name}</strong> - ${contact.relation}
+                                <br><small>Teléfono: ${contact.phone}</small>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div class="summary-item">
+                    <h3><i class="fas fa-map-marked-alt"></i> Puntos de Encuentro (${meetingPoints.length})</h3>
+                    <ul>
+                        ${meetingPoints.map(point => `
+                            <li>
+                                <strong>${point.name}</strong>
+                                <br><small>${point.address}</small>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div class="summary-item">
+                    <h3><i class="fas fa-list-check"></i> Protocolos para:</h3>
+                    <ul>
+                        ${selectedRisks.map(risk => {
+                            const riskNames = {
+                                earthquake: 'Terremotos',
+                                flood: 'Inundaciones',
+                                fire: 'Incendios',
+                                hurricane: 'Huracanes',
+                                medical: 'Emergencias Médicas'
+                            };
+                            return `<li>${riskNames[risk] || risk}</li>`;
+                        }).join('')}
+                    </ul>
+                </div>
+                
+                <div class="summary-item">
+                    <h3><i class="fas fa-info-circle"></i> Recomendaciones</h3>
+                    <ul>
+                        <li>Revisa y actualiza este plan cada 6 meses</li>
+                        <li>Practica simulacros con tu familia</li>
+                        <li>Mantén tu kit de emergencia actualizado</li>
+                        <li>Guarda una copia física de este plan en un lugar accesible</li>
+                    </ul>
+                </div>
+            `;
+            
+            planSummary.innerHTML = html;
+        }
+        
+        // Generate PDF
+        function generatePdf() {
+            // Create a new PDF
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(20);
+            doc.text('Plan de Emergencia Familiar', 105, 20, { align: 'center' });
+            
+            // Add date
+            doc.setFontSize(12);
+            doc.text(`Generado el: ${new Date().toLocaleDateString()}`, 105, 30, { align: 'center' });
+            
+            // Add family members
+            doc.setFontSize(14);
+            doc.text('1. Miembros de la Familia', 20, 45);
+            doc.setFontSize(12);
+            
+            let y = 55;
+            familyMembers.forEach(member => {
+                doc.text(`- ${member.name} (${member.role})`, 25, y);
+                if (member.needs) {
+                    y += 7;
+                    doc.setFontSize(10);
+                    doc.text(`  Necesidades: ${member.needs}`, 30, y);
+                    doc.setFontSize(12);
+                }
+                y += 10;
+            });
+            
+            // Add emergency contacts
+            y += 10;
+            doc.setFontSize(14);
+            doc.text('2. Contactos de Emergencia', 20, y);
+            doc.setFontSize(12);
+            y += 10;
+            
+            emergencyContacts.forEach(contact => {
+                doc.text(`- ${contact.name} (${contact.relation})`, 25, y);
+                y += 7;
+                doc.text(`  Teléfono: ${contact.phone}`, 30, y);
+                y += 10;
+            });
+            
+            // Add meeting points
+            y += 10;
+            doc.setFontSize(14);
+            doc.text('3. Puntos de Encuentro', 20, y);
+            doc.setFontSize(12);
+            y += 10;
+            
+            meetingPoints.forEach(point => {
+                doc.text(`- ${point.name}`, 25, y);
+                y += 7;
+                doc.text(`  Dirección: ${point.address}`, 30, y);
+                y += 7;
+                doc.text(`  Coordenadas: ${point.lat.toFixed(4)}, ${point.lng.toFixed(4)}`, 30, y);
+                y += 10;
+            });
+            
+            // Add protocols
+            y += 10;
+            doc.setFontSize(14);
+            doc.text('4. Protocolos de Emergencia', 20, y);
+            doc.setFontSize(12);
+            y += 10;
+            
+            const protocols = {
+                earthquake: {
+                    title: 'Terremotos',
+                    steps: [
+                        'Agáchate, Cúbrete y Agárrate durante el sismo',
+                        'Aléjate de ventanas y objetos que puedan caer',
+                        'No uses ascensores durante ni después del sismo',
+                        'Revisa posibles fugas de gas o daños estructurales',
+                        'Dirígete al punto de encuentro familiar'
+                    ]
+                },
+                flood: {
+                    title: 'Inundaciones',
+                    steps: [
+                        'Desconecta la electricidad si el agua está subiendo',
+                        'Sube a pisos superiores o zonas altas',
+                        'Evita caminar o conducir por agua en movimiento',
+                        'No intentes cruzar corrientes de agua',
+                        'Lleva contigo documentos importantes y kit de emergencia'
+                    ]
+                },
+                fire: {
+                    title: 'Incendios',
+                    steps: [
+                        'Sal inmediatamente, no pierdas tiempo recogiendo pertenencias',
+                        'Gatea si hay humo (el aire más limpio está cerca del piso)',
+                        'Prueba las perillas de las puertas antes de abrirlas (si están calientes, no abras)',
+                        'Usa las escaleras, nunca los ascensores',
+                        'Si no puedes salir, cierra puertas y coloca toallas húmedas en las rendijas'
+                    ]
+                },
+                hurricane: {
+                    title: 'Huracanes',
+                    steps: [
+                        'Refúgiate en la habitación más segura de tu casa (sin ventanas)',
+                        'Ten un suministro de agua y alimentos para varios días',
+                        'Protege ventanas con tablas o cinta adhesiva',
+                        'Desconecta aparatos eléctricos',
+                        'Mantente informado con una radio de baterías'
+                    ]
+                },
+                medical: {
+                    title: 'Emergencias Médicas',
+                    steps: [
+                        'Llama al servicio de emergencias (911)',
+                        'Proporciona información clara: qué pasó, cuántas personas afectadas, estado de conciencia',
+                        'No muevas a la persona a menos que esté en peligro inmediato',
+                        'Aplica primeros auxilios si estás capacitado',
+                        'Ten a la mano información médica importante (alergias, medicamentos)'
+                    ]
+                }
+            };
+            
+            selectedRisks.forEach(risk => {
+                if (protocols[risk]) {
+                    doc.text(`Protocolo para ${protocols[risk].title}:`, 25, y);
+                    y += 7;
+                    
+                    protocols[risk].steps.forEach((step, i) => {
+                        doc.text(`${i + 1}. ${step}`, 30, y);
+                        y += 7;
+                    });
+                    
+                    y += 5;
+                }
+            });
+            
+            // Add recommendations
+            y += 10;
+            doc.setFontSize(14);
+            doc.text('5. Recomendaciones', 20, y);
+            doc.setFontSize(12);
+            y += 10;
+            
+            const recommendations = [
+                'Revisa y actualiza este plan cada 6 meses',
+                'Practica simulacros con tu familia',
+                'Mantén tu kit de emergencia actualizado',
+                'Guarda una copia física de este plan en un lugar accesible'
+            ];
+            
+            recommendations.forEach((rec, i) => {
+                doc.text(`${i + 1}. ${rec}`, 25, y);
+                y += 7;
+            });
+            
+            // Save the PDF
+            doc.save('Plan_de_Emergencia_Familiar.pdf');
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
