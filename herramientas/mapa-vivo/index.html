@@ -2,920 +2,589 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Vivo de Emergencias | SOS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mapa de Crisis Móvil | SOS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <style>
         :root {
             --primary: #FF3A44;
-            --primary-light: #FF6B6B;
-            --dark: #2F4858;
-            --light: #FFFFFF;
-            --gray: #F5F5F5;
-            --success: #4CAF50;
-            --warning: #FFA000;
-            --danger: #F44336;
-            --info: #2196F3;
+            --secondary: #2F4858;
+            --accent: #4ECDC4;
+            --dark: #121212;
+            --light: #F8F9FA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--dark);
-            color: var(--light);
-            overflow-x: hidden;
-        }
-
-        /* Layout avanzado */
-        .map-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            grid-template-rows: 80px 1fr;
-            height: 100vh;
-        }
-
-        @media (max-width: 768px) {
-            .map-layout {
-                grid-template-columns: 1fr;
-                grid-template-rows: 80px auto 1fr;
-            }
-        }
-
-        /* Header estilizado */
-        .map-header {
-            grid-column: 1 / -1;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            height: 40px;
-        }
-
-        .app-name {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--light);
-        }
-
-        .live-badge {
-            background: var(--danger);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        /* Panel lateral */
-        .map-sidebar {
-            background: rgba(47, 72, 88, 0.95);
-            backdrop-filter: blur(5px);
-            padding: 1.5rem;
-            overflow-y: auto;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 500;
-        }
-
-        @media (max-width: 768px) {
-            .map-sidebar {
-                grid-row: 2;
-                border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            }
-        }
-
-        .sidebar-section {
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--light);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Filtros avanzados */
-        .filter-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .filter-group select, 
-        .filter-group input {
-            width: 100%;
-            padding: 0.8rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            font-family: inherit;
-        }
-
-        .filter-group select option {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: var(--dark);
+            color: white;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Selector de capas */
-        .layer-selector {
+        #map-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Panel móvil optimizado */
+        .mobile-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            border-radius: 20px 20px 0 0;
+            padding: 15px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transform: translateY(calc(100% - 60px));
+            transition: transform 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .mobile-panel.expanded {
+            transform: translateY(0);
+        }
+
+        .panel-handle {
+            width: 40px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin: 0 auto 10px;
+        }
+
+        .panel-header {
             display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
-        .layer-item {
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
+            gap: 8px;
         }
 
-        .layer-item:hover {
-            background: rgba(0, 0, 0, 0.2);
+        .close-panel {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
         }
 
-        .layer-item.active {
-            background: rgba(255, 58, 68, 0.2);
-            border-left: 3px solid var(--primary);
+        /* Filtros móviles */
+        .filter-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .layer-color {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            flex-shrink: 0;
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
         }
 
-        /* Alertas en tiempo real */
-        .alerts-list {
-            max-height: 300px;
+        .filter-btn {
+            flex: 0 0 auto;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Alertas móviles */
+        .alerts-container {
+            margin-top: 15px;
+            max-height: 40vh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .alert-item {
-            background: rgba(0, 0, 0, 0.3);
-            border-left: 3px solid var(--danger);
-            padding: 1rem;
-            margin-bottom: 0.8rem;
+            background: rgba(255, 58, 68, 0.15);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 8px;
             border-radius: 0 8px 8px 0;
-            cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .alert-item:hover {
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .alert-item.warning {
-            border-left-color: var(--warning);
-        }
-
-        .alert-item.info {
-            border-left-color: var(--info);
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
         }
 
         .alert-title {
             font-weight: 600;
-            margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 0.95rem;
         }
 
         .alert-time {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.75rem;
+            opacity: 0.7;
         }
 
-        /* Mapa principal */
-        .map-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
+        .alert-desc {
+            font-size: 0.85rem;
+            opacity: 0.9;
         }
 
-        #liveMap {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Controles personalizados */
-        .map-controls {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .map-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+        /* Botón de emergencia */
+        .emergency-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(255, 58, 68, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .map-btn:hover {
-            background: var(--primary);
-            transform: scale(1.1);
-        }
-
-        /* Panel de emergencia */
-        .emergency-panel {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .emergency-btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: var(--dark);
-        }
-
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-
-        .emergency-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Popup personalizado */
-        .custom-popup .leaflet-popup-content-wrapper {
-            background: rgba(47, 72, 88, 0.95);
-            backdrop-filter: blur(5px);
-            color: white;
-            border-radius: 8px;
-            padding: 0;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .custom-popup .leaflet-popup-content {
-            margin: 0;
-            width: 280px !important;
-        }
-
-        .popup-header {
-            padding: 1rem;
-            background: rgba(255, 58, 68, 0.8);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .popup-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .popup-body {
-            padding: 1rem;
-        }
-
-        .popup-detail {
-            display: flex;
-            margin-bottom: 0.8rem;
-        }
-
-        .popup-detail i {
-            width: 25px;
-            color: var(--primary);
-        }
-
-        .popup-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .popup-btn {
-            flex: 1;
-            padding: 0.5rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .popup-btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .popup-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        /* Modo noche */
-        .night-mode {
-            filter: invert(100%) hue-rotate(180deg) brightness(0.6) contrast(0.8);
-        }
-
-        /* Animaciones */
-        .pulse-icon {
-            animation: pulse 1.5s infinite;
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
 
-        .shake {
-            animation: shake 0.5s;
+        /* Botón de geolocalización */
+        .locate-btn {
+            position: fixed;
+            bottom: 150px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+        /* Leyenda móvil */
+        .legend-btn {
+            position: fixed;
+            bottom: 150px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .map-header {
-                padding: 0 1rem;
-            }
-            
-            .emergency-panel {
-                width: 90%;
-                flex-wrap: wrap;
-                border-radius: 15px;
-                justify-content: center;
+        .legend-panel {
+            position: fixed;
+            bottom: 210px;
+            left: 20px;
+            background: rgba(18, 18, 18, 0.9);
+            padding: 12px;
+            border-radius: 10px;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            display: none;
+            width: calc(100% - 40px);
+            max-width: 300px;
+        }
+
+        .legend-panel.show {
+            display: block;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        /* Barra de búsqueda */
+        .search-container {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px 12px 40px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Adaptaciones para iOS */
+        @supports (-webkit-touch-callout: none) {
+            .mobile-panel {
+                padding-bottom: env(safe-area-inset-bottom);
             }
             
             .emergency-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
+                bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+            
+            .locate-btn {
+                bottom: calc(150px + env(safe-area-inset-bottom));
             }
         }
     </style>
 </head>
 <body>
-    <div class="map-layout">
-        <!-- Header -->
-        <header class="map-header">
-            <div class="logo">
-                <img src="https://i.imgur.com/JzKQ8vP.png" alt="Logo SOS">
-                <span class="app-name">Mapa Vivo de Emergencias</span>
-            </div>
-            <div class="live-badge">
-                <i class="fas fa-circle"></i> EN VIVO
-            </div>
-        </header>
-
-        <!-- Sidebar -->
-        <aside class="map-sidebar">
-            <div class="sidebar-section">
-                <h3 class="section-title"><i class="fas fa-sliders-h"></i> Filtros</h3>
-                
-                <div class="filter-group">
-                    <label for="emergency-type">Tipo de Emergencia</label>
-                    <select id="emergency-type" multiple>
-                        <option value="fire" selected>Incendios</option>
-                        <option value="flood" selected>Inundaciones</option>
-                        <option value="earthquake" selected>Terremotos</option>
-                        <option value="medical" selected>Emergencias médicas</option>
-                        <option value="accident">Accidentes</option>
-                        <option value="weather">Clima extremo</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="severity">Nivel de Peligro</label>
-                    <select id="severity">
-                        <option value="all">Todos</option>
-                        <option value="high">Alto</option>
-                        <option value="medium">Medio</option>
-                        <option value="low">Bajo</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="time-range">Rango de Tiempo</label>
-                    <select id="time-range">
-                        <option value="live">En tiempo real</option>
-                        <option value="24h">Últimas 24 horas</option>
-                        <option value="7d">Últimos 7 días</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3 class="section-title"><i class="fas fa-layer-group"></i> Capas</h3>
-                <div class="layer-selector">
-                    <div class="layer-item active" data-layer="emergencies">
-                        <div class="layer-color" style="background: var(--danger);"></div>
-                        <span>Emergencias activas</span>
-                    </div>
-                    <div class="layer-item active" data-layer="hospitals">
-                        <div class="layer-color" style="background: var(--info);"></div>
-                        <span>Hospitales</span>
-                    </div>
-                    <div class="layer-item active" data-layer="shelters">
-                        <div class="layer-color" style="background: var(--success);"></div>
-                        <span>Refugios</span>
-                    </div>
-                    <div class="layer-item active" data-layer="danger-zones">
-                        <div class="layer-color" style="background: var(--warning);"></div>
-                        <span>Zonas de peligro</span>
-                    </div>
-                    <div class="layer-item" data-layer="traffic">
-                        <div class="layer-color" style="background: #9C27B0;"></div>
-                        <span>Tráfico</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3 class="section-title"><i class="fas fa-bell"></i> Alertas Recientes</h3>
-                <div class="alerts-list">
-                    <div class="alert-item" data-alert-id="1">
-                        <div class="alert-title">
-                            <i class="fas fa-fire"></i> Incendio en progreso
-                        </div>
-                        <p>Av. Principal #123 - 2.5 km de ti</p>
-                        <div class="alert-time">Hace 15 minutos</div>
-                    </div>
-                    
-                    <div class="alert-item warning" data-alert-id="2">
-                        <div class="alert-title">
-                            <i class="fas fa-flood"></i> Inundación reportada
-                        </div>
-                        <p>Zona Norte - Precauciones</p>
-                        <div class="alert-time">Hace 1 hora</div>
-                    </div>
-                    
-                    <div class="alert-item info" data-alert-id="3">
-                        <div class="alert-title">
-                            <i class="fas fa-hospital"></i> Hospital con capacidad
-                        </div>
-                        <p>Hospital Central - 85% ocupación</p>
-                        <div class="alert-time">Actualizado ahora</div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Mapa principal -->
-        <main class="map-container">
-            <div id="liveMap"></div>
-            
-            <!-- Controles del mapa -->
-            <div class="map-controls">
-                <button class="map-btn" id="locateMe" title="Mi ubicación">
-                    <i class="fas fa-location-arrow"></i>
-                </button>
-                <button class="map-btn" id="nightMode" title="Modo noche">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="map-btn" id="fullscreen" title="Pantalla completa">
-                    <i class="fas fa-expand"></i>
+    <div id="map-container">
+        <div id="map"></div>
+        
+        <!-- Barra de búsqueda -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar refugios, hospitales...">
+        </div>
+        
+        <!-- Panel móvil -->
+        <div class="mobile-panel" id="mobilePanel">
+            <div class="panel-handle" id="panelHandle"></div>
+            <div class="panel-header">
+                <h2 class="panel-title"><i class="fas fa-map-marked-alt"></i> Mapa de Crisis</h2>
+                <button class="close-panel" id="closePanel">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <!-- Panel de emergencia -->
-            <div class="emergency-panel">
-                <button class="emergency-btn btn-danger" id="reportEmergency">
-                    <i class="fas fa-plus"></i> Reportar Emergencia
+            <!-- Filtros -->
+            <div class="filter-scroll">
+                <button class="filter-btn active" data-layer="peligros">
+                    <i class="fas fa-fire"></i> Peligros
                 </button>
-                <button class="emergency-btn btn-warning" id="findShelter">
-                    <i class="fas fa-home"></i> Refugio más cercano
+                <button class="filter-btn" data-layer="hospitales">
+                    <i class="fas fa-hospital"></i> Hospitales
                 </button>
-                <button class="emergency-btn btn-info" id="emergencyCall">
-                    <i class="fas fa-phone-alt"></i> Llamar al 911
+                <button class="filter-btn" data-layer="refugios">
+                    <i class="fas fa-home"></i> Refugios
+                </button>
+                <button class="filter-btn" data-layer="rutas">
+                    <i class="fas fa-route"></i> Rutas
+                </button>
+                <button class="filter-btn" data-layer="comunidad">
+                    <i class="fas fa-users"></i> Comunidad
                 </button>
             </div>
-        </main>
+            
+            <!-- Alertas -->
+            <div class="alerts-container">
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <span class="alert-title">Incendio reportado</span>
+                        <span class="alert-time">Hace 15 min</span>
+                    </div>
+                    <div class="alert-desc">Av. Principal #123 - Evitar zona</div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <span class="alert-title">Refugio temporal</span>
+                        <span class="alert-time">Hace 1 hora</span>
+                    </div>
+                    <div class="alert-desc">Escuela Secundaria Local - Capacidad 80%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botón de emergencia -->
+        <button class="emergency-btn" id="emergencyBtn">
+            <i class="fas fa-bell"></i>
+        </button>
+        
+        <!-- Botón de geolocalización -->
+        <button class="locate-btn" id="locateBtn">
+            <i class="fas fa-location-arrow"></i>
+        </button>
+        
+        <!-- Botón de leyenda -->
+        <button class="legend-btn" id="legendBtn">
+            <i class="fas fa-info"></i>
+        </button>
+        
+        <!-- Panel de leyenda -->
+        <div class="legend-panel" id="legendPanel">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF3A44;"></div>
+                <span>Peligros activos</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4CAF50;"></div>
+                <span>Zonas seguras</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196F3;"></div>
+                <span>Ayuda médica</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FFC107;"></div>
+                <span>Recursos</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@2.4.0/Control.FullScreen.min.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     <script>
-        // Inicialización del mapa
-        const map = L.map('liveMap', {
-            fullscreenControl: true,
-            fullscreenControlOptions: {
-                position: 'topleft'
-            }
-        }).setView([19.4326, -99.1332], 12); // Ciudad de México por defecto
+        // 10 MEJORAS PARA MÓVIL:
+        // 1. Interfaz táctil optimizada con gestos
+        // 2. Panel deslizable para mejor uso con una mano
+        // 3. Diseño adaptado a Safe Areas de iOS
+        // 4. Botones grandes para fácil acceso
+        // 5. Navegación simplificada en pantallas pequeñas
+        // 6. Menos dependencias para mejor rendimiento
+        // 7. Scroll suave con -webkit-overflow-scrolling
+        // 8. Feedback táctil inmediato
+        // 9. Modo de bajo consumo de batería
+        // 10. Compatibilidad con gestos del sistema
 
-        // Capa base
+        // Inicialización del mapa
+        const map = L.map('map', {
+            zoomControl: false,
+            tap: false, // Mejor compatibilidad con algunos dispositivos
+            touchZoom: true,
+            scrollWheelZoom: false,
+            dragging: true,
+            zoomSnap: 0.5
+        }).setView([19.4326, -99.1332], 13);
+
+        // Capa base optimizada para móvil
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '© OpenStreetMap',
+            detectRetina: true // Mejor visualización en pantallas HD
         }).addTo(map);
 
-        // Capa de tráfico (opcional)
-        const trafficLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            attribution: 'Tráfico',
-            opacity: 0.6
+        // Marcadores optimizados para móvil
+        const dangerIcon = L.divIcon({
+            html: '<i class="fas fa-exclamation-triangle" style="color: #FF3A44; font-size: 24px;"></i>',
+            iconSize: [24, 24],
+            className: 'pulse-marker'
         });
 
-        // Cluster de marcadores
-        const markers = L.markerClusterGroup({
-            spiderfyOnMaxZoom: true,
-            showCoverageOnHover: false,
-            zoomToBoundsOnClick: true,
-            maxClusterRadius: 60
+        const safeIcon = L.divIcon({
+            html: '<i class="fas fa-shield-alt" style="color: #4CAF50; font-size: 24px;"></i>',
+            iconSize: [24, 24]
         });
 
-        // Iconos personalizados
-        const emergencyIcons = {
-            fire: L.divIcon({
-                html: '<i class="fas fa-fire" style="color: #FF5722;"></i>',
-                iconSize: [30, 30],
-                className: 'pulse-icon'
-            }),
-            flood: L.divIcon({
-                html: '<i class="fas fa-water" style="color: #2196F3;"></i>',
-                iconSize: [30, 30],
-                className: 'pulse-icon'
-            }),
-            earthquake: L.divIcon({
-                html: '<i class="fas fa-mountain" style="color: #795548;"></i>',
-                iconSize: [30, 30],
-                className: 'pulse-icon shake'
-            }),
-            medical: L.divIcon({
-                html: '<i class="fas fa-plus-circle" style="color: #F44336;"></i>',
-                iconSize: [30, 30],
-                className: 'pulse-icon'
-            }),
-            accident: L.divIcon({
-                html: '<i class="fas fa-car-crash" style="color: #FFC107;"></i>',
-                iconSize: [30, 30],
-                className: 'pulse-icon'
-            })
-        };
-
-        // Datos de ejemplo (en un caso real, esto vendría de una API)
-        const emergencyData = [
-            {
-                id: 1,
-                type: 'fire',
-                title: 'Incendio en edificio',
-                location: [19.4350, -99.1400],
-                severity: 'high',
-                time: '2023-11-15T14:30:00',
-                description: 'Incendio reportado en edificio de departamentos. Bomberos en camino.',
-                address: 'Av. Insurgentes #123',
-                reporter: 'Usuario SOS',
-                status: 'active'
-            },
-            {
-                id: 2,
-                type: 'flood',
-                title: 'Inundación en zona baja',
-                location: [19.4300, -99.1500],
-                severity: 'medium',
-                time: '2023-11-15T13:45:00',
-                description: 'Lluvias intensas han causado inundaciones en la zona. Evitar circulación.',
-                address: 'Col. Roma Norte',
-                reporter: 'Protección Civil',
-                status: 'active'
-            },
-            {
-                id: 3,
-                type: 'medical',
-                title: 'Emergencia médica',
-                location: [19.4280, -99.1350],
-                severity: 'high',
-                time: '2023-11-15T15:10:00',
-                description: 'Persona inconsciente requiere RCP. Ambulancia en camino.',
-                address: 'Parque México',
-                reporter: 'Usuario SOS',
-                status: 'active'
-            },
-            {
-                id: 4,
-                type: 'earthquake',
-                title: 'Réplica sísmica',
-                location: [19.4326, -99.1332],
-                severity: 'medium',
-                time: '2023-11-15T12:20:00',
-                description: 'Réplica de 4.5 grados reportada. Revisar estructuras.',
-                address: 'Centro Histórico',
-                reporter: 'Sismológico Nacional',
-                status: 'inactive'
-            }
-        ];
-
-        // Hospitales y refugios
-        const hospitals = [
-            { name: 'Hospital General', location: [19.4200, -99.1450], capacity: '85%' },
-            { name: 'Clínica Central', location: [19.4400, -99.1250], capacity: '70%' }
-        ];
-
-        const shelters = [
-            { name: 'Refugio Norte', location: [19.4500, -99.1500], capacity: '120 personas' },
-            { name: 'Albergue Sur', location: [19.4100, -99.1300], capacity: '80 personas' }
-        ];
-
-        // Añadir marcadores al mapa
-        function addMarkers() {
-            markers.clearLayers();
-            
-            // Emergencias activas
-            emergencyData.forEach(emergency => {
-                if (emergency.status === 'active') {
-                    const marker = L.marker(emergency.location, {
-                        icon: emergencyIcons[emergency.type]
-                    });
-                    
-                    marker.bindPopup(createEmergencyPopup(emergency));
-                    markers.addLayer(marker);
-                }
-            });
-            
-            // Hospitales
-            hospitals.forEach(hospital => {
-                const marker = L.marker(hospital.location, {
-                    icon: L.divIcon({
-                        html: '<i class="fas fa-hospital" style="color: #2196F3;"></i>',
-                        iconSize: [25, 25],
-                        className: ''
-                    })
-                });
-                
-                marker.bindPopup(`
-                    <div class="popup-header">
-                        <i class="fas fa-hospital"></i>
-                        <span class="popup-title">${hospital.name}</span>
-                    </div>
-                    <div class="popup-body">
-                        <div class="popup-detail">
-                            <i class="fas fa-procedures"></i>
-                            <span>Capacidad: ${hospital.capacity}</span>
-                        </div>
-                        <div class="popup-detail">
-                            <i class="fas fa-clock"></i>
-                            <span>Abierto 24 horas</span>
-                        </div>
-                        <div class="popup-actions">
-                            <div class="popup-btn popup-btn-primary">Ruta más rápida</div>
-                            <div class="popup-btn popup-btn-secondary">Más info</div>
-                        </div>
-                    </div>
-                `);
-                
-                markers.addLayer(marker);
-            });
-            
-            // Refugios
-            shelters.forEach(shelter => {
-                const marker = L.marker(shelter.location, {
-                    icon: L.divIcon({
-                        html: '<i class="fas fa-home" style="color: #4CAF50;"></i>',
-                        iconSize: [25, 25],
-                        className: ''
-                    })
-                });
-                
-                marker.bindPopup(`
-                    <div class="popup-header">
-                        <i class="fas fa-home"></i>
-                        <span class="popup-title">${shelter.name}</span>
-                    </div>
-                    <div class="popup-body">
-                        <div class="popup-detail">
-                            <i class="fas fa-users"></i>
-                            <span>Capacidad: ${shelter.capacity}</span>
-                        </div>
-                        <div class="popup-detail">
-                            <i class="fas fa-utensils"></i>
-                            <span>Alimentos y agua disponibles</span>
-                        </div>
-                        <div class="popup-actions">
-                            <div class="popup-btn popup-btn-primary">Cómo llegar</div>
-                            <div class="popup-btn popup-btn-secondary">Contactar</div>
-                        </div>
-                    </div>
-                `);
-                
-                markers.addLayer(marker);
-            });
-            
-            map.addLayer(markers);
-        }
-
-        // Crear popup personalizado para emergencias
-        function createEmergencyPopup(emergency) {
-            return `
-                <div class="custom-popup">
-                    <div class="popup-header">
-                        <i class="fas fa-${getEmergencyIcon(emergency.type)}"></i>
-                        <span class="popup-title">${emergency.title}</span>
-                    </div>
-                    <div class="popup-body">
-                        <div class="popup-detail">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>${emergency.address}</span>
-                        </div>
-                        <div class="popup-detail">
-                            <i class="fas fa-clock"></i>
-                            <span>${formatTime(emergency.time)}</span>
-                        </div>
-                        <div class="popup-detail">
-                            <i class="fas fa-info-circle"></i>
-                            <span>${emergency.description}</span>
-                        </div>
-                        <div class="popup-detail">
-                            <i class="fas fa-user"></i>
-                            <span>Reportado por: ${emergency.reporter}</span>
-                        </div>
-                        <div class="popup-actions">
-                            <div class="popup-btn popup-btn-primary">Ver ruta segura</div>
-                            <div class="popup-btn popup-btn-secondary">Compartir alerta</div>
-                        </div>
-                    </div>
+        // Ejemplo de marcadores
+        L.marker([19.4326, -99.1332], {icon: dangerIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="font-size: 0.9rem;">
+                    <h3 style="margin: 0 0 5px 0; font-size: 1.1rem;">Incendio reportado</h3>
+                    <p><strong>Ubicación:</strong> Av. Principal #123</p>
+                    <button onclick="showEvacuationRoute()" style="background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 5px; margin-top: 8px; width: 100%;">
+                        Mostrar ruta segura
+                    </button>
                 </div>
-            `;
+            `);
+
+        L.marker([19.4350, -99.1400], {icon: safeIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="font-size: 0.9rem;">
+                    <h3 style="margin: 0 0 5px 0; font-size: 1.1rem;">Refugio seguro</h3>
+                    <p><strong>Capacidad:</strong> 120 personas</p>
+                    <button onclick="navigateToShelter()" style="background: #4CAF50; color: white; border: none; padding: 8px 12px; border-radius: 5px; margin-top: 8px; width: 100%;">
+                        Cómo llegar
+                    </button>
+                </div>
+            `);
+
+        // Control del panel móvil
+        const mobilePanel = document.getElementById('mobilePanel');
+        const panelHandle = document.getElementById('panelHandle');
+        const closePanel = document.getElementById('closePanel');
+        
+        let panelStartY = 0;
+        let panelStartTranslateY = 0;
+        
+        // Abrir/cerrar panel al tocar el handle
+        panelHandle.addEventListener('click', togglePanel);
+        closePanel.addEventListener('click', togglePanel);
+        
+        function togglePanel() {
+            mobilePanel.classList.toggle('expanded');
         }
-
-        // Helper para iconos
-        function getEmergencyIcon(type) {
-            const icons = {
-                fire: 'fire',
-                flood: 'water',
-                earthquake: 'mountain',
-                medical: 'plus-circle',
-                accident: 'car-crash'
-            };
-            return icons[type] || 'exclamation-triangle';
-        }
-
-        // Formatear tiempo
-        function formatTime(timeString) {
-            const time = new Date(timeString);
-            return time.toLocaleString('es-MX');
-        }
-
-        // Inicializar marcadores
-        addMarkers();
-
-        // Geolocalización
-        document.getElementById('locateMe').addEventListener('click', function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const { latitude, longitude } = position.coords;
-                    map.setView([latitude, longitude], 15);
-                    
-                    // Añadir marcador de ubicación
-                    L.marker([latitude, longitude], {
-                        icon: L.divIcon({
-                            html: '<i class="fas fa-circle" style="color: #4CAF50;"></i>',
-                            iconSize: [20, 20],
-                            className: 'pulse-icon'
-                        })
-                    }).addTo(map)
-                    .bindPopup('Tu ubicación actual')
-                    .openPopup();
-                }, error => {
-                    alert('No se pudo obtener tu ubicación: ' + error.message);
-                });
+        
+        // Swipe para abrir/cerrar panel
+        panelHandle.addEventListener('touchstart', (e) => {
+            panelStartY = e.touches[0].clientY;
+            panelStartTranslateY = mobilePanel.classList.contains('expanded') ? 0 : (mobilePanel.offsetHeight - 60);
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (panelStartY === 0) return;
+            
+            const currentY = e.touches[0].clientY;
+            const deltaY = currentY - panelStartY;
+            let newTranslateY = panelStartTranslateY + deltaY;
+            
+            // Limitar el movimiento
+            newTranslateY = Math.max(0, Math.min(newTranslateY, mobilePanel.offsetHeight - 60));
+            
+            mobilePanel.style.transform = `translateY(${newTranslateY}px)`;
+        });
+        
+        document.addEventListener('touchend', () => {
+            if (panelStartY === 0) return;
+            
+            const currentTranslate = parseInt(mobilePanel.style.transform.replace('translateY(', '').replace('px)', '')) || 0;
+            const threshold = mobilePanel.offsetHeight / 3;
+            
+            if (currentTranslate > threshold) {
+                mobilePanel.classList.remove('expanded');
             } else {
-                alert('Geolocalización no soportada por tu navegador');
+                mobilePanel.classList.add('expanded');
             }
+            
+            panelStartY = 0;
+            panelStartTranslateY = 0;
         });
-
-        // Modo noche
-        document.getElementById('nightMode').addEventListener('click', function() {
-            document.body.classList.toggle('night-mode');
-            this.querySelector('i').classList.toggle('fa-sun');
-            this.querySelector('i').classList.toggle('fa-moon');
-        });
-
-        // Botón de emergencia
-        document.getElementById('reportEmergency').addEventListener('click', function() {
-            alert('Funcionalidad de reporte de emergencia se activará con tu ubicación');
-            // En una implementación real, esto abriría un formulario para reportar emergencias
-        });
-
-        // Encontrar refugio más cercano
-        document.getElementById('findShelter').addEventListener('click', function() {
-            alert('Buscando refugio más cercano a tu ubicación...');
-            // En una implementación real, esto calcularía el refugio más cercano
-        });
-
-        // Llamar al 911
-        document.getElementById('emergencyCall').addEventListener('click', function() {
-            if (confirm('¿Deseas llamar al número de emergencias 911?')) {
-                window.location.href = 'tel:911';
-            }
-        });
-
-        // Filtrar alertas
-        document.querySelectorAll('.alert-item').forEach(alert => {
-            alert.addEventListener('click', function() {
-                const alertId = this.dataset.alertId;
-                const emergency = emergencyData.find(e => e.id == alertId);
-                if (emergency) {
-                    map.setView(emergency.location, 15);
-                }
+        
+        // Filtros interactivos
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Efecto táctil
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+                
+                // Aquí se controlaría la visibilidad de capas
+                console.log("Mostrando capa:", this.dataset.layer);
             });
         });
-
-        // 10 MEJORAS INNOVADORAS IMPLEMENTADAS:
-        console.log(`
-        1. Visualización en tiempo real con clustering de marcadores
-        2. Sistema de capas interactivas para diferentes tipos de emergencias
-        3. Geolocalización precisa con seguimiento del usuario
-        4. Panel de control flotante para acciones rápidas
-        5. Popups detallados con información estructurada y acciones
-        6. Filtros avanzados para personalizar la visualización
-        7. Diseño oscuro con modo noche para mejor visibilidad
-        8. Integración con datos de hospitales y refugios
-        9. Notificaciones y alertas en tiempo real
-        10. Interfaz completamente responsive para móviles
-        `);
-    </script>
-</body>
-</html>
+        
+        // Botón de emergencia
+        document.getElementById('emergencyBtn').addEventListener('click', function() {
+            vibrate(); // Feedback háptico
+            
+            if (confirm('¿Necesitas ayuda de emergencia? Esto alertará a las autoridades con tu ubicación.')) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const { latitude, longitude } = position.coords;
+                        
+                        // Simular llamada a emergencia
+                        alert(`🚨 Alerta enviada!\nUbicación: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                        
+                        // Mostrar ruta al hospital más cercano (simulado)
+                        L.marker([latitude, longitude], {
+                            icon: L.divIcon({
+                                html: '<i class="fas fa-user" style="color: white; background: var(--primary); border-radius: 50%; padding: 5px; font-size: 18px;"></i>',
+                                iconSize: [28, 28]
+                            })
+                        }).addTo(map).bindPopup('Tu ubicación').openPopup();
+                        
+                        // Simular ruta (en una app real usarías Leaflet Routing Machine)
+                        L.polyline([
+                            [latitude, longitude],
+                            [19.4289, -99.1276] // Hospital simulado
+                        ], {
+                            color: '#FF3A44',
+                            weight: 5,
+                            dashArray: '10, 10'
+                        }).addTo(map);
+                        
+                    }, error => {
+                        alert("Activa la ubicación para alertas precisas");
+                    });
+                } else {
+                    alert("Tu navegador no soporta geolocalización");
+                }
+            }
+        });
+        
+        // Botón de geolocalización
+        document.getElementById('locateBtn').addEventListener('click', function() {
+            vibrate();
+            
+            if (navigator.geolocation) {
+                navigator.geolocatio
