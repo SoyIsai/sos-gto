@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mapa de Crisis Inteligente | SOS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3A44;
+            --secondary: #2F4858;
+            --accent: #4ECDC4;
+            --dark: #121212;
+            --light: #F8F9FA;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: white;
+            overflow: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #map-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Panel superior fijo */
+        .control-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.95);
+            padding: 0.8rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contenido colapsable */
+        .panel-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .panel-content.expanded {
+            max-height: 60vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Barra de búsqueda */
+        .search-bar {
+            position: relative;
+            margin-bottom: 0.8rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Filtros */
+        .filter-section {
+            margin-bottom: 0.8rem;
+        }
+
+        .filter-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.3rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-buttons::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 0.8rem;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-shrink: 0;
+            white-space: nowrap;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            font-weight: bold;
+        }
+
+        .filter-btn i {
+            font-size: 0.8rem;
+        }
+
+        /* Alertas */
+        .alerts-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-item {
+            background: rgba(255, 58, 68, 0.15);
+            border-left: 3px solid var(--primary);
+            padding: 0.7rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .alert-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .alert-desc {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Botones flotantes */
+        .floating-btn {
+            position: fixed;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(5px);
+            font-size: 0.8rem;
+            padding: 0.7rem 1.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Botón de emergencia */
+        .emergency-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: 0 5px 20px rgba(255, 58, 68, 0.5);
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Modo AR */
+        .ar-mode {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        /* Leyenda */
+        .legend {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.9);
+            padding: 0.8rem;
+            border-radius: 10px;
+            max-width: 150px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+        }
+
+        /* Efectos */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Optimizaciones para el mapa */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+
+        .leaflet-popup-content {
+            font-size: 0.9rem !important;
+            margin: 0.7rem !important;
+        }
+
+        .leaflet-popup-content h3 {
+            margin: 0 0 0.5rem 0 !important;
+            font-size: 1.1rem !important;
+        }
+
+        .leaflet-popup-content p {
+            margin: 0.3rem 0 !important;
+        }
+
+        .leaflet-popup-content button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* Safe area para dispositivos con notch */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .control-panel {
+                padding-top: calc(0.8rem + env(safe-area-inset-top));
+            }
+            
+            .legend {
+                top: calc(70px + env(safe-area-inset-top));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="map-container">
+        <div id="map"></div>
+        
+        <!-- Panel superior fijo -->
+        <div class="control-panel" id="controlPanel">
+            <div class="panel-header">
+                <h2 class="panel-title"><i class="fas fa-map-marked-alt"></i> Mapa de Crisis</h2>
+                <div class="panel-actions">
+                    <button class="panel-btn" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="panel-btn" id="togglePanel">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Contenido expandible -->
+            <div class="panel-content" id="panelContent">
+                <!-- Barra de búsqueda -->
+                <div class="search-bar">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Buscar ubicación..." id="searchInput">
+                </div>
+                
+                <!-- Filtros -->
+                <div class="filter-section">
+                    <div class="filter-title">Filtrar por:</div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-layer="peligros">
+                            <i class="fas fa-fire"></i> Peligros
+                        </button>
+                        <button class="filter-btn" data-layer="hospitales">
+                            <i class="fas fa-hospital"></i> Hospitales
+                        </button>
+                        <button class="filter-btn" data-layer="refugios">
+                            <i class="fas fa-home"></i> Refugios
+                        </button>
+                        <button class="filter-btn" data-layer="rutas">
+                            <i class="fas fa-route"></i> Rutas
+                        </button>
+                        <button class="filter-btn" data-layer="comunidad">
+                            <i class="fas fa-users"></i> Comunidad
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Alertas -->
+                <div class="alerts-section" id="alertsContainer">
+                    <div class="alert-item pulse">
+                        <div class="alert-title">
+                            <span>Incendio reportado</span>
+                            <span class="alert-time">Hace 15 min</span>
+                        </div>
+                        <div class="alert-desc">Av. Principal #123 - Evitar zona</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-title">
+                            <span>Refugio temporal</span>
+                            <span class="alert-time">Hace 1 hora</span>
+                        </div>
+                        <div class="alert-desc">Escuela Secundaria Local - Capacidad 80%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botón de emergencia -->
+        <button class="floating-btn emergency-btn pulse" id="emergencyBtn">
+            <i class="fas fa-bell"></i>
+        </button>
+        
+        <!-- Modo AR -->
+        <button class="floating-btn ar-mode" id="arMode">
+            <i class="fas fa-camera"></i> Modo AR
+        </button>
+        
+        <!-- Leyenda -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF3A44;"></div>
+                <span>Peligros</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4CAF50;"></div>
+                <span>Zonas seguras</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196F3;"></div>
+                <span>Ayuda médica</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script>
+        // Inicialización del mapa optimizado para móvil
+        const map = L.map('map', {
+            zoomControl: false,
+            preferCanvas: true,
+            tap: false,
+            touchZoom: 'center',
+            bounceAtZoomLimits: false
+        }).setView([19.4326, -99.1332], 13);
+
+        // Capa base
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '',
+            detectRetina: true
+        }).addTo(map);
+
+        // Control de zoom táctil
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
+
+        // Capa de calor
+        const heatData = [
+            [19.4326, -99.1332, 0.6],
+            [19.4350, -99.1400, 0.8],
+            [19.4289, -99.1276, 0.3]
+        ];
+        
+        const heatLayer = L.heatLayer(heatData, {
+            radius: 20,
+            blur: 15,
+            maxZoom: 17,
+            gradient: {0.4: 'blue', 0.6: 'lime', 0.8: 'yellow', 1.0: 'red'}
+        }).addTo(map);
+
+        // Iconos de marcadores
+        const dangerIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        });
+
+        const safeIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        });
+
+        // Función para crear marcadores
+        function createMarker(lat, lng, type, content) {
+            const icon = type === 'danger' ? dangerIcon : safeIcon;
+            const marker = L.marker([lat, lng], {icon}).addTo(map);
+            
+            marker.bindPopup(content, {
+                maxWidth: 250,
+                closeButton: true,
+                autoClose: false,
+                closeOnClick: false
+            });
+            
+            marker.on('click', function() {
+                this.openPopup();
+            });
+            
+            return marker;
+        }
+
+        // Marcadores de ejemplo
+        createMarker(19.4326, -99.1332, 'danger', `
+            <h3>Incendio reportado</h3>
+            <p><strong>Ubicación:</strong> Av. Principal #123</p>
+            <p><strong>Hora:</strong> 14:30</p>
+            <button class="evac-btn">Mostrar ruta de evacuación</button>
+        `);
+
+        createMarker(19.4350, -99.1400, 'safe', `
+            <h3>Refugio temporal</h3>
+            <p><strong>Ubicación:</strong> Escuela Primaria</p>
+            <p><strong>Capacidad:</strong> 120 personas</p>
+            <p><strong>Recursos:</strong> Agua, alimentos, primeros auxilios</p>
+        `);
+
+        // Control del panel superior
+        const controlPanel = document.getElementById('controlPanel');
+        const panelContent = document.getElementById('panelContent');
+        const togglePanel = document.getElementById('togglePanel');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.getElementById('searchInput');
+        
+        let panelExpanded = false;
+        
+        // Alternar visibilidad del panel
+        function togglePanelState() {
+            panelExpanded = !panelExpanded;
+            panelContent.classList.toggle('expanded', panelExpanded);
+            
+            const icon = togglePanel.querySelector('i');
+            icon.classList.toggle('fa-chevron-down', !panelExpanded);
+            icon.classList.toggle('fa-chevron-up', panelExpanded);
+            
+            // Ajustar el mapa cuando el panel se expande
+            setTimeout(() => map.invalidateSize(), 300);
+        }
+        
+        // Eventos de clic
+        togglePanel.addEventListener('click', togglePanelState);
+        
+        // Botón de búsqueda independiente
+        searchBtn.addEventListener('click', function() {
+            if (!panelExpanded) {
+                togglePanelState();
+            }
+            searchInput.focus();
+        });
+        
+        // Botón de emergencia
+        document.getElementById('emergencyBtn').addEventListener('click', function() {
+            if (navigator.vibrate) navigator.vibrate(100);
+            
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const { latitude, longitude } = position.coords;
+                    
+                    const emergencyMarker = createMarker(latitude, longitude, 'danger', `
+                        <h3>TU UBICACIÓN</h3>
+                        <p>Alerta enviada a las ${new Date().toLocaleTimeString()}</p>
+                    `);
+                    
+                    emergencyMarker.openPopup();
+                    map.setView([latitude, longitude], 15);
+                    
+                    alert(`🚨 Alerta enviada a autoridades!\n\nTu ubicación: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                    
+                }, (error) => {
+                    alert("Activa la ubicación para enviar alertas precisas");
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 5000
+                });
+            } else {
+                alert("Tu dispositivo no soporta geolocalización");
+            }
+        });
+        
+        // Modo AR
+        document.getElementById('arMode').addEventListener('click', function() {
+            if (navigator.vibrate) navigator.vibrate(50);
+            alert("🔍 Modo AR activado:\n\n1. Apunta tu cámara al entorno\n2. Verás marcadores de peligros y recursos\n3. Sigue las flechas para rutas seguras");
+        });
+        
+        // Filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (navigator.vibrate) navigator.vibrate(20);
+                
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const layer = this.dataset.layer;
+                
+                switch(layer) {
+                    case 'peligros':
+                        map.addLayer(heatLayer);
+                        break;
+                    default:
+                        map.removeLayer(heatLayer);
+                }
+            });
+        });
+        
+        // Simulación de datos en tiempo real
+        function simulateLiveData() {
+            setTimeout(() => {
+                const newAlert = document.createElement('div');
+                newAlert.className = 'alert-item pulse';
+                newAlert.innerHTML = `
+                    <div class="alert-title">
+                        <span>Nuevo reporte comunitario</span>
+                        <span class="alert-time">Ahora</span>
+                    </div>
+                    <div class="alert-desc">Accidente vehicular - Av. Reforma</div>
+                `;
+                
+                const alertsContainer = document.getElementById('alertsContainer');
+                alertsContainer.insertBefore(newAlert, alertsContainer.firstChild);
+                
+                if (alertsContainer.children.length > 5) {
+                    alertsContainer.removeChild(alertsContainer.lastChild);
+                }
+                
+                createMarker(19.4320, -99.1350, 'danger', `
+                    <h3>Accidente reportado</h3>
+                    <p>Av. Reforma - ${new Date().toLocaleTimeString()}</p>
+                    <p>Reportado por usuarios</p>
+                `);
+                
+                heatData.push([19.4320, -99.1350, 0.7]);
+                heatLayer.setLatLngs(heatData);
+                
+                if (Notification.permission === "granted") {
+                    new Notification("Nueva alerta", {
+                        body: "Accidente vehicular reportado en Av. Reforma"
+                    });
+                }
+                
+                setTimeout(simulateLiveData, 10000 + Math.random() * 10000);
+            }, 5000);
+        }
+        
+        // Solicitar permisos para notificaciones
+        if (Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+        
+        // Iniciar simulación
+        simulateLiveData();
+        
+        // Ajustar el mapa cuando el teclado aparece/desaparece
+        window.addEventListener('resize', () => map.invalidateSize());
+    </script>
+</body>
+</html>
